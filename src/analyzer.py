@@ -94,7 +94,6 @@ class Analyzer: # TODO change dependency structure
   def plot_costs(self, horiz, subdir=""):
     """ Creates a line plot of costs with horiz as x-axis. """
     plot_slices = self.split_slices(split_vars=[horiz], sort_var=horiz)
-    print(plot_slices.slices[0].df)
     for i in range(plot_slices.N):
       slice = plot_slices.slices[i]
       plt.plot(slice.df[horiz], slice.df["cost"])
