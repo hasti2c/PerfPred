@@ -101,7 +101,7 @@ class Analyzer: # TODO change dependency structure
       plt.xlabel(horiz)
       plt.ylabel("rmse loss")
       plt.title(slice.title)
-      plt.savefig(os.join.path(self.path, "plots", subdir, slice.title + ".png"))
+      plt.savefig(os.path.join(self.path, "plots", subdir, slice.title + ".png"))
       plt.clf()
 
   def plot_all_costs(self):
@@ -138,7 +138,7 @@ class Analyzer: # TODO change dependency structure
       if len(self.scatter_horiz) > 1:
         subdir = var_names[horiz]
       if len(self.scatter_seper) > 1:
-        subdir = os.join.path(subdir, "-".join([var_names[var] for var in seper]))
+        subdir = os.path.join(subdir, "-".join([var_names[var] for var in seper]))
       self.scatter_costs(horiz, seper, subdir=subdir)
 
   def bar_chart_costs(self, horiz):
