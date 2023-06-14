@@ -2,7 +2,7 @@ from trial import *
 
 path_A = os.path.join("results", "1A")
 
-class SingleTrain(SingleVar):
+class SingleSize(SingleVar):
   """ Trial with factor D1 or D2.
 
   == Attributes ==
@@ -51,7 +51,7 @@ class SingleTrain(SingleVar):
     super().analyze_all(run_plots=run_plots)
 
 
-class DoubleTrain(DoubleVar):
+class DoubleSize(DoubleVar):
   """ Trial with factors D1+D2.
 
   == Attributes ==
