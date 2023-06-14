@@ -74,17 +74,6 @@ ObjectArray = np.ndarray[ObjectT]
 
 # === File Helpers ===
 
-def empty_folder(path: str) -> None:
-  """ Deletes (deep) all files from the folder described by the path.
-  Does not delete subdirectories.
-  """
-  for f in os.listdir(path):
-    f_path = os.path.join(path, f)
-    if os.path.isdir(f_path):
-      empty_folder(f_path)
-    else:
-      os.unlink(f_path)
-
 def write_to_csv(f: str, data: T.Iterable) -> None:
   """ Writes data as csv to file f. """
   with open(f, 'w', newline='') as fp:
@@ -107,6 +96,25 @@ def print_lines(lines, path=None, append=False):
   if save_prints:
     f.close()
 
+def empty_folder(path: str) -> None:
+  """ Deletes (deep) all files from the folder described by the path.
+  Does not delete subdirectories.
+  """
+  for f in os.listdir(path):
+    f_path = os.path.join(path, f)
+    if os.path.isdir(f_path):
+      empty_folder(f_path)
+    else:
+      os.unlink(f_path)
+
+def create_trial_folder(path: str) -> None:
+  os.mkdir(path)
+  os.mkdir(os.path.join(path, "plots"))
+  os.mkdir(os.path.join(path, "analysis"))
+  os.mkdir(os.path.join(path, "analysis", "plots"))
+  os.mkdir(os.path.join(path, "analysis", "scatters"))
+  os.mkdir(os.path.join(path, "analysis", "bar_charts"))
+  
 
 # === Misc Helpers ===
 

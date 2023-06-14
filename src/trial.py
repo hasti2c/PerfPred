@@ -159,13 +159,13 @@ class Trial:
     if self.path is not None:
       ids = ["-".join(map(str, id)) for id in self.slices.ids_as_list()]
       fits = [",".join(map(str, fit)) for fit in self.fits]
-      write_to_csv(self.path + "fits.csv", zip(ids, fits, self.costs))
+      write_to_csv(os.path.join(self.path, "fits.csv"), zip(ids, fits, self.costs))
 
   def read_all_fits(self) -> T.Tuple[list[FloatArray], list[float]]:
     """ Reads fits and costs into self.fits and self.costs from pickle.
     Pre-Condition: fit_all has already been run for this model with the same path.
     """
-    data = read_from_csv(self.path + "fits.csv")
+    data = read_from_csv(os.path.join(self.path, "fits.csv"))
     self.fits = np.array([np.array(row[1].split(","), dtype=float) for row in data])
     self.costs = np.array([float(row[2]) for row in data])
     return self.fits, self.costs
@@ -194,7 +194,7 @@ class Trial:
     results_df["cost"] = self.costs
     results_df = results_df.astype({"cost": "Float64"})
     self.analyzer = Analyzer(self.slices.vary, results_df, self.par_num,
-                             self.par_names, self.path + "analysis/",
+                             self.par_names, os.path.join(self.path, "analysis"),
                              self.slices.ignore, plot_horiz, scatter_horiz,
                              bar_horiz, scatter_seper)
 
@@ -254,7 +254,7 @@ class SingleVar(Trial):
     plt.xlabel(slice.xvars[0])
     plt.ylabel('sp-BLEU')
     plt.title(slice.description)
-    plt.savefig(self.path + "plots/" + slice.title + ".png")
+    plt.savefig(os.path.join(self.path, "plots", slice.title + ".png"))
     plt.clf()
 
 
@@ -307,7 +307,7 @@ class DoubleVar(Trial):
     plt.legend(title=slice.xvars[hue])
     plt.title(slice.description)
     horiz_name = var_names[slice.xvars[horiz]]
-    plt.savefig(self.path + f'plots/{horiz_name}/' + slice.title + ".png")
+    plt.savefig(os.path.join(self.path, "plots", horiz_name, slice.title + ".png"))
     plt.clf()
 
   def plot_double_var_both(self, slice, fit):

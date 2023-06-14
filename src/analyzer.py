@@ -75,7 +75,7 @@ class Analyzer: # TODO change dependency structure
       if len(self.par_names) > 0:
         lines.append(f'Mean {self.par_names[i]}: {mean}')
     if len(self.par_names) > 0:
-      print_lines(lines, path=self.path+"fits_analysis.txt")
+      print_lines(lines, path=os.path.join(self.path, "fits_analysis.txt"))
     return self.fit_stats
 
   def costs_analysis(self):
@@ -88,7 +88,7 @@ class Analyzer: # TODO change dependency structure
     lines = []
     for i, name in enumerate(names):
       lines.append(name + ": " + self.cost_stats[i].astype(str))
-    print_lines(lines, path=self.path+"costs_analysis.txt")
+    print_lines(lines, path=os.path.join(self.path, "costs_analysis.txt"))
     return self.cost_stats
 
   def plot_costs(self, horiz, subdir=""):
@@ -101,16 +101,16 @@ class Analyzer: # TODO change dependency structure
       plt.xlabel(horiz)
       plt.ylabel("rmse loss")
       plt.title(slice.title)
-      plt.savefig(self.path + "plots/" + subdir + slice.title + ".png")
+      plt.savefig(os.join.path(self.path, "plots", subdir, slice.title + ".png"))
       plt.clf()
 
   def plot_all_costs(self):
     """ Calls plot_costs for each horiz in plot_horiz. """
-    path = ""
+    subdir = ""
     for horiz in self.plot_horiz:
       if len(self.plot_horiz) > 1:
-        path = var_names[horiz] + "/"
-      self.plot_costs(horiz, subdir=path)
+        subdir = var_names[horiz]
+      self.plot_costs(horiz, subdir=subdir)
 
   def scatter_costs(self, horiz, seper=[], subdir=""):
     """ Creates a scatter plot of costs with horiz as x-axis for each seper value. """
@@ -127,19 +127,19 @@ class Analyzer: # TODO change dependency structure
       plt.ylabel("rsme")
       plt.title(slice.title)
       lgd = plt.legend(bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=2)
-      plt.savefig(self.path + "scatters/" + subdir + slice.title + ".png",
+      plt.savefig(os.path.join(self.path, "scatters", subdir, slice.title + ".png"),
                   bbox_extra_artists=(lgd,), bbox_inches='tight')
       plt.clf()
 
   def scatter_all_costs(self):
     """ Calls scatter_costs for each (horiz, seper) in (scatter_horiz, scatter_seper). """
-    path = ""
+    subdir = ""
     for horiz, seper in product(self.scatter_horiz, self.scatter_seper):
       if len(self.scatter_horiz) > 1:
-        path = var_names[horiz] + "/"
+        subdir = var_names[horiz]
       if len(self.scatter_seper) > 1:
-        path += "-".join([var_names[var] for var in seper]) + "/"
-      self.scatter_costs(horiz, seper, subdir=path)
+        subdir = os.join.path(subdir, "-".join([var_names[var] for var in seper]))
+      self.scatter_costs(horiz, seper, subdir=subdir)
 
   def bar_chart_costs(self, horiz):
     """ Creates a bar chart of costs with horiz as x-axis."""
@@ -151,7 +151,7 @@ class Analyzer: # TODO change dependency structure
     plt.xlabel(horiz)
     plt.ylabel("rsme")
     plt.tight_layout()
-    plt.savefig(self.path + "bar_charts/" + horiz + ".png")
+    plt.savefig(os.path.join(self.path, "bar_charts", horiz + ".png"))
     plt.clf()
 
   def bar_chart_all_costs(self):

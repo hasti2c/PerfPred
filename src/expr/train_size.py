@@ -1,6 +1,6 @@
 from trial import *
 
-path_A = "results/1A/"
+path_A = os.path.join("results", "1A")
 
 class SingleTrain(SingleVar):
   """ Trial with factor D1 or D2.
@@ -29,7 +29,7 @@ class SingleTrain(SingleVar):
     """
     super().__init__([f"train set {n} size"], f, init, fixed_init=fixed_init,
                      bounds=bounds, loss=loss, par_names=par_names,
-                     path=path_A + "size" + str(n) + "/" + trial + "/",
+                     path=os.path.join(path_A, "size" + str(n), trial),
                      ignore_vars=["train set 1 jsd", "train set 2 jsd"],
                      xvars=[f"train set {n} size"], verbose=verbose)
     self.alt_var = f"train set {3 - n} size"
@@ -71,7 +71,7 @@ class DoubleTrain(DoubleVar):
     super().__init__(["train set 1 size", "train set 2 size"], f, init,
                      fixed_init=fixed_init, bounds=bounds, loss='soft_l1',
                      par_names=par_names,
-                     path=path_A + "sizes/" + trial + "/",
+                     path=os.path.join(path_A, "sizes", trial),
                      ignore_vars=["train set 1 jsd", "train set 2 jsd"],
                      xvars=["train set 1 size", "train set 2 size"],
                      verbose=verbose)
