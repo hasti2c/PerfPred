@@ -103,7 +103,7 @@ class Trial:
       - The model will obey mins[i] <= c[i] <= maxes[i] for each i, i.e. mins[i]
         and maxes[i] define the bounds for the i-th coefficient.
     """
-    self.slices = SliceGroup.get_slices(slice_vars, ignore_vars, xvars=xvars)
+    self.slices = SliceGroup(slice_vars, ignore_vars, xvars=xvars)
     self.f, self.plot_f = f, plot_f
     self.residual = lambda c, x, y : f(c, x) - y
     if fixed_init:

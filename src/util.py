@@ -19,53 +19,6 @@ verbose = 3 # Can be: 0, 1, 2, 3
 
 eps = 1e-6
 
-# TODO create class/enum for variables
-# Variables in main dataframe.
-vars = np.array(["train set 1",
-                 "train set 1 size",
-                 "train set 1 jsd",
-                 "train set 2",
-                 "train set 2 size",
-                 "train set 2 jsd",
-                 "test set",
-                 "language to"])
-# Number of variables.
-varN = len(vars)
-# Name of variables.
-var_names = {
-    "train set 1": "train1",
-    "train set 1 size": "size1",
-    "train set 1 jsd": "jsd1",
-    "train set 2": "train2",
-    "train set 2 size": "size2",
-    "train set 2 jsd": "jsd2",
-    "test set": "test",
-    "language to": "lang"
-}
-# List of all possible values for each variable.
-var_lists = np.empty(varN, dtype=list)
-for i, var in enumerate(vars):
-  var_lists[i] = [val for val in set(main_df[var]) if not pd.isnull(val)]
-
-df_cols = [
-  "train set 1",
-  "train set 1 size",
-  "train set 1 jsd",
-  "train set 2",
-  "train set 2 size",
-  "train set 2 jsd",
-  "language from",
-  "language to",
-  "test set",
-  "sp-BLEU"
-]
-df_dtypes = {
-    "train set 1 size": "Int64",
-    "train set 1 jsd": "Float64",
-    "train set 2 size": "Int64",
-    "train set 2 jsd": "Float64"
-}
-
 FloatT = (T.Any, float)
 ObjectT = (T.Any, object)
 

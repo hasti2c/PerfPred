@@ -7,13 +7,16 @@ from expr.domain_div import *
 # Single Domain: j1, j2
 # Double Domain: j1+j2
 
-# expr = SingleTrain(1, linear_single, np.zeros(2), par_names=["alpha", "C"],
-#                    trial="trial1", verbose=2)
+# expr = SingleDomain(2, linear_single, np.zeros(2), par_names=["alpha", "C"],
+#                     trial="trial1", verbose=2)
 # expr.fit_all()
 # # expr.read_all_fits()
 # expr.plot_all()
-# # expr.analyze_all()
+# expr.analyze_all()
 
-create_trial_folder(os.path.join(path_B, "jsd1", "trial1"))
-create_trial_folder(os.path.join(path_B, "jsd2", "trial1"))
-create_trial_folder(os.path.join(path_B, "jsds", "trial1"))
+expr = DoubleDomain(linear_double, np.zeros(3), par_names=["beta1", "beta2", "C"],
+                    trial="trial1", verbose=2)
+expr.fit_all()
+# expr.read_all_fits()
+expr.plot_all()
+expr.analyze_all()

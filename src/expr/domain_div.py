@@ -28,7 +28,7 @@ class SingleDomain(SingleVar):
       trial: Name of trial. Used as subdirectory name.
     """
     super().__init__([f"train set {n}", "test set"], f, init,
-                     fixed_init=fixed_init, bounds=bounds, loss='soft_l1',
+                     fixed_init=fixed_init, bounds=bounds, loss=loss,
                      par_names=par_names,
                      path=os.path.join(path_B, "jsd" + str(n), trial),
                      ignore_vars=["train set 1 jsd", "train set 2 jsd"],
@@ -71,7 +71,7 @@ class DoubleDomain(DoubleVar):
                trial: T.Optional[str]=None,
                verbose: int=1) -> None:
     super().__init__(["train set 1", "train set 2", "test set"], f, init,
-                     fixed_init=fixed_init, bounds=bounds, loss='soft_l1',
+                     fixed_init=fixed_init, bounds=bounds, loss=loss,
                      par_names=par_names,
                      path=os.path.join(path_B, "jsds", trial),
                      ignore_vars=["train set 1 jsd", "train set 2 jsd"],
@@ -82,7 +82,7 @@ class DoubleDomain(DoubleVar):
     """ Initalizes self.analyzer with attributes:
       bar_horiz = [[], ["language to"]]
     """
-    super().init_analyzer(bar_horiz=[[], ["language to"]])
+    super().init_analyzer(bar_horiz=["language to"])
 
   def analyze_all(self, run_plots=True):
     """ Calls init_analyzer and super().analyze_all(). """

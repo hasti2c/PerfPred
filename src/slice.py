@@ -1,31 +1,5 @@
 from util import *
-
-from enum import Enum
-from itertools import product
-
-class VarFlag(Enum):
-  """ Flags for usage of variables in slicing.
-
-  == SET Variables == (Used together with a preset value.)
-    In SliceGroup: All slices have the same preset values for SET vars.
-    In each Slice: All points have the same preset values for SET vars.
-  == FIX variables ==
-    In SliceGroup: Each slice has a different value of FIX vars.
-    In each Slice: All points have the same value of FIX vars (same value as
-                   used in defining Slice).
-  == VARY variables ==
-    In SliceGroup: VARY vars are not used to define Slices.
-    In each Slice: Points have a different value of VARY vars.
-  == IGNORE Variables == Behaves similarly to VARY vars.
-    In SliceGroup: IGNORE vars are not used to define Slices.
-    In each Slice: Points can have any value of IGNORE vars.
-    NOTE: The main distinction between VARY and IGNORE vars is conceptual.
-  """
-  SET = -1
-  FIX = 0
-  VARY = 1
-  IGNORE = 2
-
+from split import *
 
 class Slice: # TODO define __str__
   """ A slice of the data, representing a subset of rows of main dataframe.
@@ -129,99 +103,33 @@ class SliceGroup: # TODO define __str__
   ignore: list[str]
   preset: list[str]
 
-  def __init__(self, ids: pd.DataFrame, slices: list[Slice],
-               flags: np.ndarray[T.Any, object]) -> None:
-    """ Initializes SliceGroup. """
-    self.ids = ids
-    self.slices = slices
-    self.N = len(slices)
-    self.flags = flags
-    self.vary = [vars[i] for i in range(varN) if flags[i] == VarFlag.VARY]
-    self.ignore = [vars[i] for i in range(varN) if flags[i] == VarFlag.IGNORE]
-    self.preset = [vars[i] for i in range(varN) if flags[i] == VarFlag.SET]
-
-  @staticmethod
-  def get_flags(vary_list: list[str], ignore_list: list[str]=[],
-                preset_list: list[str]=[]) -> np.ndarray[T.Any, object]:
-    """ Takes lists of variable types and returns array of flags. """
-    return np.array([VarFlag.VARY if vars[i] in vary_list else
-                    VarFlag.IGNORE if vars[i] in ignore_list else
-                    VarFlag.SET if vars[i] in preset_list else
-                    VarFlag.FIX for i in range(varN)])
-
-  @staticmethod ## TODO make these initializers
-  def get_slices_by_flags(flags, presets=np.full(varN, pd.NA), df=main_df,
-                          xvars=None, set_xvar=True):  
-    """ Instantiates SliceGroup given flags.
-
+  def __init__(self, vary_list, ignore_list=[], preset_list=[],
+               presets=np.full(varN, pd.NA), df=main_df, xvars=None,
+               set_xvar=True):
+    """ Initializes SliceGroup. 
+    
     == Arguments ==
-      flags: Array of length varN containing VarFlags corresponding to each var.
-      presets: Array of preset values for each SET var.
-      df: Dataframe to perform slicing on.
-      set_xvar: Whether or not to give slices xvars value when initializing.
-                If True, slices will be given xvars value.
-      xvars: xvars value to use when initializing slices.
-             By Default (i.e. if xvars is None and set_xvar is True), VARY vars
-             will be used as xvars.
-
-    == Return Value ==
-      Instance of SliceGroup as specified by the inputs.
+    vary_list: List of VARY vars.
+    ignore_list: List of IGNORE vars.
+    preset_list: List of SET vars.
+    presets: Array of preset values for each SET var.
+    df: Dataframe to perform slicing on.
+    set_xvar: Whether or not to give slices xvars value when initializing.
+              If True, slices will be given xvars value.
+    xvars: xvars value to use when initializing slices.
+            By Default (i.e. if xvars is None and set_xvar is True), VARY vars
+            will be used as xvars.
     """
-    fixed_indices = list(np.where(flags == VarFlag.FIX)[0])
-    vary_indices = list(np.where(flags == VarFlag.VARY)[0])
-    set_indices = list(np.where(flags == VarFlag.SET)[0])
-    ignore_indices = list(np.where(flags == VarFlag.IGNORE)[0])
+    self.vary, self.ignore, self.preset = vary_list, ignore_list, preset_list
+    self.flags = get_flags(self.vary, self.ignore, self.preset)
 
-    ids, slices = [], []
-    prd = list(product(*var_lists[fixed_indices]))
-    for comb in prd:
-      id = np.full(varN, pd.NA)
-      # find values to fix
-      for i in set_indices:
-        id[i] = presets[i]
-      for j, i in enumerate(fixed_indices):
-        # i is index of flags (out of varN), j is index of fixed_indices/comb
-        id[i] = comb[j]
-
-      # slice to fix values
-      slice = df
-      for i in fixed_indices + set_indices:
-        slice = slice[slice[vars[i]] == id[i]]
-
-      if not slice.empty:
-        ids.append(id)
-        slices.append(slice)
-    ids = pd.DataFrame(np.array(ids), columns=list(vars)).astype(df_dtypes)
+    ids, slices = split_by_flags(self.flags, presets=presets, df=df)
+    self.ids = pd.DataFrame(np.array(ids), columns=list(vars)).astype(df_dtypes)
     if set_xvar and xvars is None:
-      xvars = vars[vary_indices]
-    slices = [Slice(slices[i], ids.iloc[i], flags, xvars)
-              for i in range(len(slices))]
-    return SliceGroup(ids, slices, flags)
-
-  @staticmethod
-  def get_slices(vary_list, ignore_list=[], preset_list=[],
-                 presets=np.full(varN, pd.NA), df=main_df, xvars=None,
-                 set_xvar=True):
-    """ Instantiates SliceGroup given list of different variable types.
-
-    == Arguments ==
-      vary_list: List of VARY vars.
-      ignore_list: List of IGNORE vars.
-      preset_list: List of SET vars.
-      presets: Array of preset values for each SET var.
-      df: Dataframe to perform slicing on.
-      set_xvar: Whether or not to give slices xvars value when initializing.
-                If True, slices will be given xvars value.
-      xvars: xvars value to use when initializing slices.
-             By Default (i.e. if xvars is None and set_xvar is True), VARY vars
-             will be used as xvars.
-
-    == Return Value ==
-      Instance of SliceGroup as specified by the inputs.
-    """
-    flags = SliceGroup.get_flags(vary_list, ignore_list, preset_list)
-    return SliceGroup.get_slices_by_flags(flags, presets=presets, df=df,
-                                          xvars=xvars, set_xvar=set_xvar)
+      xvars = vary_list
+    self.slices = [Slice(slices[i], self.ids.iloc[i], self.flags, xvars)
+                   for i in range(len(slices))]
+    self.N = len(self.slices)
 
   def ids_as_list(self):
     ret = []

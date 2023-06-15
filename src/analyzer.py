@@ -58,11 +58,10 @@ class Analyzer: # TODO change dependency structure
       df.reset_index(drop=True, inplace=True)
 
     if len(split_vars) > 0:
-      return SliceGroup.get_slices(split_vars, self.slice_vars + self.ignore_vars,
-                            df=df, set_xvar=False)
+      return SliceGroup(split_vars, self.slice_vars + self.ignore_vars, df=df, set_xvar=False)
     else:
       split_vars = [var for var in vars if var not in seper_vars]
-      return SliceGroup.get_slices(split_vars,
+      return SliceGroup(split_vars,
                                    self.slice_vars + self.ignore_vars,
                                    df=df, set_xvar=False)
 
