@@ -2,7 +2,7 @@ from trial import *
 
 path_B = os.path.join("results", "1B")
 
-class SingleDomain(SingleVar):
+class SingleDomainTrial(SingleVar):
   """ Trial with factor j1 or j2.
 
   == Attributes ==
@@ -20,7 +20,7 @@ class SingleDomain(SingleVar):
                pars: list[str]=[],
                trial: T.Optional[str]=None,
                verbose: int=1) -> None:
-    """ Initializes a SingleDomain trial.
+    """ Initializes a SingleDomainTrial trial.
     == Arguments ==
       n: Whether to use j1 or j2.
          If n == 1, uses train set 1. If n == 2, uses train set 2.
@@ -50,7 +50,7 @@ class SingleDomain(SingleVar):
     super().analyze_all(run_plots=run_plots)
 
 
-class DoubleDomain(DoubleVar):
+class DoubleDomainTrial(DoubleVar):
   """ Trial with factors j1 + j2.
 
   == Attributes ==
