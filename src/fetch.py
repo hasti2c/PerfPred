@@ -120,7 +120,6 @@ def format_df(data_df: pd.DataFrame, jsd_df: pd.DataFrame,
       - sp-BLEU (Float64): sp-BLEU of experiment record.
     NOTE: Dataset pmo is also represented as gov for simplicity.
   """
-  # TODO discard_na=False is unsupported.
   df = pd.DataFrame(columns=df_cols)
   for row in range(1, data_df.shape[0], 2):
     for col in data_df.columns[5:]:

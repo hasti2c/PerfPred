@@ -28,17 +28,15 @@ class Trial:
             plot_f takes a slice and an array of coefficient values as input.
     path: Path for saving files related to the trial.
     verbose: Level of verbosity in progress logs.
-    fits: List of fitted coefficients per slice.
-    costs: List of rmse cost of fitted model per slice.
+    df: Dataframe containing slice ids, fits, and costs.
     analyzer: Instance of Analayzer for this trial.
 
   == Methods ==
     rmse: Calculates rmse for a slice given fitted coeffs.
     fit_slice: Fits the trial function f for a slice.
-    fit_all: Fits all slices in self.slices. Puts result in self.fits and
-             self.costs.
+    fit_all: Fits all slices in self.slices. Puts result in self.df.
     plot_all: Plots all slices using plot_f.
-    read_all_fits: Reads fits and costs into self.fits and self.costs from pickle.
+    read_all_fits: Reads fits and costs into self.df from csv.
   """
   slices: SliceGroup
   f: T.Callable[[FloatArray, FloatArray], FloatArray]
@@ -51,8 +49,7 @@ class Trial:
   plot_f: T.Callable[[Slice, FloatArray], None]
   path: T.Optional[str]
   verbose: int
-  fits: list[FloatArray]
-  costs: list[float]
+  df: pd.DataFrame
   analyzer: Analyzer
 
   def __init__(self, slice_vars: list[str],
@@ -137,14 +134,14 @@ class Trial:
     return fit_x, cost
 
   def fit_all(self) -> T.Tuple[list[FloatArray], list[float]]:
-    """ Fits all slices in self.slices. Puts result in self.fits and self.costs.
-    If path is not None, writes self.fits and costs to a pickle and a txt file.
-    Returns self.fits and self.costs.
+    """ Fits all slices in self.slices. Puts result in self.df.
+    If path is not None, writes fits and costs to a csv file.
+    Returns fits and costs.
     """
-    self.fits = np.empty(self.slices.N, dtype=np.ndarray)
-    self.costs = np.empty(self.slices.N, dtype=float)
+    fits = np.empty(self.slices.N, dtype=np.ndarray)
+    costs = np.empty(self.slices.N, dtype=float)
     for i, slice in enumerate(self.slices.slices):
-      self.fits[i], self.costs[i] = self.fit_slice(slice, self.init[i])
+      fits[i], costs[i] = self.fit_slice(slice, self.init[i])
       if self.verbose >= 3:
         p = verbose_helper(i + 1, self.slices.N)
         if p > 0:
@@ -152,23 +149,31 @@ class Trial:
     if self.verbose >= 2:
       print("Done fitting.")
 
+    self.init_df(fits, costs)
     self.write_all_fits()
-    return self.fits, self.costs
+    return fits, costs
 
   def write_all_fits(self):
     if self.path is not None:
       ids = ["-".join(map(str, id)) for id in self.slices.ids_as_list()]
-      fits = [",".join(map(str, fit)) for fit in self.fits]
-      write_to_csv(os.path.join(self.path, "fits.csv"), zip(ids, fits, self.costs))
+      fits = [",".join(map(str, fit)) for fit in self.df["fit"]]
+      write_to_csv(os.path.join(self.path, "fits.csv"), zip(ids, fits, self.df["cost"]))
 
   def read_all_fits(self) -> T.Tuple[list[FloatArray], list[float]]:
-    """ Reads fits and costs into self.fits and self.costs from pickle.
+    """ Reads fits and costs into self.df from csv.
     Pre-Condition: fit_all has already been run for this model with the same path.
     """
     data = read_from_csv(os.path.join(self.path, "fits.csv"))
-    self.fits = np.array([np.array(row[1].split(","), dtype=float) for row in data])
-    self.costs = np.array([float(row[2]) for row in data])
-    return self.fits, self.costs
+    fits = np.array([np.array(row[1].split(","), dtype=float) for row in data])
+    costs = np.array([float(row[2]) for row in data])
+    self.init_df(fits, costs)
+    return fits, costs
+
+  def init_df(self, fits, costs):
+    self.df = self.slices.ids.copy()
+    self.df["fit"] = fits
+    self.df["cost"] = costs
+    self.df = self.df.astype({"cost": "Float64"})
 
   # TODO move grid search here
 
@@ -178,7 +183,7 @@ class Trial:
     """
     for i in range(self.slices.N):
       slice = self.slices.slices[i]
-      self.plot_f(slice, self.fits[i])
+      self.plot_f(slice, self.df["fit"][i])
       if self.verbose >= 2:
         p = verbose_helper(i + 1, self.slices.N)
         if p > 0:
@@ -189,11 +194,7 @@ class Trial:
   def init_analyzer(self, plot_horiz=[], scatter_horiz=[], bar_horiz=[],
                     scatter_seper=[[]]):
     """ Initializes self.analyzer. """
-    results_df = self.slices.ids.copy()
-    results_df["fit"] = self.fits
-    results_df["cost"] = self.costs
-    results_df = results_df.astype({"cost": "Float64"})
-    self.analyzer = Analyzer(self.slices.vary, results_df, self.par_num,
+    self.analyzer = Analyzer(self.slices.vary, self.df, self.par_num,
                              self.par_names, os.path.join(self.path, "analysis"),
                              self.slices.ignore, plot_horiz, scatter_horiz,
                              bar_horiz, scatter_seper)
