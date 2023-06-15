@@ -1,36 +1,35 @@
-# from trial import *
+from trial import *
 
-# path_B = os.path.join("results", "1B")
+path_C = os.path.join("results", "1C")
 
-# class SingleDomainTrial(SingleVar):
-#   """ Trial with factor j1 or j2.
+class LanguageTrial(SingleVar):
+  """ Trial with factor geographical, genetic, syntactic, phonological,
+      inventory, or featural.
 
 #   == Attributes ==
 #     alt_var: The other factor among j1, j2 not used as slice var.
 #   Otherwise same as SingleVar, but with pre-set values:
 #     slice_vars = ["train set n", "test set"]
 #     x_vars = ["train set n jsd"]
-#   """
-#   def __init__(self, n: int,
-#                f: T.Callable[[FloatArray, FloatArray], FloatArray],
-#                init: T.Union[FloatArray, list[FloatArray]],
-#                fixed_init: bool=True,
-#                bounds: T.Optional[tuple[list[float]]]=None,
-#                loss: str='soft_l1',
-#                pars: list[str]=[],
-#                trial: T.Optional[str]=None,
-#                verbose: int=1) -> None:
-#     """ Initializes a SingleDomainTrial trial.
-#     == Arguments ==
-#       n: Whether to use j1 or j2.
-#          If n == 1, uses train set 1. If n == 2, uses train set 2.
-#       trial: Name of trial. Used as subdirectory name.
-#     """
-#     super().__init__([f"train set {n}", "test set"], f, init,
-#                      fixed_init=fixed_init, bounds=bounds, loss=loss,
-#                      pars=pars, path=os.path.join(path_B, "jsd" + str(n), trial),
-#                      xvars=[f"train set {n} jsd"], verbose=verbose)
-#     self.alt_var = f"train set {3 - n}"
+  """
+  def __init__(self, type: str,
+               f: T.Callable[[FloatArray, FloatArray], FloatArray],
+               init: T.Union[FloatArray, list[FloatArray]],
+               fixed_init: bool=True,
+               bounds: T.Optional[tuple[list[float]]]=None,
+               loss: str='soft_l1',
+               pars: list[str]=[],
+               trial: T.Optional[str]=None,
+               verbose: int=1) -> None:
+    """ Initializes a Language trial.
+    == Arguments ==
+      type: Which l2v distance to use.
+      trial: Name of trial. Used as subdirectory name.
+    """
+    super().__init__(["language to"], f, init, fixed_init=fixed_init, 
+                     bounds=bounds, loss=loss, pars=pars, 
+                     path=os.path.join(path_C, var_names[type], trial),
+                     xvars=[type], verbose=verbose)
 
 #   def init_analyzer(self):
 #     """ Initalizes self.analyzer with attributes:
@@ -43,41 +42,6 @@
 #     super().init_analyzer(plot_horiz=numer, scatter_horiz=numer,
 #                           bar_horiz=[self.alt_var, "language to"],
 #                           scatter_seper=[[], ["language to"]])
-
-#   def analyze_all(self, run_plots=True):
-#     """ Calls init_analyzer and super().analyze_all(). """
-#     self.init_analyzer()
-#     super().analyze_all(run_plots=run_plots)
-
-
-# class DoubleDomainTrial(DoubleVar):
-#   """ Trial with factors j1 + j2.
-
-#   == Attributes ==
-#   Same as DoubleVar, but with pre-set values:
-#     slice_vars = ["train set 1", "train set 2", "test set"]
-#     x_vars = ["train set 1 jsd", "train set 2 jsd"]
-#   """
-#   def __init__(self, f: T.Callable[[FloatArray, FloatArray], FloatArray],
-#                init: T.Union[FloatArray, list[FloatArray]],
-#                fixed_init: bool=True,
-#                bounds: T.Optional[tuple[list[float]]]=None,
-#                loss: str='soft_l1',
-#                pars: list[str]=[],
-#                trial: T.Optional[str]=None,
-#                verbose: int=1) -> None:
-#     super().__init__(["train set 1", "train set 2", "test set"], f, init,
-#                      fixed_init=fixed_init, bounds=bounds, loss=loss,
-#                      pars=pars, path=os.path.join(path_B, "jsds", trial),
-#                      xvars=["train set 1 jsd", "train set 2 jsd"],
-#                      label_func=lambda i: f"train set {i}",
-#                      verbose=verbose)
-
-#   def init_analyzer(self): # TODO should have plot and scatter
-#     """ Initalizes self.analyzer with attributes:
-#       bar_horiz = [[], ["language to"]]
-#     """
-#     super().init_analyzer(bar_horiz=["language to"])
 
 #   def analyze_all(self, run_plots=True):
 #     """ Calls init_analyzer and super().analyze_all(). """
