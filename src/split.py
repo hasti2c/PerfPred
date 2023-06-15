@@ -69,9 +69,7 @@ df_cols = [
 ]
 df_dtypes = {
     "train set 1 size": "Int64",
-    "train set 1 jsd": "Float64",
     "train set 2 size": "Int64",
-    "train set 2 jsd": "Float64"
 }
 
 

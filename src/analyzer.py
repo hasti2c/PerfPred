@@ -55,10 +55,10 @@ class Analyzer: # TODO change dependency structure
       df.reset_index(drop=True, inplace=True)
 
     if len(split_vars) > 0:
-      return SliceGroup(split_vars, df=df, set_xvar=False)
+      return SliceGroup(split_vars + self.slice_vars, df=df, set_xvar=False)
     else:
       split_vars = [var for var in vars if var not in seper_vars]
-      return SliceGroup(split_vars, df=df, set_xvar=False)
+      return SliceGroup(split_vars + self.slice_vars, df=df, set_xvar=False)
 
   def fits_analysis(self, save_prints=True): # TODO make np array
     """ Prints analysis of fits (to file or stdout). """
@@ -95,9 +95,8 @@ class Analyzer: # TODO change dependency structure
       plt.plot(slice.df[horiz], slice.df["cost"])
       plt.xlabel(horiz)
       plt.ylabel("rmse loss")
-      title = slice.get_title(ignore=self.slice_vars)
-      plt.title(title)
-      plt.savefig(os.path.join(self.path, "plots", subdir, title + ".png"))
+      plt.title(slice.title)
+      plt.savefig(os.path.join(self.path, "plots", subdir, slice.title + ".png"))
       plt.clf()
 
   def plot_all_costs(self):
@@ -121,7 +120,7 @@ class Analyzer: # TODO change dependency structure
 
       plt.xlabel(horiz)
       plt.ylabel("rsme")
-      title = slice.get_title(ignore=self.slice_vars)
+      title = slice.title
       plt.title(title)
       lgd = plt.legend(bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=2)
       plt.savefig(os.path.join(self.path, "scatters", subdir, title + ".png"),
