@@ -22,7 +22,7 @@ df_dtypes = {
 
 def read_pure_data(gc) -> pd.DataFrame:
   """Reads experiment records from GSheet to a DataFrame."""
-  worksheet = gc.open('Experiment 1 Tab').get_worksheet(0)
+  worksheet = gc.open('Experiment 1 Data').get_worksheet(0)
   rows = worksheet.get_all_values()
   df = pd.DataFrame.from_records(rows[4:109], coerce_float=True)
   df.columns = [
@@ -61,7 +61,7 @@ def read_pure_data(gc) -> pd.DataFrame:
 
 def read_pure_jsd(gc) -> pd.DataFrame:
   """Reads jsd values from GSheet to a DataFrame."""
-  worksheet = gc.open('Experiment 1 Tab').get_worksheet(1)
+  worksheet = gc.open('Experiment 1 Data').get_worksheet(1)
   rows = worksheet.get_all_values()
   df = pd.DataFrame.from_records(rows[1:38], coerce_float=True)
   df.columns = [

@@ -172,7 +172,69 @@ class Trial:
     self.df["cost"] = costs
     self.df = self.df.astype({"cost": "Float64"})
 
-  # TODO move grid search here
+  # TODO refactor grid search
+
+  # def grid_search_all(f, slices, init_ranges, num=11, bounds=None,
+  #                   loss='linear', path=None, plot_func=None):
+  #   n = len(init_ranges)
+  #   ranges = np.empty(n, dtype=np.ndarray)
+  #   for i, (min, max) in enumerate(init_ranges):
+  #     ranges[i] = np.round(np.linspace(min, max, num, endpoint=True), decimals=4)
+
+  #   best_fits = np.empty(slices.N, dtype=np.ndarray)
+  #   best_costs = np.full(slices.N, np.inf, dtype=float)
+  #   best_inits = np.empty(slices.N, dtype=np.ndarray)
+  #   inits = list(product(*ranges))
+  #   for j, init in enumerate(inits):
+  #     fits, costs = fit_all(f, slices, np.array(init), bounds=bounds, loss=loss)
+  #     for i in range(slices.N):
+  #       if costs[i] < best_costs[i]:
+  #         best_fits[i] = fits[i]
+  #         best_costs[i] = costs[i]
+  #         best_inits[i] = np.array(init)
+  #     if verbose >= 1:
+  #         p = verbose_helper(j + 1, len(inits), num=100)
+  #         if p > 0:
+  #           print(f"Have done {p}% of grid search... [{j + 1}/{len(inits)}]")
+  #   if verbose >= 0:
+  #     print("Done grid searching.")
+
+  #   if path is not None:
+  #     write_pickle_to_file(path + "grid.pickle", (best_fits, best_costs, best_inits))
+  #     write_list_to_file(path + "grid.txt", list(zip(list(slices.ids), best_fits, best_costs, best_inits)))
+  #     if plot_func is not None:
+  #       plot_all(f, slices, fits, path + "slice_plots/", plot_func)
+  #   return best_fits, best_costs, best_inits
+
+  # def grid_search_one(f, slice, init_ranges, num=11, bounds=None,
+  #                   loss='linear', path=None, plot_func=None):
+  #   n = len(init_ranges)
+  #   ranges = np.empty(n, dtype=np.ndarray)
+  #   for i, (min, max) in enumerate(init_ranges):
+  #     ranges[i] = np.round(np.linspace(min, max, num, endpoint=True), decimals=4)
+
+  #   best_fit, best_init = None, None
+  #   best_cost = np.inf
+  #   inits = list(product(*ranges))
+  #   for j, init in enumerate(inits):
+  #     fit, cost = fit_one(f, slice, np.array(init), bounds=bounds, loss=loss,
+  #                         id=id)
+  #     print(f"init={init}, fit={fit}, cost={cost}")
+  #     if cost < best_cost:
+  #       best_fit, best_cost, best_init = fit, cost, np.array(init)
+  #     if verbose >= 1:
+  #         p = verbose_helper(j + 1, len(inits), num=10)
+  #         if p > 0:
+  #           print(f"Have done {p}% of grid search... [{j + 1}/{len(inits)}]")
+  #   if verbose >= 0:
+  #     print("Done grid searching.")
+
+  #   if path is not None:
+  #     # write_pickle_to_file(path + "grid.pickle", (ids, best_fits, best_costs, best_inits))
+  #     # write_list_to_file(path + "grid.txt", list(zip(ids, best_fits, best_costs, best_inits)))
+  #     if plot_func is not None:
+  #       plot_func(f, id, slice, fit, path + "temp/")
+  #   return id, best_fit, best_cost, best_init
 
   def plot_all(self) -> None:
     """ Plots all slices using plot_f.
