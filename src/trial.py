@@ -310,7 +310,7 @@ class SingleVar(Trial):
     plt.xlabel(slice.xvars[0])
     plt.ylabel('sp-BLEU')
     plt.title(slice.description)
-    plt.savefig(os.path.join(self.path, "plots", slice.get_title() + ".png"))
+    plt.savefig(os.path.join(self.path, "plots", slice.title + ".png"))
     plt.clf()
 
 
@@ -371,7 +371,7 @@ class DoubleVar(Trial):
     plt.legend(title=label)
     plt.title(slice.description)
     horiz_name = var_names[slice.xvars[horiz]]
-    plt.savefig(os.path.join(self.path, "plots", horiz_name, slice.get_title() + ".png"))
+    plt.savefig(os.path.join(self.path, "plots", horiz_name, slice.title + ".png"))
     plt.clf()
 
   def plot_double_var_both(self, slice: Slice, fit: FloatArray, 

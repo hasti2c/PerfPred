@@ -12,6 +12,8 @@ class Slice:
     flags: Flags describing the slicing.
     vary: List of VARY vars in the slicing.
     preset: SET vars of slicing.
+    title: Short name for slice.
+    description: Long name for slice.
     xvars: Variables used as input of model function.
     x: Input array of model, i.e. xvars columns of df.
        dim: (n, k) if n df rows and k xvars.
@@ -26,6 +28,8 @@ class Slice:
   flags: ObjectArray
   vary: list[str]
   preset: list[str]
+  title: str
+  description: str
   xvars: list[str]
   x: FloatArray
   y: FloatArray
@@ -38,12 +42,13 @@ class Slice:
     self.flags = flags
     self.vary = [vars[i] for i in range(varN) if flags[i] == VarFlag.VARY]
     self.preset = [vars[i] for i in range(varN) if flags[i] == VarFlag.SET]
+    self.title, self.description = self.get_title()
     if xvars is not None:
       self.xvars = xvars
       self.x = self.df.loc[:, xvars].astype(float).to_numpy()
       self.y = self.df.loc[:, "sp-BLEU"].to_numpy()
 
-  def get_title(self, ignore=[]) -> tuple[str]:
+  def get_title(self) -> tuple[str]:
     """ Returns title and description for slice.
     Return Values:
       title: Non NA values in id seperated by "-".
@@ -56,8 +61,6 @@ class Slice:
 
     fix_vars, vals = [], []
     for i in fix:
-      if var_names[vars[i]] in ignore:
-        continue
       fix_vars.append(var_names[vars[i]])
       if vars[i] in ["train set 1 size", "train set 2 size"]:
         vals.append(str(self.id[vars[i]]) + "k")
