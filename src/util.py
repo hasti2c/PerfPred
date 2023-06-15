@@ -10,12 +10,6 @@ import csv
 main_df = pd.read_csv("data/data_na_disc.csv") # TODO: consider na_keep
 
 # TODO remove these bools
-run_fits = False # If false, reads fits & costs from file.
-run_plots = True
-run_analysis = True
-run_grid = False # If false, reads grid search results from file.
-save_prints = True # If true, writes to file.
-verbose = 3 # Can be: 0, 1, 2, 3
 
 eps = 1e-6
 
@@ -37,8 +31,8 @@ def read_from_csv(f: str) -> T.Iterable:
   with open(f, newline='') as fp:
     return [row for row in csv.reader(fp)]
 
-def print_lines(lines, path=None, append=False):
-  """ If global variable save_prints is True, saves lines to path.
+def print_lines(lines, path=None, append=False, save_prints=True):
+  """ If save_prints is True, saves lines to path.
   Otherwise, prints lines to stdout.
   """
   f = open(path, "w") if save_prints and path is not None else sys.stdout

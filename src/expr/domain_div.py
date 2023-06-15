@@ -74,6 +74,7 @@ class DoubleDomain(DoubleVar):
                      pars=pars, path=os.path.join(path_B, "jsds", trial),
                      ignore_vars=["train set 1 jsd", "train set 2 jsd"],
                      xvars=["train set 1 jsd", "train set 2 jsd"],
+                     label_func=lambda i: f"train set {i}",
                      verbose=verbose)
 
   def init_analyzer(self): # TODO should have plot and scatter

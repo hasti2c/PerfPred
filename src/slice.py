@@ -1,7 +1,7 @@
 from util import *
 from split import *
 
-class Slice: # TODO define __str__
+class Slice:
   """ A slice of the data, representing a subset of rows of main dataframe.
 
   == Attributes ==
@@ -76,7 +76,7 @@ class Slice: # TODO define __str__
     return title, description
   
 
-class SliceGroup: # TODO define __str__
+class SliceGroup:
   """ A group of slices as defined by VarFlags.
 
   == Attributes ==

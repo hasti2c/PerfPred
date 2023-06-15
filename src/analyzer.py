@@ -65,7 +65,7 @@ class Analyzer: # TODO change dependency structure
                                    self.slice_vars + self.ignore_vars,
                                    df=df, set_xvar=False)
 
-  def fits_analysis(self): # TODO make np array
+  def fits_analysis(self, save_prints=True): # TODO make np array
     """ Prints analysis of fits (to file or stdout). """
     self.fit_stats, lines = [], []
     for i in range(self.par_num):
@@ -74,10 +74,11 @@ class Analyzer: # TODO change dependency structure
       if len(self.pars) > 0:
         lines.append(f'Mean {self.pars[i]}: {mean}')
     if len(self.pars) > 0:
-      print_lines(lines, path=os.path.join(self.path, "fits_analysis.txt"))
+      print_lines(lines, path=os.path.join(self.path, "fits_analysis.txt"), 
+                  save_prints=save_prints)
     return self.fit_stats
 
-  def costs_analysis(self):
+  def costs_analysis(self, save_prints=True):
     """ Prints analysis of costs (to file or stdout). """
     names = ["Average", "Q1", "Median", "Q3", "Variance", "Standard Deviation"]
     costs = self.df["cost"]
@@ -87,7 +88,8 @@ class Analyzer: # TODO change dependency structure
     lines = []
     for i, name in enumerate(names):
       lines.append(name + ": " + self.cost_stats[i].astype(str))
-    print_lines(lines, path=os.path.join(self.path, "costs_analysis.txt"))
+    print_lines(lines, path=os.path.join(self.path, "costs_analysis.txt"),
+                save_prints=save_prints)
     return self.cost_stats
 
   def plot_costs(self, horiz, subdir=""):

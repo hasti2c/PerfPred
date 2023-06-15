@@ -141,7 +141,6 @@ class Trial:
     fits = np.empty((self.slices.N, self.par_num))
     costs = np.empty(self.slices.N)
     for i, slice in enumerate(self.slices.slices):
-      fit, cost = self.fit_slice(slice, self.init[i])
       fits[i, :], costs[i] = self.fit_slice(slice, self.init[i])
       if self.verbose >= 3:
         p = verbose_helper(i + 1, self.slices.N)
@@ -166,11 +165,6 @@ class Trial:
     fits = np.array(self.df[self.pars])
     costs = np.array(self.df["cost"])
     return fits, costs
-    # data = read_from_csv(os.path.join(self.path, "fits.csv"))
-    # fits = np.array([np.array(row[1].split(","), dtype=float) for row in data], dtype=np.ndarray)
-    # costs = np.array([float(row[2]) for row in data])
-    # self.init_df(fits, costs)
-    # return fits, costs
 
   def init_df(self, fits, costs):
     self.df = self.slices.ids.copy()
@@ -202,21 +196,21 @@ class Trial:
                              self.slices.ignore, plot_horiz, scatter_horiz,
                              bar_horiz, scatter_seper)
 
-  def analyze_all(self, run_plots=True):
+  def analyze_all(self, run_plots=True, save_prints=True):
     """ Calls analyzer.plot_all_costs, analyzer.scatter_all_costs, and
         analyzer.bar_chart_all_costs. """
-    self.analyzer.fits_analysis()
-    self.analyzer.costs_analysis()
+    self.analyzer.fits_analysis(save_prints=save_prints)
+    self.analyzer.costs_analysis(save_prints=save_prints)
     if run_plots:
       self.analyzer.plot_all_costs()
-      if len(self.analyzer.plot_horiz) > 0 and verbose >= 2:
+      if len(self.analyzer.plot_horiz) > 0 and self.verbose >= 2:
         print("Finished line plots.")
       self.analyzer.scatter_all_costs()
       if len(self.analyzer.scatter_horiz) > 0 and \
-         len(self.analyzer.scatter_seper) > 0 and verbose >= 2:
+         len(self.analyzer.scatter_seper) > 0 and self.verbose >= 2:
         print("Finished scatter plots.")
       self.analyzer.bar_chart_all_costs()
-      if len(self.analyzer.bar_horiz) != 0 and verbose >= 2:
+      if len(self.analyzer.bar_horiz) != 0 and self.verbose >= 2:
         print("Finished bar charts.")
     return self.analyzer.fit_stats, self.analyzer.cost_stats
   
@@ -275,45 +269,60 @@ class DoubleVar(Trial):
                path: T.Optional[str]=None,
                ignore_vars: list[str]=[],
                xvars: list[str]=None,
+               label_func: T.Optional[T.Callable[[int], str]]=None,
                verbose: int=1) -> None:
     """ Initializes a DoubleVar Trial.
     Pre-condition: Should have two xvars.
     """
     super().__init__(slice_vars, f, init, fixed_init=fixed_init, bounds=bounds,
                      loss=loss, pars=pars, path=path, ignore_vars=ignore_vars, 
-                     xvars=xvars, plot_f=self.plot_double_var_both, 
+                     xvars=xvars, 
+                     plot_f=lambda slice, fit: self.plot_double_var_both(slice, fit, label_func),
                      verbose=verbose)
 
-  def plot_double_var(self, slice: Slice, fit: FloatArray, horiz: int) -> None:
+  def plot_double_var(self, slice: Slice, fit: FloatArray, horiz: int,
+                      label: T.Optional[str]=None) -> None:
     """ Plots a slice against the xvar[horiz]. horiz should be 0 or 1.
     x-axis will be xvar[horiz] and hue will be xvar[1 - horiz].
     Line plots the fitted function, scatter plots the real values.
     """
     hue = 1 - horiz
     x = slice.x[:, horiz]
-    z = slice.x[:, hue]
     n, N = min(x), max(x)
-    colors = get_colors(len(np.unique(z)))
-    for i, k in enumerate(np.unique(z)):
+
+    z = slice.x[:, hue]
+    if label is None:
+      label = slice.xvars[hue]
+    l_all = slice.df.loc[:, label]
+    l, indices = np.unique(l_all, return_index=True)
+    z = z[indices]
+    colors = get_colors(len(l))
+
+    for i in range(len(l)):
       xs = np.linspace(n, N, 100, endpoint=True)
       if horiz == 0:
-        xs_in = np.column_stack((xs, np.full(len(xs), k)))
+        xs_in = np.column_stack((xs, np.full(len(xs), z[i])))
       else:
-        xs_in = np.column_stack((np.full(len(xs), k), xs))
+        xs_in = np.column_stack((np.full(len(xs), z[i]), xs))
       ys = self.f(fit, xs_in)
-      plt.plot(xs, ys, c=colors[i], label=f'{k}')
-    plt.scatter(x, slice.y, c=[colors[np.where(np.unique(z) == k)[0][0]] for k in z])
+      plt.plot(xs, ys, c=colors[i], label=f'{l[i]}')
+    plt.scatter(x, slice.y, c=[colors[np.where(l == k)[0][0]] for k in l_all])
     # TODO labels
 
     plt.xlabel(slice.xvars[horiz])
     plt.ylabel('sp-BLEU')
-    plt.legend(title=slice.xvars[hue])
+    plt.legend(title=label)
     plt.title(slice.description)
     horiz_name = var_names[slice.xvars[horiz]]
     plt.savefig(os.path.join(self.path, "plots", horiz_name, slice.title + ".png"))
     plt.clf()
 
-  def plot_double_var_both(self, slice, fit):
+  def plot_double_var_both(self, slice: Slice, fit: FloatArray, 
+                           label_func: T.Optional[T.Callable[[int], str]]=None):
     """ Calls plot_double var with horiz=0 and horiz=1. """
-    self.plot_double_var(slice, fit, 0)
-    self.plot_double_var(slice, fit, 1)
+    if label_func is None:
+      self.plot_double_var(slice, fit, 0)
+      self.plot_double_var(slice, fit, 1)
+    else:
+      self.plot_double_var(slice, fit, 0, label=label_func(2))
+      self.plot_double_var(slice, fit, 1, label=label_func(1))
