@@ -60,14 +60,12 @@ class Trial:
                loss: str='soft_l1',
                pars: list[str]=[],
                path: T.Optional[str]=None,
-               ignore_vars: list[str]=[],
                xvars: list[str]=None,
                plot_f: T.Callable[[Slice, FloatArray], None]=None,
                verbose: int=1) -> None:
     """ Initializes a slice.
     == Arguments ==
       slice_vars: VARY vars for slicing.
-      ignore_vars: IGNORE vars for slicing.
       xvars: xvars for each slice.
       f: Trial function used for fitting. (More info in pre-conditions.)
       init: If fixed_init is true, init is the initial value for all slices.
@@ -100,7 +98,7 @@ class Trial:
       - The model will obey mins[i] <= c[i] <= maxes[i] for each i, i.e. mins[i]
         and maxes[i] define the bounds for the i-th coefficient.
     """
-    self.slices = SliceGroup(slice_vars, ignore_vars, xvars=xvars)
+    self.slices = SliceGroup(slice_vars, xvars=xvars)
     self.f, self.plot_f = f, plot_f
     self.residual = lambda c, x, y : f(c, x) - y
     if fixed_init:
@@ -255,8 +253,8 @@ class Trial:
     """ Initializes self.analyzer. """
     self.analyzer = Analyzer(self.slices.vary, self.df, self.par_num,
                              self.pars, os.path.join(self.path, "analysis"),
-                             self.slices.ignore, plot_horiz, scatter_horiz,
-                             bar_horiz, scatter_seper)
+                             plot_horiz, scatter_horiz, bar_horiz, 
+                             scatter_seper)
 
   def analyze_all(self, run_plots=True, save_prints=True):
     """ Calls analyzer.plot_all_costs, analyzer.scatter_all_costs, and
@@ -289,15 +287,14 @@ class SingleVar(Trial):
                loss: str='soft_l1',
                pars: list[str]=[],
                path: T.Optional[str]=None,
-               ignore_vars: list[str]=[],
                xvars: list[str]=None,
                verbose: int=1) -> None:
     """ Initializes a SingleVar Trial.
     Pre-condition: Should have only one xvar.
     """
     super().__init__(slice_vars, f, init, fixed_init=fixed_init, bounds=bounds,
-                     loss=loss, pars=pars, path=path, ignore_vars=ignore_vars, 
-                     xvars=xvars, plot_f=self.plot_single_var, verbose=verbose)
+                     loss=loss, pars=pars, path=path, xvars=xvars, 
+                     plot_f=self.plot_single_var, verbose=verbose)
 
   def plot_single_var(self, slice: Slice, fit: FloatArray) -> None:
     """ Plots a slice against its xvar.
@@ -313,7 +310,7 @@ class SingleVar(Trial):
     plt.xlabel(slice.xvars[0])
     plt.ylabel('sp-BLEU')
     plt.title(slice.description)
-    plt.savefig(os.path.join(self.path, "plots", slice.title + ".png"))
+    plt.savefig(os.path.join(self.path, "plots", slice.get_title() + ".png"))
     plt.clf()
 
 
@@ -329,7 +326,6 @@ class DoubleVar(Trial):
                loss: str='soft_l1',
                pars: list[str]=[],
                path: T.Optional[str]=None,
-               ignore_vars: list[str]=[],
                xvars: list[str]=None,
                label_func: T.Optional[T.Callable[[int], str]]=None,
                verbose: int=1) -> None:
@@ -337,8 +333,7 @@ class DoubleVar(Trial):
     Pre-condition: Should have two xvars.
     """
     super().__init__(slice_vars, f, init, fixed_init=fixed_init, bounds=bounds,
-                     loss=loss, pars=pars, path=path, ignore_vars=ignore_vars, 
-                     xvars=xvars, 
+                     loss=loss, pars=pars, path=path, xvars=xvars, 
                      plot_f=lambda slice, fit: self.plot_double_var_both(slice, fit, label_func),
                      verbose=verbose)
 
@@ -376,7 +371,7 @@ class DoubleVar(Trial):
     plt.legend(title=label)
     plt.title(slice.description)
     horiz_name = var_names[slice.xvars[horiz]]
-    plt.savefig(os.path.join(self.path, "plots", horiz_name, slice.title + ".png"))
+    plt.savefig(os.path.join(self.path, "plots", horiz_name, slice.get_title() + ".png"))
     plt.clf()
 
   def plot_double_var_both(self, slice: Slice, fit: FloatArray, 

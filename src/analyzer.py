@@ -10,10 +10,9 @@ class Analyzer: # TODO change dependency structure
       bar_horiz: List of x-axis values for bar plots.
       scatter_horiz: List of x-axis values for scatter plots.
       scatter_seper: List variables by which to separate scatter plots.
-      slice_vars, ignore_vars, par_num, pars: Same as attributes of Trial.
+      slice_vars, par_num, pars: Same as attributes of Trial.
     """
   slice_vars: list[str]
-  ignore_vars: list[str]
   df: pd.DataFrame
   par_num: int
   pars: list[str]
@@ -31,14 +30,13 @@ class Analyzer: # TODO change dependency structure
                par_num: int=None,
                pars: list[str]=None,
                path: T.Optional[str]=None,
-               ignore_vars: list[str]=[],
                plot_horiz: list[str]=[],
                scatter_horiz: list[str]=[],
                bar_horiz: list[str]=[],
                scatter_seper: list[list[str]]=[[]]) -> None:
     """ Initializes an Analyzer. """
 
-    self.slice_vars, self.ignore_vars, self.df = slice_vars, ignore_vars, df
+    self.slice_vars, self.df = slice_vars, df
     self.par_num, self.pars, self.path = par_num, pars, path
     self.plot_horiz, self.bar_horiz = plot_horiz, bar_horiz
     self.scatter_horiz, self.scatter_seper = scatter_horiz, scatter_seper
@@ -49,7 +47,6 @@ class Analyzer: # TODO change dependency structure
     split_vars: Variables which will vary in a slice.
     seper_vars: Variables which will be fixed for each slice.
     NOTE: At most one of split_vars & seper_vars should be non-empty.
-    NOTE: slice_vars and ignore_vars will be ignored (behaviour similar to vary).
     """
     if df is None:
       df = self.df
@@ -58,12 +55,10 @@ class Analyzer: # TODO change dependency structure
       df.reset_index(drop=True, inplace=True)
 
     if len(split_vars) > 0:
-      return SliceGroup(split_vars, self.slice_vars + self.ignore_vars, df=df, set_xvar=False)
+      return SliceGroup(split_vars, df=df, set_xvar=False)
     else:
       split_vars = [var for var in vars if var not in seper_vars]
-      return SliceGroup(split_vars,
-                                   self.slice_vars + self.ignore_vars,
-                                   df=df, set_xvar=False)
+      return SliceGroup(split_vars, df=df, set_xvar=False)
 
   def fits_analysis(self, save_prints=True): # TODO make np array
     """ Prints analysis of fits (to file or stdout). """
@@ -100,8 +95,9 @@ class Analyzer: # TODO change dependency structure
       plt.plot(slice.df[horiz], slice.df["cost"])
       plt.xlabel(horiz)
       plt.ylabel("rmse loss")
-      plt.title(slice.title)
-      plt.savefig(os.path.join(self.path, "plots", subdir, slice.title + ".png"))
+      title = slice.get_title(ignore=self.slice_vars)
+      plt.title(title)
+      plt.savefig(os.path.join(self.path, "plots", subdir, title + ".png"))
       plt.clf()
 
   def plot_all_costs(self):
@@ -125,9 +121,10 @@ class Analyzer: # TODO change dependency structure
 
       plt.xlabel(horiz)
       plt.ylabel("rsme")
-      plt.title(slice.title)
+      title = slice.get_title(ignore=self.slice_vars)
+      plt.title(title)
       lgd = plt.legend(bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=2)
-      plt.savefig(os.path.join(self.path, "scatters", subdir, slice.title + ".png"),
+      plt.savefig(os.path.join(self.path, "scatters", subdir, title + ".png"),
                   bbox_extra_artists=(lgd,), bbox_inches='tight')
       plt.clf()
 

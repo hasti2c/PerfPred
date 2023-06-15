@@ -11,13 +11,25 @@ df_cols = [
   "language from",
   "language to",
   "test set",
-  "sp-BLEU"
+  "sp-BLEU",
+  "geographic",
+  "genetic",
+  "syntactic",
+  "phonological",
+  "inventory",
+  "featural"
 ]
 df_dtypes = {
     "train set 1 size": "Int64",
     "train set 1 jsd": "Float64",
     "train set 2 size": "Int64",
-    "train set 2 jsd": "Float64"
+    "train set 2 jsd": "Float64",
+    "geographic": "Float64",
+    "genetic": "Float64",
+    "syntactic": "Float64",
+    "phonological": "Float64",
+    "inventory": "Float64",
+    "featural": "Float64"
 }
 
 def read_pure_data(gc) -> pd.DataFrame:
@@ -78,6 +90,22 @@ def read_pure_jsd(gc) -> pd.DataFrame:
   df[df==''] = pd.NA
   return df
 
+def read_pure_l2v(gc) -> pd.DataFrame:
+  """Reads lang2vec distance values from GSheet to a DataFrame."""
+  worksheet = gc.open('Experiment 1 Data').get_worksheet(2)
+  rows = worksheet.get_all_values()
+  df = pd.DataFrame.from_records(rows[1:7], coerce_float=True)
+  df.columns = [
+    "distance",
+    "kan-eng",
+    "guj-eng",
+    "hin-eng",
+    "sin-eng",
+    "tam-eng"
+  ]
+  df[df==''] = pd.NA
+  return df
+
 def find_jsd(jsd_df: pd.DataFrame, train: str, train_size: int, test: str,
              lang: str) -> float:
   """ Returns jsd of a record in jsd_df.
@@ -92,8 +120,18 @@ def find_jsd(jsd_df: pd.DataFrame, train: str, train_size: int, test: str,
     return pd.NA
   return slice.loc[slice.index[0], lang]
 
-def format_df(data_df: pd.DataFrame, jsd_df: pd.DataFrame,
-              discard_na: bool=False) -> pd.DataFrame:
+def find_l2v(l2v_df: pd.DataFrame, lang: str) -> float:
+  lang_map = {
+    'ka': 'kan',
+    'gu': 'guj',
+    'hi': 'hin',
+    'si': 'sin',
+    'ta': 'tam'
+  }
+  return l2v_df[lang_map[lang] + "-eng"].to_numpy()
+
+def format_df(data_df: pd.DataFrame, jsd_df: pd.DataFrame, 
+              l2v_df: pd.DataFrame, discard_na: bool=False) -> pd.DataFrame:
   """ Formats data into a DataFrame.
   Arguments:
     data_df: DataFrame containing records returned from read_pure_data.
@@ -150,6 +188,7 @@ def format_df(data_df: pd.DataFrame, jsd_df: pd.DataFrame,
         "language to": lang,
         "sp-BLEU": float(data_df[col][row])
       }
+      new_row.update(zip(l2v_df["distance"], find_l2v(l2v_df, lang)))
       if discard_na and (pd.isna(train1) or pd.isna(train2) or pd.isna(test)):
         continue
       df.loc[len(df.index)] = new_row
@@ -157,14 +196,11 @@ def format_df(data_df: pd.DataFrame, jsd_df: pd.DataFrame,
 
 def read_data(discard_na: bool=False) -> pd.DataFrame:
   """ Reads data into a Dataframe of the format returned by format_df. """
-#   auth.authenticate_user()
-  # creds, _ = default()
-  # gc = gspread.authorize(creds)
   gc = gspread.oauth()
-
   data_df = read_pure_data(gc)
   jsd_df = read_pure_jsd(gc)
-  return format_df(data_df, jsd_df, discard_na)
+  l2v_df = read_pure_l2v(gc)
+  return format_df(data_df, jsd_df, l2v_df, discard_na)
 
 if __name__ == "__main__":
     df = read_data(discard_na=True)

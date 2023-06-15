@@ -9,7 +9,6 @@ class SingleSize(SingleVar):
     alt_var: The other factor among D1, D2 not used as slice var.
   Otherwise same as SingleVar, but with pre-set values:
     slice_vars = ["train set n size"]
-    ignore_vars = ["train set 1 jsd", "train set 2 jsd"]
     x_vars = ["train set n size"]
   """
   def __init__(self, n: int,
@@ -30,7 +29,6 @@ class SingleSize(SingleVar):
     super().__init__([f"train set {n} size"], f, init, fixed_init=fixed_init,
                      bounds=bounds, loss=loss, pars=pars,
                      path=os.path.join(path_A, "size" + str(n), trial),
-                     ignore_vars=["train set 1 jsd", "train set 2 jsd"],
                      xvars=[f"train set {n} size"], verbose=verbose)
     self.alt_var = f"train set {3 - n} size"
 
@@ -57,7 +55,6 @@ class DoubleSize(DoubleVar):
   == Attributes ==
   Same as DoubleVar, but with pre-set values:
     slice_vars = ["train set 1 size", "train set 2 size"]
-    ignore_vars = ["train set 1 jsd", "train set 2 jsd"]
     x_vars = ["train set 1 size", "train set 2 size"]
   """
   def __init__(self, f: T.Callable[[FloatArray, FloatArray], FloatArray],
@@ -71,7 +68,6 @@ class DoubleSize(DoubleVar):
     super().__init__(["train set 1 size", "train set 2 size"], f, init,
                      fixed_init=fixed_init, bounds=bounds, loss=loss,
                      pars=pars, path=os.path.join(path_A, "sizes", trial),
-                     ignore_vars=["train set 1 jsd", "train set 2 jsd"],
                      xvars=["train set 1 size", "train set 2 size"],
                      verbose=verbose)
 

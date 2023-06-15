@@ -8,13 +8,10 @@ class Slice:
     df: DataFrame containing the rows corresponding to this slice.
     id: Values of the variables defining this slice.
         Entries for FIX & SET vars contain their fixed value for this slice.
-        Entries for VARY & IGNORE vars contain pd.NA.
+        Entries for VARY vars contain pd.NA.
     flags: Flags describing the slicing.
     vary: List of VARY vars in the slicing.
-    ignore: List of IGNORE vars in the slicing.
     preset: SET vars of slicing.
-    title: Short name for slice.
-    description: Long name for slice.
     xvars: Variables used as input of model function.
     x: Input array of model, i.e. xvars columns of df.
        dim: (n, k) if n df rows and k xvars.
@@ -28,10 +25,7 @@ class Slice:
   id: pd.Series
   flags: ObjectArray
   vary: list[str]
-  ignore: list[str]
   preset: list[str]
-  title: str
-  description: str
   xvars: list[str]
   x: FloatArray
   y: FloatArray
@@ -43,15 +37,13 @@ class Slice:
     self.id = id
     self.flags = flags
     self.vary = [vars[i] for i in range(varN) if flags[i] == VarFlag.VARY]
-    self.ignore = [vars[i] for i in range(varN) if flags[i] == VarFlag.IGNORE]
     self.preset = [vars[i] for i in range(varN) if flags[i] == VarFlag.SET]
-    self.title, self.description = self.get_title()
     if xvars is not None:
       self.xvars = xvars
       self.x = self.df.loc[:, xvars].astype(float).to_numpy()
       self.y = self.df.loc[:, "sp-BLEU"].to_numpy()
 
-  def get_title(self) -> tuple[str]:
+  def get_title(self, ignore=[]) -> tuple[str]:
     """ Returns title and description for slice.
     Return Values:
       title: Non NA values in id seperated by "-".
@@ -64,6 +56,8 @@ class Slice:
 
     fix_vars, vals = [], []
     for i in fix:
+      if var_names[vars[i]] in ignore:
+        continue
       fix_vars.append(var_names[vars[i]])
       if vars[i] in ["train set 1 size", "train set 2 size"]:
         vals.append(str(self.id[vars[i]]) + "k")
@@ -85,7 +79,6 @@ class SliceGroup:
     N: Number of slices.
     flags: Flags describing the slicing.
     vary: List of VARY vars in the slicing.
-    ignore: List of IGNORE vars in the slicing.
     preset: SET vars of slicing.
 
   == Static Methods ==
@@ -100,17 +93,14 @@ class SliceGroup:
   N: int
   flags: ObjectArray
   vary: list[str]
-  ignore: list[str]
   preset: list[str]
 
-  def __init__(self, vary_list, ignore_list=[], preset_list=[],
-               presets=np.full(varN, pd.NA), df=main_df, xvars=None,
-               set_xvar=True):
+  def __init__(self, vary_list, preset_list=[], presets=np.full(varN, pd.NA),
+               df=main_df, xvars=None, set_xvar=True):
     """ Initializes SliceGroup. 
     
     == Arguments ==
     vary_list: List of VARY vars.
-    ignore_list: List of IGNORE vars.
     preset_list: List of SET vars.
     presets: Array of preset values for each SET var.
     df: Dataframe to perform slicing on.
@@ -120,8 +110,8 @@ class SliceGroup:
             By Default (i.e. if xvars is None and set_xvar is True), VARY vars
             will be used as xvars.
     """
-    self.vary, self.ignore, self.preset = vary_list, ignore_list, preset_list
-    self.flags = get_flags(self.vary, self.ignore, self.preset)
+    self.vary, self.preset = vary_list, preset_list
+    self.flags = get_flags(self.vary, self.preset)
 
     ids, slices = split_by_flags(self.flags, presets=presets, df=df)
     self.ids = pd.DataFrame(np.array(ids), columns=list(vars)).astype(df_dtypes)

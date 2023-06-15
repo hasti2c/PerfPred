@@ -9,7 +9,6 @@ class SingleDomain(SingleVar):
     alt_var: The other factor among j1, j2 not used as slice var.
   Otherwise same as SingleVar, but with pre-set values:
     slice_vars = ["train set n", "test set"]
-    ignore_vars = ["train set 1 jsd", "train set 2 jsd"]
     x_vars = ["train set n jsd"]
   """
   def __init__(self, n: int,
@@ -30,7 +29,6 @@ class SingleDomain(SingleVar):
     super().__init__([f"train set {n}", "test set"], f, init,
                      fixed_init=fixed_init, bounds=bounds, loss=loss,
                      pars=pars, path=os.path.join(path_B, "jsd" + str(n), trial),
-                     ignore_vars=["train set 1 jsd", "train set 2 jsd"],
                      xvars=[f"train set {n} jsd"], verbose=verbose)
     self.alt_var = f"train set {3 - n}"
 
@@ -58,7 +56,6 @@ class DoubleDomain(DoubleVar):
   == Attributes ==
   Same as DoubleVar, but with pre-set values:
     slice_vars = ["train set 1", "train set 2", "test set"]
-    ignore_vars = ["train set 1 jsd", "train set 2 jsd"]
     x_vars = ["train set 1 jsd", "train set 2 jsd"]
   """
   def __init__(self, f: T.Callable[[FloatArray, FloatArray], FloatArray],
@@ -72,7 +69,6 @@ class DoubleDomain(DoubleVar):
     super().__init__(["train set 1", "train set 2", "test set"], f, init,
                      fixed_init=fixed_init, bounds=bounds, loss=loss,
                      pars=pars, path=os.path.join(path_B, "jsds", trial),
-                     ignore_vars=["train set 1 jsd", "train set 2 jsd"],
                      xvars=["train set 1 jsd", "train set 2 jsd"],
                      label_func=lambda i: f"train set {i}",
                      verbose=verbose)

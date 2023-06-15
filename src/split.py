@@ -6,13 +6,25 @@ from itertools import product
 # TODO create class/enum for variables
 # Variables in main dataframe.
 vars = np.array(["train set 1",
+                      "train set 1 size",
+                      "train set 2",
+                      "train set 2 size",
+                      "test set",
+                      "language to"])
+all_vars = np.array(["train set 1",
                  "train set 1 size",
                  "train set 1 jsd",
                  "train set 2",
                  "train set 2 size",
                  "train set 2 jsd",
                  "test set",
-                 "language to"])
+                 "language to",
+                 "geographic",
+                 "genetic",
+                 "syntactic",
+                 "phonological",
+                 "inventory",
+                 "featural"])
 # Number of variables.
 varN = len(vars)
 # Name of variables.
@@ -24,7 +36,13 @@ var_names = {
     "train set 2 size": "size2",
     "train set 2 jsd": "jsd2",
     "test set": "test",
-    "language to": "lang"
+    "language to": "lang",
+    "geographic": "geo",
+    "genetic": "gen",
+    "syntactic": "syn",
+    "phonological": "pho",
+    "inventory": "inv",
+    "featural": "fea"
 }
 # List of all possible values for each variable.
 var_lists = np.empty(varN, dtype=list)
@@ -41,7 +59,13 @@ df_cols = [
   "language from",
   "language to",
   "test set",
-  "sp-BLEU"
+  "sp-BLEU",
+  "geographic",
+  "genetic",
+  "syntactic",
+  "phonological",
+  "inventory",
+  "featural"
 ]
 df_dtypes = {
     "train set 1 size": "Int64",
@@ -64,15 +88,10 @@ class VarFlag(Enum):
   == VARY variables ==
     In SliceGroup: VARY vars are not used to define Slices.
     In each Slice: Points have a different value of VARY vars.
-  == IGNORE Variables == Behaves similarly to VARY vars.
-    In SliceGroup: IGNORE vars are not used to define Slices.
-    In each Slice: Points can have any value of IGNORE vars.
-    NOTE: The main distinction between VARY and IGNORE vars is conceptual.
   """
   SET = -1
   FIX = 0
   VARY = 1
-  IGNORE = 2
 
 # == Splitting Functions ==
 
@@ -108,24 +127,21 @@ def split_by_flags(flags, presets=np.full(varN, pd.NA), df=main_df):
       slices.append(slice)
   return ids, slices
 
-def get_flags(vary_list: list[str], ignore_list: list[str]=[],
-              preset_list: list[str]=[]) -> np.ndarray[T.Any, object]:
+def get_flags(vary_list: list[str], preset_list: list[str]=[]) -> \
+              np.ndarray[T.Any, object]:
   """ Takes lists of variable types and returns array of flags. """
   return np.array([VarFlag.VARY if vars[i] in vary_list else
-                  VarFlag.IGNORE if vars[i] in ignore_list else
                   VarFlag.SET if vars[i] in preset_list else
                   VarFlag.FIX for i in range(varN)])
 
-def split(vary_list, ignore_list=[], preset_list=[],
-          presets=np.full(varN, pd.NA), df=main_df):
+def split(vary_list, preset_list=[], presets=np.full(varN, pd.NA), df=main_df):
   """ Returns list of ids and dataframes corresponding to split.
 
   == Arguments ==
     vary_list: List of VARY vars.
-    ignore_list: List of IGNORE vars.
     preset_list: List of SET vars.
     presets: Array of preset values for each SET var.
     df: Dataframe to perform slicing on.
   """
-  flags = get_flags(vary_list, ignore_list, preset_list)
+  flags = get_flags(vary_list, preset_list)
   return split_by_flags(flags, presets=presets, df=df)
