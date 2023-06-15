@@ -63,11 +63,11 @@ class Analyzer: # TODO change dependency structure
   def fits_analysis(self, save_prints=True): # TODO make np array
     """ Prints analysis of fits (to file or stdout). """
     self.fit_stats, lines = [], []
+    means = self.df[self.pars].mean()
     for i in range(self.par_num):
-      mean = self.df[self.pars].mean()
-      self.fit_stats.append(mean)
+      self.fit_stats.append(means.iloc[i])
       if len(self.pars) > 0:
-        lines.append(f'Mean {self.pars[i]}: {mean}')
+        lines.append(f'Mean {self.pars[i]}: {means.iloc[i]}')
     if len(self.pars) > 0:
       print_lines(lines, path=os.path.join(self.path, "fits_analysis.txt"), 
                   save_prints=save_prints)

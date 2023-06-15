@@ -26,5 +26,7 @@ from expr.language import *
 
 expr = LanguageTrial("featural", linear_single, np.zeros(2), pars=["alpha", "C"],
                      trial="trial1", verbose=2)
-expr.fit_all()
-expr.plot_all()
+# expr.fit_all()
+expr.read_all_fits()
+# expr.plot_all()
+expr.analyze_all()

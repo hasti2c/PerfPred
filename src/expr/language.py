@@ -31,19 +31,19 @@ class LanguageTrial(SingleVar):
                      path=os.path.join(path_C, var_names[type], trial),
                      xvars=[type], verbose=verbose)
 
-#   def init_analyzer(self):
-#     """ Initalizes self.analyzer with attributes:
-#       plot_horiz = ["train set 1 size", "train set 2 size"]
-#       bar_horiz = ["train set 2", "language to"]
-#       scatter_horiz = ["train set 1 size", "train set 2 size"]
-#       scatter_seper = [[], ["language to"]]
-#     """
-#     numer = ["train set 1 size", "train set 2 size"] # TODO can have alt jsd
-#     super().init_analyzer(plot_horiz=numer, scatter_horiz=numer,
-#                           bar_horiz=[self.alt_var, "language to"],
-#                           scatter_seper=[[], ["language to"]])
+  def init_analyzer(self):
+    """ Initalizes self.analyzer with attributes:
+      plot_horiz = ["train set 1 size", "train set 2 size"]
+      bar_horiz = ["train set 1", "train set 2", "test set"]
+      scatter_horiz = ["train set 1 size", "train set 2 size"]
+      scatter_seper = [[]]
+    """
+    numer = ["train set 1 size", "train set 2 size"] # TODO can have jsd
+    super().init_analyzer(plot_horiz=numer, scatter_horiz=numer,
+                          bar_horiz=["train set 1", "train set 2", "test set"],
+                          scatter_seper=[[]])
 
-#   def analyze_all(self, run_plots=True):
-#     """ Calls init_analyzer and super().analyze_all(). """
-#     self.init_analyzer()
-#     super().analyze_all(run_plots=run_plots)
+  def analyze_all(self, run_plots=True):
+    """ Calls init_analyzer and super().analyze_all(). """
+    self.init_analyzer()
+    super().analyze_all(run_plots=run_plots)
