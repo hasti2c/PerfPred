@@ -158,3 +158,71 @@ class Analyzer: # TODO change dependency structure
     """ Calls bar_chart_costs for each horiz in bar_horiz. """
     for horiz in self.bar_horiz:
       self.bar_chart_costs(horiz)
+
+  # TODO refactor compare
+
+  # def compare_costs(slice_vars, trial_names, path, plot_horiz=None, bar_horiz=[],
+  #                 ignore_vars=[]):
+  #   slices = SliceGroup.get_slices(slice_vars, ignore_vars, set_xvar=False)
+  #   trial_num = len(trial_names)
+  #   # TODO compare fits
+  #   costs_df = slices.ids.copy()
+  #   for i in np.arange(0, trial_num):
+  #     _, cost = read_pickle_from_file(path + trial_names[i] + "/fits.pickle")
+  #     costs_df[trial_names[i]] = cost
+
+  #   analysis_path = path + "overall/analysis/"
+  #   costs_analysis(costs_df, analysis_path + "costs_analysis.txt", trial_names)
+  #   if plot_horiz:
+  #     plot_costs(slice_vars, costs_df, plot_horiz,
+  #               analysis_path + "plots/", cost_cols=trial_names,
+  #               ignore_vars=ignore_vars)
+  #   for horiz in bar_horiz:
+  #     bar_chart_costs(costs_df, horiz, analysis_path + "bar_charts/",
+  #                     cost_cols=trial_names)
+
+  # def plot_costs(slice_vars, stats_df, horiz, path, cost_cols=["cost"],
+  #              ignore_vars=[]):
+  #   sorted_df = stats_df.sort_values(by=horiz)
+  #   sorted_df.reset_index(drop=True, inplace=True)
+  #   plot_slices = SliceGroup.get_slices([horiz], slice_vars + ignore_vars,
+  #                                       df=sorted_df, set_xvar=False)
+
+  #   for i in range(plot_slices.N):
+  #     slice = plot_slices.slices[i]
+  #     for col in cost_cols:
+  #       if len(cost_cols) > 1:
+  #         plt.plot(slice.df[horiz], slice.df[col], label=col)
+  #       else:
+  #         plt.plot(slice.df[horiz], slice.df[col])
+  #     plt.xlabel(horiz)
+  #     plt.ylabel("rmse loss")
+  #     if len(cost_cols) > 1:
+  #       plt.legend()
+  #     plt.title(slice.title)
+  #     plt.savefig(path + slice.title + ".png")
+  #     plt.clf()
+
+  # def bar_chart_costs(stats_df, horiz, path, cost_cols=["cost"]):
+  #   groups = stats_df.groupby(horiz)
+  #   xs = groups.groups.keys()
+  #   x_axis = np.arange(len(xs))
+  #   offsets = np.linspace(-0.4, 0.4, num=len(cost_cols) + 1, endpoint=True)
+  #   for i, col in enumerate(cost_cols):
+  #     means = groups[col].mean().reset_index()
+  #     inter = offsets[i + 1] - offsets[i]
+  #     if len(cost_cols) > 1:
+  #       plt.bar(x_axis + offsets[i] + inter / 2, means[col], inter, label=col)
+  #     else:
+  #       plt.bar(x_axis + offsets[i] + inter / 2, means[col], inter)
+  #     for j, cost in enumerate(means[col]):
+  #       plt.text(j + offsets[i] + inter / 2, cost, f'{cost:.2f}', ha='center',
+  #                 va='bottom')
+  #   plt.xlabel(horiz)
+  #   plt.xticks(x_axis, xs)
+  #   plt.ylabel("rsme")
+  #   if len(cost_cols) > 1:
+  #     plt.legend()
+  #   plt.tight_layout()
+  #   plt.savefig(path + horiz + ".png")
+  #   plt.clf()
