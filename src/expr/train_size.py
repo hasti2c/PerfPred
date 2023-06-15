@@ -18,7 +18,7 @@ class SingleSize(SingleVar):
                fixed_init: bool=True,
                bounds: T.Optional[tuple[list[float]]]=None,
                loss: str='soft_l1',
-               par_names: list[str]=[],
+               pars: list[str]=[],
                trial: T.Optional[str]=None,
                verbose: int=1) -> None:
     """ Initializes a SingleTrain trial.
@@ -28,7 +28,7 @@ class SingleSize(SingleVar):
       trial: Name of trial. Used as subdirectory name.
     """
     super().__init__([f"train set {n} size"], f, init, fixed_init=fixed_init,
-                     bounds=bounds, loss=loss, par_names=par_names,
+                     bounds=bounds, loss=loss, pars=pars,
                      path=os.path.join(path_A, "size" + str(n), trial),
                      ignore_vars=["train set 1 jsd", "train set 2 jsd"],
                      xvars=[f"train set {n} size"], verbose=verbose)
@@ -65,13 +65,12 @@ class DoubleSize(DoubleVar):
                fixed_init: bool=True,
                bounds: T.Optional[tuple[list[float]]]=None,
                loss: str='soft_l1',
-               par_names: list[str]=[],
+               pars: list[str]=[],
                trial: T.Optional[str]=None,
                verbose: int=1) -> None:
     super().__init__(["train set 1 size", "train set 2 size"], f, init,
-                     fixed_init=fixed_init, bounds=bounds, loss='soft_l1',
-                     par_names=par_names,
-                     path=os.path.join(path_A, "sizes", trial),
+                     fixed_init=fixed_init, bounds=bounds, loss=loss,
+                     pars=pars, path=os.path.join(path_A, "sizes", trial),
                      ignore_vars=["train set 1 jsd", "train set 2 jsd"],
                      xvars=["train set 1 size", "train set 2 size"],
                      verbose=verbose)

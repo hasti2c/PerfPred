@@ -18,7 +18,7 @@ class SingleDomain(SingleVar):
                fixed_init: bool=True,
                bounds: T.Optional[tuple[list[float]]]=None,
                loss: str='soft_l1',
-               par_names: list[str]=[],
+               pars: list[str]=[],
                trial: T.Optional[str]=None,
                verbose: int=1) -> None:
     """ Initializes a SingleDomain trial.
@@ -29,8 +29,7 @@ class SingleDomain(SingleVar):
     """
     super().__init__([f"train set {n}", "test set"], f, init,
                      fixed_init=fixed_init, bounds=bounds, loss=loss,
-                     par_names=par_names,
-                     path=os.path.join(path_B, "jsd" + str(n), trial),
+                     pars=pars, path=os.path.join(path_B, "jsd" + str(n), trial),
                      ignore_vars=["train set 1 jsd", "train set 2 jsd"],
                      xvars=[f"train set {n} jsd"], verbose=verbose)
     self.alt_var = f"train set {3 - n}"
@@ -67,13 +66,12 @@ class DoubleDomain(DoubleVar):
                fixed_init: bool=True,
                bounds: T.Optional[tuple[list[float]]]=None,
                loss: str='soft_l1',
-               par_names: list[str]=[],
+               pars: list[str]=[],
                trial: T.Optional[str]=None,
                verbose: int=1) -> None:
     super().__init__(["train set 1", "train set 2", "test set"], f, init,
                      fixed_init=fixed_init, bounds=bounds, loss=loss,
-                     par_names=par_names,
-                     path=os.path.join(path_B, "jsds", trial),
+                     pars=pars, path=os.path.join(path_B, "jsds", trial),
                      ignore_vars=["train set 1 jsd", "train set 2 jsd"],
                      xvars=["train set 1 jsd", "train set 2 jsd"],
                      verbose=verbose)

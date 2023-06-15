@@ -23,7 +23,7 @@ class Trial:
           Allowed Values: 'linear', 'soft_l1', 'huber', 'cauchy', 'arctan'
           (More info: https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html)
     par_num: Number of coefficients of f.
-    par_names: Names of coefficients of f. (Only used for fit analysis.)
+    pars: Names of coefficients of f.
     plot_f: Function for plotting fits.
             plot_f takes a slice and an array of coefficient values as input.
     path: Path for saving files related to the trial.
@@ -45,7 +45,7 @@ class Trial:
   bounds: tuple[list[float]]
   loss: str
   par_num: int
-  par_names: list[str]
+  pars: list[str]
   plot_f: T.Callable[[Slice, FloatArray], None]
   path: T.Optional[str]
   verbose: int
@@ -58,7 +58,7 @@ class Trial:
                fixed_init: bool=True,
                bounds: T.Optional[tuple[list[float]]]=None,
                loss: str='soft_l1',
-               par_names: list[str]=[],
+               pars: list[str]=[],
                path: T.Optional[str]=None,
                ignore_vars: list[str]=[],
                xvars: list[str]=None,
@@ -75,7 +75,7 @@ class Trial:
             (More info in pre-conditions.)
       fixed_init: Whether the same initial value will be used for all slices.
       bounds: Bounds for each coefficient.       (More info in pre-conditions.)
-      loss, par_names, path, plot_f, verbose: Same as corresponding attributes.
+      loss, pars, path, plot_f, verbose: Same as corresponding attributes.
 
     == Pre-Conditions ==
     * Let N be the number of slices in the slice group.
@@ -107,7 +107,7 @@ class Trial:
       self.init = [init] * self.slices.N
     else:
       self.init = init
-    self.par_num, self.par_names = len(init), par_names
+    self.par_num, self.pars = len(init), pars
     if bounds is None:
       bounds = ([-np.inf]*self.par_num, [np.inf]*self.par_num)
     self.bounds, self.loss = bounds, loss
@@ -138,10 +138,11 @@ class Trial:
     If path is not None, writes fits and costs to a csv file.
     Returns fits and costs.
     """
-    fits = np.empty(self.slices.N, dtype=np.ndarray)
-    costs = np.empty(self.slices.N, dtype=float)
+    fits = np.empty((self.slices.N, self.par_num))
+    costs = np.empty(self.slices.N)
     for i, slice in enumerate(self.slices.slices):
-      fits[i], costs[i] = self.fit_slice(slice, self.init[i])
+      fit, cost = self.fit_slice(slice, self.init[i])
+      fits[i, :], costs[i] = self.fit_slice(slice, self.init[i])
       if self.verbose >= 3:
         p = verbose_helper(i + 1, self.slices.N)
         if p > 0:
@@ -155,23 +156,25 @@ class Trial:
 
   def write_all_fits(self):
     if self.path is not None:
-      ids = ["-".join(map(str, id)) for id in self.slices.ids_as_list()]
-      fits = [",".join(map(str, fit)) for fit in self.df["fit"]]
-      write_to_csv(os.path.join(self.path, "fits.csv"), zip(ids, fits, self.df["cost"]))
+      self.df.to_csv(os.path.join(self.path, "fits.csv"), index=False)
 
   def read_all_fits(self) -> T.Tuple[list[FloatArray], list[float]]:
     """ Reads fits and costs into self.df from csv.
     Pre-Condition: fit_all has already been run for this model with the same path.
     """
-    data = read_from_csv(os.path.join(self.path, "fits.csv"))
-    fits = np.array([np.array(row[1].split(","), dtype=float) for row in data])
-    costs = np.array([float(row[2]) for row in data])
-    self.init_df(fits, costs)
+    self.df = pd.read_csv(os.path.join(self.path, "fits.csv"))
+    fits = np.array(self.df[self.pars])
+    costs = np.array(self.df["cost"])
     return fits, costs
+    # data = read_from_csv(os.path.join(self.path, "fits.csv"))
+    # fits = np.array([np.array(row[1].split(","), dtype=float) for row in data], dtype=np.ndarray)
+    # costs = np.array([float(row[2]) for row in data])
+    # self.init_df(fits, costs)
+    # return fits, costs
 
   def init_df(self, fits, costs):
     self.df = self.slices.ids.copy()
-    self.df["fit"] = fits
+    self.df[self.pars] = fits
     self.df["cost"] = costs
     self.df = self.df.astype({"cost": "Float64"})
 
@@ -183,7 +186,7 @@ class Trial:
     """
     for i in range(self.slices.N):
       slice = self.slices.slices[i]
-      self.plot_f(slice, self.df["fit"][i])
+      self.plot_f(slice, self.df[self.pars].iloc[i])
       if self.verbose >= 2:
         p = verbose_helper(i + 1, self.slices.N)
         if p > 0:
@@ -195,7 +198,7 @@ class Trial:
                     scatter_seper=[[]]):
     """ Initializes self.analyzer. """
     self.analyzer = Analyzer(self.slices.vary, self.df, self.par_num,
-                             self.par_names, os.path.join(self.path, "analysis"),
+                             self.pars, os.path.join(self.path, "analysis"),
                              self.slices.ignore, plot_horiz, scatter_horiz,
                              bar_horiz, scatter_seper)
 
@@ -228,7 +231,7 @@ class SingleVar(Trial):
                fixed_init: bool=True,
                bounds: T.Optional[tuple[list[float]]]=None,
                loss: str='soft_l1',
-               par_names: list[str]=[],
+               pars: list[str]=[],
                path: T.Optional[str]=None,
                ignore_vars: list[str]=[],
                xvars: list[str]=None,
@@ -237,9 +240,8 @@ class SingleVar(Trial):
     Pre-condition: Should have only one xvar.
     """
     super().__init__(slice_vars, f, init, fixed_init=fixed_init, bounds=bounds,
-                     loss=loss, par_names=par_names, path=path,
-                     ignore_vars=ignore_vars, xvars=xvars,
-                     plot_f=self.plot_single_var, verbose=verbose)
+                     loss=loss, pars=pars, path=path, ignore_vars=ignore_vars, 
+                     xvars=xvars, plot_f=self.plot_single_var, verbose=verbose)
 
   def plot_single_var(self, slice: Slice, fit: FloatArray) -> None:
     """ Plots a slice against its xvar.
@@ -269,7 +271,7 @@ class DoubleVar(Trial):
                fixed_init: bool=True,
                bounds: T.Optional[tuple[list[float]]]=None,
                loss: str='soft_l1',
-               par_names: list[str]=[],
+               pars: list[str]=[],
                path: T.Optional[str]=None,
                ignore_vars: list[str]=[],
                xvars: list[str]=None,
@@ -278,9 +280,9 @@ class DoubleVar(Trial):
     Pre-condition: Should have two xvars.
     """
     super().__init__(slice_vars, f, init, fixed_init=fixed_init, bounds=bounds,
-                     loss='soft_l1', par_names=par_names, path=path,
-                     ignore_vars=ignore_vars, xvars=xvars,
-                     plot_f=self.plot_double_var_both, verbose=verbose)
+                     loss=loss, pars=pars, path=path, ignore_vars=ignore_vars, 
+                     xvars=xvars, plot_f=self.plot_double_var_both, 
+                     verbose=verbose)
 
   def plot_double_var(self, slice: Slice, fit: FloatArray, horiz: int) -> None:
     """ Plots a slice against the xvar[horiz]. horiz should be 0 or 1.

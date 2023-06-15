@@ -10,13 +10,13 @@ class Analyzer: # TODO change dependency structure
       bar_horiz: List of x-axis values for bar plots.
       scatter_horiz: List of x-axis values for scatter plots.
       scatter_seper: List variables by which to separate scatter plots.
-      slice_vars, ignore_vars, par_num, par_names: Same as attributes of Trial.
+      slice_vars, ignore_vars, par_num, pars: Same as attributes of Trial.
     """
   slice_vars: list[str]
   ignore_vars: list[str]
   df: pd.DataFrame
   par_num: int
-  par_names: list[str]
+  pars: list[str]
   path: str
   plot_horiz: list[str]
   bar_horiz: list[str]
@@ -29,7 +29,7 @@ class Analyzer: # TODO change dependency structure
                slice_vars: list[str],
                df: pd.DataFrame=None,
                par_num: int=None,
-               par_names: list[str]=None,
+               pars: list[str]=None,
                path: T.Optional[str]=None,
                ignore_vars: list[str]=[],
                plot_horiz: list[str]=[],
@@ -39,7 +39,7 @@ class Analyzer: # TODO change dependency structure
     """ Initializes an Analyzer. """
 
     self.slice_vars, self.ignore_vars, self.df = slice_vars, ignore_vars, df
-    self.par_num, self.par_names, self.path = par_num, par_names, path
+    self.par_num, self.pars, self.path = par_num, pars, path
     self.plot_horiz, self.bar_horiz = plot_horiz, bar_horiz
     self.scatter_horiz, self.scatter_seper = scatter_horiz, scatter_seper
 
@@ -69,11 +69,11 @@ class Analyzer: # TODO change dependency structure
     """ Prints analysis of fits (to file or stdout). """
     self.fit_stats, lines = [], []
     for i in range(self.par_num):
-      mean = self.df["fit"].mean()
+      mean = self.df[self.pars].mean()
       self.fit_stats.append(mean)
-      if len(self.par_names) > 0:
-        lines.append(f'Mean {self.par_names[i]}: {mean}')
-    if len(self.par_names) > 0:
+      if len(self.pars) > 0:
+        lines.append(f'Mean {self.pars[i]}: {mean}')
+    if len(self.pars) > 0:
       print_lines(lines, path=os.path.join(self.path, "fits_analysis.txt"))
     return self.fit_stats
 
