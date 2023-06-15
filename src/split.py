@@ -59,13 +59,13 @@ df_cols = [
   "language from",
   "language to",
   "test set",
-  "sp-BLEU",
   "geographic",
   "genetic",
   "syntactic",
   "phonological",
   "inventory",
-  "featural"
+  "featural",
+  "sp-BLEU"
 ]
 df_dtypes = {
     "train set 1 size": "Int64",
