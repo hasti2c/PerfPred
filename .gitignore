@@ -1,6 +1,7 @@
 .DS_Store
 results/
 .vscode/
+lang2vec/
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
