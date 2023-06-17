@@ -8,9 +8,9 @@ df_cols = [
   "train set 2",
   "train set 2 size",
   "train set 2 jsd",
+  "test set",
   "language from",
   "language to",
-  "test set",
   "geographic",
   "genetic",
   "syntactic",
@@ -185,10 +185,10 @@ def format_df(data_df: pd.DataFrame, jsd_df: pd.DataFrame,
         "train set 2 jsd": jsd2,
         "test set": test if pd.isna(test) or test != 'pmo/gov' else 'gov',
         "language from": "en",
-        "language to": lang
+        "language to": lang,
+        "sp-BLEU": float(data_df[col][row])
       }
       new_row.update(zip(l2v_df["distance"], find_l2v(l2v_df, lang)))
-      new_row["sp-BLEU"] = float(data_df[col][row])
       if discard_na and (pd.isna(train1) or pd.isna(train2) or pd.isna(test)):
         continue
       df.loc[len(df.index)] = new_row
