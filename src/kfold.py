@@ -5,93 +5,93 @@ import random
 from sklearn.metrics import mean_squared_error
 
 
-class Record: #Should be slices
+class Slice:
 
-  def __init__(self, trainset1_in, trainset2_in, testset_in, size1_in, size2_in, lang_in, x_vars_in, act_score_in, fits_arr_in, rmse_in):
+  def __init__(self, x_vars_in, act_score_in, fits_arr_in, 
+              trainset1_in=None, trainset2_in=None, testset_in=None, 
+              size1_in=None, size2_in=None, lang_in=None):
       self.trainset1 = trainset1_in
       self.trainset2 = trainset2_in
       self.testset = testset_in
       self.size1 = size1_in
       self.size2 = size2_in
       self.lang = lang_in
-
-      # Only slice have these four, records don't
+        
       self.x_vars = x_vars_in
       self.act_score = act_score_in
       self.fits_arr = fits_arr_in
-      self.rmse = rmse_in
-
 
 class Fold:
 
-  def __init__(self, records_in):
+  def __init__(self, slices_in):
     self.fits = []
-    self.records = records_in
-    for record in records_in:
-        self.fits.append(record.fits_arr)
-
+    self.slices = slices_in
+    for slice in slices_in:
+        self.fits.append(slice.fits_arr)
 
   def average_fits(self):
-      num_records = len(self.fits)
-      num_fits = len(self.fits[0])
-      average_fits = []
+    """
+    Returns an array of average fits in this fold
+    """
+    num_slices = len(self.fits)
+    num_fits = len(self.fits[0])
+    average_fits = []
 
-      for fit_index in range(num_fits):
-          total_fit = 0
-          for record_index in range(num_records):
-              total_fit += self.fits[record_index][fit_index]
-          average_fit = total_fit / num_records
-          average_fits.append(average_fit)
+    for fit_index in range(num_fits):
+        total_fit = 0
+        for slice_index in range(num_slices):
+            total_fit += self.fits[slice_index][fit_index]
+        average_fit = total_fit / num_slices
+        average_fits.append(average_fit)
 
-      return average_fits
+    return average_fits
 
   def run_trial_on_this_fold(self, trial_func, fits_to_test):
     """
     Take in a trial function and test on this fold
     Return average RMSE of testing trial_func using fits_to_test on this fold
     """
-    num_records = len(self.records)
+    num_slices = len(self.slices)
     total_rmse = 0
 
-    for record in self.records:
-        predicted_value = trial_func(fits_to_test, record.x_vars)
-        rmse = np.sqrt(mean_squared_error(record.act_score, predicted_value))
+    for slice in self.slices:
+        predicted_value = trial_func(fits_to_test, slice.x_vars)
+        rmse = np.sqrt(mean_squared_error(slice.act_score, predicted_value))
         total_rmse += rmse
 
-    average_rmse = total_rmse / num_records
+    average_rmse = total_rmse / num_slices
     return average_rmse
   
-
-def extract_records_to_fold(com_features, all_records): # com_features: a list of pairs
+def extract_slices_to_fold(com_features, all_slices): # com_features: a list of pairs
   """
   Function to extract a folds
   Return list of folds that meet the conditions
   Note: This function can be used to extract the left-out fold as well (by creating fold)
   """
-  records_wanted = []
+  slices_wanted = []
 
-  for record in all_records:
+  for slice in all_slices:
       for com_feature in com_features:
           feature, wanted_value = com_feature
-          if getattr(record, feature) == wanted_value:
-              records_wanted.append(record)
+          if getattr(slice, feature) == wanted_value:
+              slices_wanted.append(slice)
 
-  return records_wanted
+  return slices_wanted
 
-def partition_rand_folds(num_folds, all_records):
+def partition_rand_folds(num_folds, all_slices):
   """
-  Function to partitions all_records randomly into num_fold folds
+  Function to partitions all_slices randomly into num_fold folds
   (the folds can be of different sizes, but make sure no fold is empty)
   """
-  random.shuffle(all_records)
+  random.shuffle(all_slices)
   folds = []
-  fold_size = len(all_records) // num_folds
-  remainder = len(all_records) % num_folds
+  fold_size = len(all_slices) // num_folds
+  remainder = len(all_slices) % num_folds
   start_idx = 0
 
   for i in range(num_folds):
       end_idx = start_idx + fold_size + (1 if i < remainder else 0)
-      fold = Fold(all_records[start_idx:end_idx])
+      fold = Fold(all_slices[start_idx:end_idx])
       folds.append(fold)
       start_idx = end_idx
 
