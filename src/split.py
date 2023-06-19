@@ -132,7 +132,7 @@ def get_flags(vary_list: list[str], preset_list: list[str]=[]) -> \
                   VarFlag.SET if vars[i] in preset_list else
                   VarFlag.FIX for i in range(varN)])
 
-def split(vary_list, preset_list=[], presets=np.full(varN, pd.NA), df=main_df):
+def split(vary_list, ignore_vars=[], preset_list=[], presets=np.full(varN, pd.NA), df=main_df):
   """ Returns list of ids and dataframes corresponding to split.
 
   == Arguments ==
@@ -141,5 +141,16 @@ def split(vary_list, preset_list=[], presets=np.full(varN, pd.NA), df=main_df):
     presets: Array of preset values for each SET var.
     df: Dataframe to perform slicing on.
   """
-  flags = get_flags(vary_list, preset_list)
+  flags = get_flags(vary_list + ignore_vars, preset_list)
   return split_by_flags(flags, presets=presets, df=df)
+
+def random_split(num_parts, df=main_df):
+  pass
+
+# TODO
+def filter(df, preset_list, presets):
+  pass
+
+# TODO
+def filter_out(df, preset_list, presets):
+  pass
