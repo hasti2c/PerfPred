@@ -116,8 +116,7 @@ class SliceGroup:
     self.vary, self.preset = vary_list, preset_list
     self.flags = get_flags(self.vary, self.preset)
 
-    ids, slices = split_by_flags(self.flags, presets=presets, df=df)
-    self.ids = pd.DataFrame(np.array(ids), columns=list(vars)).astype(df_dtypes)
+    self.ids, slices = split_by_flags(self.flags, presets=presets, df=df)
     if set_xvar and xvars is None:
       xvars = vary_list
     self.slices = [Slice(slices[i], self.ids.iloc[i], self.flags, xvars)

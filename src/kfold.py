@@ -1,33 +1,23 @@
 from util import *
 from split import *
+from slice import *
 
 import random
 from sklearn.metrics import mean_squared_error
 
-
-class Slice:
-
-  def __init__(self, x_vars_in, act_score_in, fits_arr_in, 
-              trainset1_in=None, trainset2_in=None, testset_in=None, 
-              size1_in=None, size2_in=None, lang_in=None):
-      self.trainset1 = trainset1_in
-      self.trainset2 = trainset2_in
-      self.testset = testset_in
-      self.size1 = size1_in
-      self.size2 = size2_in
-      self.lang = lang_in
-        
-      self.x_vars = x_vars_in
-      self.act_score = act_score_in
-      self.fits_arr = fits_arr_in
-
 class Fold:
+  slices: list[Slice]
+  df: pd.DataFrame
+  fits: list[FloatArray]
+  costs: list[float]
+  N: int
+  parN: int
 
   def __init__(self, slices, df, pars):
     self.slices = slices
     self.df = df 
-    self.fits = df[pars]
-    self.costs = df["cost"]
+    self.fits = list(df[pars].values)
+    self.costs = list(df["cost"])
     self.N = len(slices)
     self.parN = len(pars)
 
@@ -35,16 +25,7 @@ class Fold:
     """
     Returns an array of average fits in this fold
     """
-    average_fits = []
-
-    for fit_index in range(self.parN):
-        total_fit = 0
-        for slice_index in range(self.N):
-            total_fit += self.fits[slice_index][fit_index]
-        average_fit = total_fit / self.N
-        average_fits.append(average_fit)
-
-    return average_fits
+    return np.mean(self.fits, axis=0)
 
   def run_trial(self, trial_func, fits_to_test):
     """
@@ -96,27 +77,17 @@ def partition_rand_folds(num_folds, all_slices):
 
   return folds
 
-# class SystematicFold (Fold):
-#    def __init__(self, slices, df, pars, common_vars, slice_id):
-#       self.super(slices, df, pars)
-#       self.slice_id = slice_id
-#       self.common_vars = common_vars
-
-def find_slices(): # TODO
-   # ids in the expr.df -> indices in expr.df as rows -> those indices in expr.slices.slices
-   pass
-
 def extract_folds(expr, num_folds = None, common_features = None):
   # Systematic Fold
   if common_features:
-    fold_ids, fold_dfs = split(common_features, ignore_vars=expr.slices.vary, df=expr.df)
+    fold_ids, fold_dfs = split_by_fix(common_features, df=expr.df)
   else:
     fold_dfs = random_split(num_folds, df=expr.df)
   
   folds = []
-  for fold_df in zip(fold_ids, fold_dfs):
-        slices = find_slices(expr, fold_df) # TODO
-        folds.append(Fold(slices, fold_df, expr.pars)) 
+  for fold_df in fold_dfs:
+    slices = [expr.slices.slices[i] for i in list(fold_df.index.values)]
+    folds.append(Fold(slices, fold_df, expr.pars))
 
   if common_features:
      return fold_ids, folds
@@ -135,19 +106,21 @@ def k_fold_cross_valid(expr, folds, fold_ids=None, inclusive_features=None, excl
   1. Extract fold to train -> get fits_to_test
   2. Extract left out fold (whatever remains in all_records that is not extracted -> get avg rmse
   """
+  fold_ids = fold_ids.reset_index(drop=True)
   leftout_fold = random.choice(folds)
-  if fold_ids:
-    leftout_id = fold_ids[folds.index(leftout_fold)]
-    fold_ids.remove(leftout_id)
+  leftout_index = folds.index(leftout_fold)
+  if fold_ids is not None:
+    leftout_id = fold_ids.iloc[leftout_index]
+    fold_ids.drop(index=leftout_index, inplace=True)
   folds.remove(leftout_fold)
 
   # Inclusive Delta
-  if fold_ids and inclusive_features:
-    filt_ids = filter(fold_ids, inclusive_features, leftout_id[inclusive_features]) # TODO
-    folds = None # TODO 
-  elif fold_ids and exclusive_features:
-    filt_ids = filter_out(fold_ids, exclusive_features, leftout_id[exclusive_features]) # TODO
-    folds = None # TODO 
+  if fold_ids is not None:
+    if inclusive_features:
+      fold_ids = filter(fold_ids, inclusive_features, leftout_id[inclusive_features])
+    elif exclusive_features:
+      fold_ids = filter_out(fold_ids, exclusive_features, leftout_id[exclusive_features])
+    folds = [folds[i] for i in fold_ids.index.values]
 
   # Step 1: Get fold fits. # TODO
   fold_fits = []

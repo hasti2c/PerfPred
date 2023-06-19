@@ -93,7 +93,7 @@ class VarFlag(Enum):
 
 # == Splitting Functions ==
 
-def split_by_flags(flags, presets=np.full(varN, pd.NA), df=main_df):  
+def split_by_flags(flags, presets=np.full(varN, pd.NA), df=main_df):  # remove use of flags, its circular TODO
   """ Returns list of ids and dataframes corresponding to split.
 
   == Arguments ==
@@ -123,6 +123,7 @@ def split_by_flags(flags, presets=np.full(varN, pd.NA), df=main_df):
     if not slice.empty:
       ids.append(id)
       slices.append(slice)
+  ids = pd.DataFrame(np.array(ids), columns=list(vars)).astype(df_dtypes)
   return ids, slices
 
 def get_flags(vary_list: list[str], preset_list: list[str]=[]) -> \
@@ -132,7 +133,7 @@ def get_flags(vary_list: list[str], preset_list: list[str]=[]) -> \
                   VarFlag.SET if vars[i] in preset_list else
                   VarFlag.FIX for i in range(varN)])
 
-def split(vary_list, ignore_vars=[], preset_list=[], presets=np.full(varN, pd.NA), df=main_df):
+def split(vary_list, preset_list=[], presets=np.full(varN, pd.NA), df=main_df):
   """ Returns list of ids and dataframes corresponding to split.
 
   == Arguments ==
@@ -141,16 +142,34 @@ def split(vary_list, ignore_vars=[], preset_list=[], presets=np.full(varN, pd.NA
     presets: Array of preset values for each SET var.
     df: Dataframe to perform slicing on.
   """
-  flags = get_flags(vary_list + ignore_vars, preset_list)
+  flags = get_flags(vary_list, preset_list)
   return split_by_flags(flags, presets=presets, df=df)
 
+def split_by_fix(fix_list, df=main_df):
+  flags = get_flags([var for var in vars if var not in fix_list])
+  return split_by_flags(flags, df=df)
+
 def random_split(num_parts, df=main_df):
-  pass
+  indices = list(df.index.values)
+  random.shuffle(indices)
+  size = int(len(indices) / num_parts)
+  ptr = 0
+  slices = []
+  for i in range(num_parts):
+    extra = 1 if i < len(indices) - size * num_parts else 0
+    selected = indices[ptr : ptr + size + extra]
+    ptr += size + extra
+    slices.append(df.iloc[selected].sort_index())
+  return slices
 
-# TODO
-def filter(df, preset_list, presets):
-  pass
+def filter(df, preset_list, presets): # TODO change split to not have preset_vars
+  filtered = df
+  for i, var in enumerate(preset_list):
+    filtered = filtered[filtered[var] == presets[i]]
+  return filtered
 
-# TODO
 def filter_out(df, preset_list, presets):
-  pass
+  filtered = df
+  for i, var in enumerate(preset_list):
+    filtered = filtered[filtered[var] != presets[i]]
+  return filtered

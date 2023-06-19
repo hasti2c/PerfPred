@@ -2,13 +2,14 @@ from expr.trial_util import *
 from expr.train_size import *
 from expr.domain_div import *
 from expr.language import *
+from kfold import *
 
 expr = SingleSizeTrial(1, linear_single, np.zeros(2), pars=["alpha", "C"],
                    trial="trial1", verbose=2)
 # fits, costs = expr.fit_all() # Fit.
 fits, costs = expr.read_all_fits()
-print(split(["language to"], ignore_vars=["train set 1 size"], df=expr.df))
-print(expr.df)
+ids, folds = extract_folds(expr, common_features=["train set 1", "language to"])
+print(k_fold_cross_valid(expr, folds, ids, ["train set 1"]))
 # expr.plot_all() # Plot "slice plots".
 # expr.analyze_all() # Plot "analysis plots".
 

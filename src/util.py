@@ -5,11 +5,11 @@ import matplotlib as mpl
 import os
 import sys
 import csv
+import random
+from pprint import pprint
 
 # === Globals ===
 main_df = pd.read_csv("data/data_na_disc.csv") # TODO: consider na_keep
-
-# TODO remove these bools
 
 eps = 1e-6
 
