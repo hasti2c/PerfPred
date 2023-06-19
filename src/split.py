@@ -108,6 +108,10 @@ def split(vary_list, df=main_df):  # TODO change id to not contain NAs
   ids = pd.DataFrame(np.array(ids), columns=list(vars)).astype(df_dtypes)
   return ids, slices
 
+def split_by_fix(fix_list, df=main_df):
+  vary_list = [var for var in vars if var not in fix_list]
+  return split(vary_list, df=df)
+
 def random_split(num_parts, df=main_df):
   indices = list(df.index.values)
   random.shuffle(indices)
