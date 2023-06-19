@@ -98,7 +98,7 @@ def partition_rand_folds(num_folds, all_slices):
   return folds
 
 
-def k_fold_cross_valid(slices_ids, expr_fits, trial_func, common_features = None, num_folds = None,
+def k_fold_cross_valid(df_in, vary_list_in, trial_func, common_features = None, num_folds = None,
                        inclusive_features = None, exclusive_features = None):
   """
   If common_features is passed in -> SFold
@@ -111,13 +111,13 @@ def k_fold_cross_valid(slices_ids, expr_fits, trial_func, common_features = None
   1. Extract fold to train -> get fits_to_test
   2. Extract left out fold (whatever remains in all_records that is not extracted -> get avg rmse
   """
-
-  all_records = [] # TODO: Read from slices_ids, expr_fits, make into array of records
+  all_slices = [] # TODO: Read in slices
+  
   fold = None
 
   # Systematic Fold
   if common_features:
-      fold = Fold(extract_records_to_fold(common_features, all_records))
+      fold = Fold(extract_slices_to_fold(common_features, all_slices))
 
       # Inclusive Delta
       if inclusive_features:
@@ -135,9 +135,9 @@ def k_fold_cross_valid(slices_ids, expr_fits, trial_func, common_features = None
 
   # Random Fold
   elif num_folds:
-    fold = Fold(partition_rand_folds(num_folds, all_records))
+    fold = Fold(partition_rand_folds(num_folds, all_slices))
 
   fits_to_test = fold.average_fits()
-  left_out_fold = Fold([record for record in all_records if record not in fold.records])
+  left_out_fold = Fold([record for record in all_slices if record not in fold.records])
   avg_rmse = left_out_fold.k_fold_trial(trial_func, fits_to_test)
   return avg_rmse
