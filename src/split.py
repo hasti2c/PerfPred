@@ -72,52 +72,34 @@ df_dtypes = {
     "train set 2 size": "Int64",
 }
 
-
-class VarFlag(Enum):
-  """ Flags for usage of variables in slicing.
-
-  == SET Variables == (Used together with a preset value.)
-    In SliceGroup: All slices have the same preset values for SET vars.
-    In each Slice: All points have the same preset values for SET vars.
-  == FIX variables ==
-    In SliceGroup: Each slice has a different value of FIX vars.
-    In each Slice: All points have the same value of FIX vars (same value as
-                   used in defining Slice).
-  == VARY variables ==
-    In SliceGroup: VARY vars are not used to define Slices.
-    In each Slice: Points have a different value of VARY vars.
-  """
-  SET = -1
-  FIX = 0
-  VARY = 1
-
 # == Splitting Functions ==
 
-def split_by_flags(flags, presets=np.full(varN, pd.NA), df=main_df):  # remove use of flags, its circular TODO
+def split(vary_list, df=main_df):  # TODO change id to not contain NAs
   """ Returns list of ids and dataframes corresponding to split.
 
   == Arguments ==
-    flags: Array of length varN containing VarFlags corresponding to each var.
-    presets: Array of preset values for each SET var.
+    vary_list: List of VARY vars:
+                In SliceGroup: VARY vars are not used to define Slices.
+                In each Slice: Points have a different value of VARY vars.
+               All other vars are FIX vars:
+                In SliceGroup: VARY vars are not used to define Slices.
+                In each Slice: Points have a different value of VARY vars.
     df: Dataframe to perform slicing on.
   """
-  fixed_indices = list(np.where(flags == VarFlag.FIX)[0])
-  set_indices = list(np.where(flags == VarFlag.SET)[0])
+  fixed_indices = [i for i in range(len(vars)) if vars[i] not in vary_list]
 
   ids, slices = [], []
   prd = list(product(*var_lists[fixed_indices]))
   for comb in prd:
     id = np.full(varN, pd.NA)
     # find values to fix
-    for i in set_indices:
-      id[i] = presets[i]
     for j, i in enumerate(fixed_indices):
       # i is index of flags (out of varN), j is index of fixed_indices/comb
       id[i] = comb[j]
 
     # slice to fix values
     slice = df
-    for i in fixed_indices + set_indices:
+    for i in fixed_indices:
       slice = slice[slice[vars[i]] == id[i]]
 
     if not slice.empty:
@@ -125,29 +107,6 @@ def split_by_flags(flags, presets=np.full(varN, pd.NA), df=main_df):  # remove u
       slices.append(slice)
   ids = pd.DataFrame(np.array(ids), columns=list(vars)).astype(df_dtypes)
   return ids, slices
-
-def get_flags(vary_list: list[str], preset_list: list[str]=[]) -> \
-              np.ndarray[T.Any, object]:
-  """ Takes lists of variable types and returns array of flags. """
-  return np.array([VarFlag.VARY if vars[i] in vary_list else
-                  VarFlag.SET if vars[i] in preset_list else
-                  VarFlag.FIX for i in range(varN)])
-
-def split(vary_list, preset_list=[], presets=np.full(varN, pd.NA), df=main_df):
-  """ Returns list of ids and dataframes corresponding to split.
-
-  == Arguments ==
-    vary_list: List of VARY vars.
-    preset_list: List of SET vars.
-    presets: Array of preset values for each SET var.
-    df: Dataframe to perform slicing on.
-  """
-  flags = get_flags(vary_list, preset_list)
-  return split_by_flags(flags, presets=presets, df=df)
-
-def split_by_fix(fix_list, df=main_df):
-  flags = get_flags([var for var in vars if var not in fix_list])
-  return split_by_flags(flags, df=df)
 
 def random_split(num_parts, df=main_df):
   indices = list(df.index.values)
@@ -162,7 +121,7 @@ def random_split(num_parts, df=main_df):
     slices.append(df.iloc[selected].sort_index())
   return slices
 
-def filter(df, preset_list, presets): # TODO change split to not have preset_vars
+def filter(df, preset_list, presets):
   filtered = df
   for i, var in enumerate(preset_list):
     filtered = filtered[filtered[var] == presets[i]]
