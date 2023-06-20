@@ -2,12 +2,12 @@ from trial import *
 
 path_A = os.path.join("results", "1A")
 
-class SingleSizeTrial(SingleVar):
+class SingleSizeTrial(SingleVarTrial):
   """ Trial with factor D1 or D2.
 
   == Attributes ==
     alt_var: The other factor among D1, D2 not used as slice var.
-  Otherwise same as SingleVar, but with pre-set values:
+  Otherwise same as SingleVarTrial, but with pre-set values:
     slice_vars = ["train set n size"]
     x_vars = ["train set n size"]
   """
@@ -50,11 +50,11 @@ class SingleSizeTrial(SingleVar):
     super().analyze_all(run_plots=run_plots)
 
 
-class DoubleSizeTrial(DoubleVar):
+class DoubleSizeTrial(DoubleVarTrial):
   """ Trial with factors D1+D2.
 
   == Attributes ==
-  Same as DoubleVar, but with pre-set values:
+  Same as DoubleVarTrial, but with pre-set values:
     slice_vars = ["train set 1 size", "train set 2 size"]
     x_vars = ["train set 1 size", "train set 2 size"]
   """

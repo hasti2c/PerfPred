@@ -44,7 +44,7 @@ class Var (Enum):
 
 # == Splitting Functions ==
 
-def split(vary_list: list[Var], df: pd.DataFrame=main_df) -> T.Tuple[pd.DataFrame, list[pd.DataFrame]]: # TODO change id to not contain NAs
+def split(vary_list: list[Var], df: pd.DataFrame=main_df) -> T.Tuple[pd.DataFrame, list[pd.DataFrame]]:
   """ Returns list of ids and dataframes corresponding to split.
 
   == Arguments ==
@@ -73,9 +73,6 @@ def split(vary_list: list[Var], df: pd.DataFrame=main_df) -> T.Tuple[pd.DataFram
   cols, dtypes = [var.title for var in fix_list], dict([(var.title, var.dtype) for var in fix_list])
   ids = pd.DataFrame(np.array(ids), columns=cols).astype(dtypes)
   return ids, slices
-
-def split_by_fix(fix_list: list[Var], df: pd.DataFrame=main_df) -> T.Tuple[pd.DataFrame, list[pd.DataFrame]]: # TODO remove
-  return split(Var.rest(fix_list), df=df)
 
 def random_split(num_parts: int, df: pd.DataFrame=main_df) -> list[pd.DataFrame]:
   indices = list(df.index.values)

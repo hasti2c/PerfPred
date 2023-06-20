@@ -39,6 +39,8 @@ class Analyzer: # TODO change dependency structure
     self.par_num, self.pars, self.path = par_num, pars, path
     self.plot_horiz, self.bar_horiz = plot_horiz, bar_horiz
     self.scatter_horiz, self.scatter_seper = scatter_horiz, scatter_seper
+    if not os.path.exists(self.path):
+      os.mkdir(self.path)
 
   def split_slices(self, split_vars: list[Var]=[], seper_vars: list[Var]=[],
                    sort_var: T.Optional[Var]=None, df: pd.DataFrame=None): # TODO remove
@@ -95,7 +97,10 @@ class Analyzer: # TODO change dependency structure
       plt.xlabel(horiz.title)
       plt.ylabel("rmse loss")
       plt.title(slice.title)
-      plt.savefig(os.path.join(self.path, "plots", subdir, slice.title + ".png"))
+      path = os.path.join(self.path, "plots", subdir)
+      if not os.path.exists(path):
+        os.makedirs(path)
+      plt.savefig(os.path.join(path, slice.title + ".png"))
       plt.clf()
 
   def plot_all_costs(self):
@@ -121,7 +126,10 @@ class Analyzer: # TODO change dependency structure
       plt.ylabel("rsme")
       plt.title(slice.title)
       lgd = plt.legend(bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=2)
-      plt.savefig(os.path.join(self.path, "scatters", subdir, slice.title + ".png"),
+      path = os.path.join(self.path, "scatters", subdir)
+      if not os.path.exists(path):
+        os.makedirs(path)
+      plt.savefig(os.path.join(path, slice.title + ".png"),
                   bbox_extra_artists=(lgd,), bbox_inches='tight')
       plt.clf()
 
@@ -145,7 +153,10 @@ class Analyzer: # TODO change dependency structure
     plt.xlabel(horiz.title)
     plt.ylabel("rsme")
     plt.tight_layout()
-    plt.savefig(os.path.join(self.path, "bar_charts", horiz.title + ".png"))
+    path = os.path.join(self.path, "bar_charts")
+    if not os.path.exists(path):
+      os.makedirs(path)
+    plt.savefig(os.path.join(path, horiz.title + ".png"))
     plt.clf()
 
   def bar_chart_all_costs(self):

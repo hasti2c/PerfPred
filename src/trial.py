@@ -110,6 +110,8 @@ class Trial:
       bounds = ([-np.inf]*self.par_num, [np.inf]*self.par_num)
     self.bounds, self.loss = bounds, loss
     self.path, self.verbose = path, verbose
+    if not os.path.exists(self.path):
+      os.makedirs(self.path)
 
   def rmse(self, slice: Slice, fit: FloatArray) -> float:
     """ Calculates rmse for a slice given fitted coeffs. """
@@ -275,7 +277,7 @@ class Trial:
     return self.analyzer.fit_stats, self.analyzer.cost_stats
   
 
-class SingleVar(Trial):
+class SingleVarTrial(Trial):
   """ Represents a trial which is "single variable" when plotting.
   Same as Trial, except with self.plot_f = plot_single_var.
   """
@@ -289,7 +291,7 @@ class SingleVar(Trial):
                path: T.Optional[str]=None,
                xvars: list[Var]=None,
                verbose: int=1) -> None:
-    """ Initializes a SingleVar Trial.
+    """ Initializes a SingleVarTrial Trial.
     Pre-condition: Should have only one xvar.
     """
     super().__init__(slice_vars, f, init, fixed_init=fixed_init, bounds=bounds,
@@ -310,11 +312,14 @@ class SingleVar(Trial):
     plt.xlabel(slice.xvars[0].title)
     plt.ylabel('sp-BLEU')
     plt.title(slice.description)
-    plt.savefig(os.path.join(self.path, "plots", slice.title + ".png"))
+    path = os.path.join(self.path, "plots")
+    if not os.path.exists(path):
+      os.makedirs(path)
+    plt.savefig(os.path.join(path, slice.title + ".png"))
     plt.clf()
 
 
-class DoubleVar(Trial):
+class DoubleVarTrial(Trial):
   """ Represents a trial which is "double variable" when plotting.
   Same as Trial, except with self.plot_f = plot_double_var_both.
   """
@@ -329,7 +334,7 @@ class DoubleVar(Trial):
                xvars: list[Var]=None,
                label_func: T.Optional[T.Callable[[int], str]]=None,
                verbose: int=1) -> None:
-    """ Initializes a DoubleVar Trial.
+    """ Initializes a DoubleVarTrial Trial.
     Pre-condition: Should have two xvars.
     """
     super().__init__(slice_vars, f, init, fixed_init=fixed_init, bounds=bounds,
@@ -349,8 +354,8 @@ class DoubleVar(Trial):
 
     z = slice.x[:, hue]
     if label is None:
-      label = slice.xvars[hue].title
-    l_all = slice.df.loc[:, label]
+      label = slice.xvars[hue]
+    l_all = slice.df.loc[:, label.title]
     l, indices = np.unique(l_all, return_index=True)
     z = z[indices]
     colors = get_colors(len(l))
@@ -368,10 +373,13 @@ class DoubleVar(Trial):
 
     plt.xlabel(slice.xvars[horiz].title)
     plt.ylabel('sp-BLEU')
-    plt.legend(title=label)
+    plt.legend(title=label.title)
     plt.title(slice.description)
     horiz_name = slice.xvars[horiz].short
-    plt.savefig(os.path.join(self.path, "plots", horiz_name, slice.title + ".png"))
+    path = os.path.join(self.path, "plots", horiz_name)
+    if not os.path.exists(path):
+      os.makedirs(path)
+    plt.savefig(os.path.join(path, slice.title + ".png"))
     plt.clf()
 
   def plot_double_var_both(self, slice: Slice, fit: FloatArray, 

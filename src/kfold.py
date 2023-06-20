@@ -80,7 +80,7 @@ def partition_rand_folds(num_folds, all_slices):
 def extract_folds(expr, num_folds = None, common_features = None):
   # Systematic Fold
   if common_features:
-    fold_ids, fold_dfs = split_by_fix(common_features, df=expr.df)
+    fold_ids, fold_dfs = split(Var.rest(common_features), df=expr.df)
   else:
     fold_dfs = random_split(num_folds, df=expr.df)
   
