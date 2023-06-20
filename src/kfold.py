@@ -117,9 +117,9 @@ def k_fold_cross_valid(expr, folds, fold_ids=None, inclusive_features=None, excl
   # Inclusive Delta
   if fold_ids is not None:
     if inclusive_features:
-      fold_ids = filter(fold_ids, inclusive_features, leftout_id[inclusive_features])
+      fold_ids = filter(fold_ids, inclusive_features, leftout_id[[var.title for var in inclusive_features]])
     elif exclusive_features:
-      fold_ids = filter_out(fold_ids, exclusive_features, leftout_id[exclusive_features])
+      fold_ids = filter_out(fold_ids, exclusive_features, leftout_id[[var.title for var in exclusive_features]])
     folds = [folds[i] for i in fold_ids.index.values]
 
   # Step 1: Get fold fits. # TODO
