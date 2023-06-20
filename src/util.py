@@ -10,6 +10,7 @@ from pprint import pprint
 # === Globals ===
 main_df = pd.read_csv("data/data_na_disc.csv") # TODO: consider na_keep
 
+verbose = 1
 eps = 1e-6
 
 FloatT = (T.Any, float)

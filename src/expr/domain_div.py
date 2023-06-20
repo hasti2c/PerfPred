@@ -2,7 +2,7 @@ from trial import *
 
 path_B = os.path.join("results", "1B")
 
-class SingleDomainTrial(SingleVarTrial):
+class SingleDomainTrial(Trial):
   """ Trial with factor j1 or j2.
 
   == Attributes ==
@@ -11,26 +11,18 @@ class SingleDomainTrial(SingleVarTrial):
     slice_vars = ["train set n", "test set"]
     x_vars = ["train set n jsd"]
   """
-  def __init__(self, n: int,
-               f: T.Callable[[FloatArray, FloatArray], FloatArray],
-               init: T.Union[FloatArray, list[FloatArray]],
-               fixed_init: bool=True,
-               bounds: T.Optional[tuple[list[float]]]=None,
-               loss: str='soft_l1',
-               pars: list[str]=[],
-               trial: T.Optional[str]=None,
-               verbose: int=1) -> None:
+  def __init__(self, n: int, model: Model, trial: T.Optional[str]=None) -> None:
     """ Initializes a SingleDomainTrial trial.
     == Arguments ==
       n: Whether to use j1 or j2.
          If n == 1, uses train set 1. If n == 2, uses train set 2.
       trial: Name of trial. Used as subdirectory name.
     """
-    super().__init__([Var.TRAIN1 if n == 1 else Var.TRAIN2, "test set"], f, init,
-                     fixed_init=fixed_init, bounds=bounds, loss=loss,
-                     pars=pars, path=os.path.join(path_B, "jsd" + str(n), trial),
-                     xvars=[Var.TRAIN1_JSD if n == 1 else Var.TRAIN2_JSD, Var.TEST], 
-                     verbose=verbose)
+    vars = [Var.TRAIN1 if n == 1 else Var.TRAIN2, Var.TEST]
+    xvars = [Var.TRAIN1_JSD if n == 1 else Var.TRAIN2_JSD]
+    super().__init__(SliceGroup(vars, xvars=xvars), model,
+                     path=os.path.join(path_B, "jsd" + str(n), trial),
+                     plot_f=self.plot_single_var)
     self.alt_var = Var.TRAIN2 if n == 1 else Var.TRAIN1
 
   def init_analyzer(self):
@@ -51,7 +43,7 @@ class SingleDomainTrial(SingleVarTrial):
     super().analyze_all(run_plots=run_plots)
 
 
-class DoubleDomainTrial(DoubleVarTrial):
+class DoubleDomainTrial(Trial):
   """ Trial with factors j1 + j2.
 
   == Attributes ==
@@ -59,20 +51,12 @@ class DoubleDomainTrial(DoubleVarTrial):
     slice_vars = ["train set 1", "train set 2", "test set"]
     x_vars = ["train set 1 jsd", "train set 2 jsd"]
   """
-  def __init__(self, f: T.Callable[[FloatArray, FloatArray], FloatArray],
-               init: T.Union[FloatArray, list[FloatArray]],
-               fixed_init: bool=True,
-               bounds: T.Optional[tuple[list[float]]]=None,
-               loss: str='soft_l1',
-               pars: list[str]=[],
-               trial: T.Optional[str]=None,
-               verbose: int=1) -> None:
-    super().__init__([Var.TRAIN1, Var.TRAIN2, Var.TEST], f, init,
-                     fixed_init=fixed_init, bounds=bounds, loss=loss,
-                     pars=pars, path=os.path.join(path_B, "jsds", trial),
-                     xvars=[Var.TRAIN1_JSD, Var.TRAIN2_JSD],
-                     label_func=lambda i: Var.TRAIN1 if i == 1 else Var.TRAIN2,
-                     verbose=verbose)
+  def __init__(self, model: Model, trial: T.Optional[str]=None) -> None:
+    vars = [Var.TRAIN1, Var.TRAIN2, Var.TEST]
+    xvars = [Var.TRAIN1_JSD, Var.TRAIN2_JSD] 
+    super().__init__(SliceGroup(vars, xvars=xvars), model,
+                     path=os.path.join(path_B, "jsds", trial),
+                     plot_f=lambda slice, fit: self.plot_double_var_both(slice, fit, self.plot_label))
 
   def init_analyzer(self): # TODO should have plot and scatter
     """ Initalizes self.analyzer with attributes:
@@ -84,3 +68,6 @@ class DoubleDomainTrial(DoubleVarTrial):
     """ Calls init_analyzer and super().analyze_all(). """
     self.init_analyzer()
     super().analyze_all(run_plots=run_plots)
+
+  def plot_label(self, i):
+    return Var.TRAIN1 if i == 1 else Var.TRAIN2

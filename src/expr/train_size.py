@@ -2,7 +2,7 @@ from trial import *
 
 path_A = os.path.join("results", "1A")
 
-class SingleSizeTrial(SingleVarTrial):
+class SingleSizeTrial(Trial):
   """ Trial with factor D1 or D2.
 
   == Attributes ==
@@ -11,26 +11,17 @@ class SingleSizeTrial(SingleVarTrial):
     slice_vars = ["train set n size"]
     x_vars = ["train set n size"]
   """
-  def __init__(self, n: int,
-               f: T.Callable[[FloatArray, FloatArray], FloatArray],
-               init: T.Union[FloatArray, list[FloatArray]],
-               fixed_init: bool=True,
-               bounds: T.Optional[tuple[list[float]]]=None,
-               loss: str='soft_l1',
-               pars: list[str]=[],
-               trial: T.Optional[str]=None,
-               verbose: int=1) -> None:
+  def __init__(self, n: int, model: Model, trial: T.Optional[str]=None) -> None:
     """ Initializes a SingleTrain trial.
     == Arguments ==
       n: Whether to use D1 or D2.
          If n == 1, uses train set 1. If n == 2, uses train set 2.
       trial: Name of trial. Used as subdirectory name.
     """
-    super().__init__([Var.TRAIN1_SIZE if n == 1 else Var.TRAIN2_SIZE], f, init,
-                     fixed_init=fixed_init, bounds=bounds, loss=loss, pars=pars,
+    vars = [Var.TRAIN1_SIZE if n == 1 else Var.TRAIN2_SIZE]
+    super().__init__(SliceGroup(vars, xvars=vars), model,
                      path=os.path.join(path_A, "size" + str(n), trial),
-                     xvars=[Var.TRAIN1_SIZE if n == 1 else Var.TRAIN2_SIZE], 
-                     verbose=verbose)
+                     plot_f=self.plot_single_var)
     self.alt_var = Var.TRAIN2_SIZE if n == 1 else Var.TRAIN1_SIZE
 
   def init_analyzer(self):
@@ -50,7 +41,7 @@ class SingleSizeTrial(SingleVarTrial):
     super().analyze_all(run_plots=run_plots)
 
 
-class DoubleSizeTrial(DoubleVarTrial):
+class DoubleSizeTrial(Trial):
   """ Trial with factors D1+D2.
 
   == Attributes ==
@@ -58,19 +49,11 @@ class DoubleSizeTrial(DoubleVarTrial):
     slice_vars = ["train set 1 size", "train set 2 size"]
     x_vars = ["train set 1 size", "train set 2 size"]
   """
-  def __init__(self, f: T.Callable[[FloatArray, FloatArray], FloatArray],
-               init: T.Union[FloatArray, list[FloatArray]],
-               fixed_init: bool=True,
-               bounds: T.Optional[tuple[list[float]]]=None,
-               loss: str='soft_l1',
-               pars: list[str]=[],
-               trial: T.Optional[str]=None,
-               verbose: int=1) -> None:
-    super().__init__([Var.TRAIN1_SIZE, Var.TRAIN2_SIZE], f, init,
-                     fixed_init=fixed_init, bounds=bounds, loss=loss,
-                     pars=pars, path=os.path.join(path_A, "sizes", trial),
-                     xvars=[Var.TRAIN1_SIZE, Var.TRAIN2_SIZE],
-                     verbose=verbose)
+  def __init__(self, model: Model, trial: T.Optional[str]=None) -> None:
+    vars = [Var.TRAIN1_SIZE, Var.TRAIN2_SIZE]
+    super().__init__(SliceGroup(vars, xvars=vars), model,
+                     path=os.path.join(path_A, "sizes", trial),
+                     plot_f=self.plot_double_var_both)
 
   def init_analyzer(self):
     """ Initalizes self.analyzer with attributes:

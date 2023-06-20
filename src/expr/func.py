@@ -2,16 +2,16 @@ import numpy as np
 
 eps = 1e-6
 
-# === Single Variable ===
-
-def linear_single(c, x):
-  """ f(x) = ax + C
-  c: Array with dim 2, corresponding to alpha, C.
-  x: Array with dim (n, 1).
+# === Function Getters ===
+def linear(c, x):
+  """ Linear with (m - 1) variables.
+  c: Array with dim m, corresponding to alpha1, ..., alpha(m-1), C.
+  x: Array with dim (n, m).
   y: Array with dim n.
   """
-  return (c[0] * x + c[1]).flatten()
+  return np.dot(x, c[:-1]) + c[-1]
 
+# === Single Variable ===
 def log_single(c, x):
   """ f(x) = clog(ax) + b
   c: Array with dim 3, corresponding to C, alpha, beta.
@@ -30,14 +30,6 @@ def recip_single(c, x):
   return (c[0] * np.power(np.reciprocal(d1) + c[1], c[2])).flatten()
 
 # === Double Variable
-def linear_double(c, x):
-  """ f(x1, x2) = b1 * x1 + b2 * x2 + c
-  c: Array with dim 3, corresponding to beta1, beta2, C.
-  x: Array with dim (n, 2).
-  y: Array with dim n.
-  """
-  return c[0] * x[:, 0] + c[1] * x[:, 1] + c[2]
-
 def product_double(c, x):
   """ f(x) = a * (x1 ^ (-p1)) * (x2 ^ (-p2)) + C
   c: Array with dim 4, corresponding to alpha, p1, p2, C.
