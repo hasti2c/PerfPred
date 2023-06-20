@@ -1,80 +1,50 @@
+from __future__ import annotations
 from util import *
 
 from enum import Enum
 from itertools import product
+import random
 
-# TODO create class/enum for variables
-# Variables in main dataframe.
-vars = np.array(["train set 1",
-                      "train set 1 size",
-                      "train set 2",
-                      "train set 2 size",
-                      "test set",
-                      "language to"])
-all_vars = np.array(["train set 1",
-                 "train set 1 size",
-                 "train set 1 jsd",
-                 "train set 2",
-                 "train set 2 size",
-                 "train set 2 jsd",
-                 "test set",
-                 "language to",
-                 "geographic",
-                 "genetic",
-                 "syntactic",
-                 "phonological",
-                 "inventory",
-                 "featural"])
-# Number of variables.
-varN = len(vars)
-# Name of variables.
-var_names = {
-    "train set 1": "train1",
-    "train set 1 size": "size1",
-    "train set 1 jsd": "jsd1",
-    "train set 2": "train2",
-    "train set 2 size": "size2",
-    "train set 2 jsd": "jsd2",
-    "test set": "test",
-    "language to": "lang",
-    "geographic": "geo",
-    "genetic": "gen",
-    "syntactic": "syn",
-    "phonological": "pho",
-    "inventory": "inv",
-    "featural": "fea"
-}
-# List of all possible values for each variable.
-var_lists = np.empty(varN, dtype=list)
-for i, var in enumerate(vars):
-  var_lists[i] = [val for val in set(main_df[var]) if not pd.isnull(val)]
+class Var (Enum):
+  TRAIN1 = "train set 1", "train1", "object"
+  TRAIN1_SIZE = "train set 1 size", "size1", "Int64"
+  TRAIN1_JSD = "train set 1 jsd", "jsd1", "Float64"
+  TRAIN2 = "train set 2", "train2", "object"
+  TRAIN2_SIZE = "train set 2 size", "size2", "Int64"
+  TRAIN2_JSD = "train set 2 jsd", "jsd2", "Float64"
+  TEST = "test set", "test", "object"
+  LANG = "language to", "lang", "object"
+  GEO_DIST = "geographic", "geo", "Float64"
+  GEN_DIST = "genetic", "gen", "Float64"
+  SYN_DIST = "syntactic", "syn", "Float64"
+  PHO_DIST = "phonological", "pho", "Float64"
+  INV_DIST = "inventory", "inv", "Float64"
+  FEA_DIST = "featural", "fea", "Float64"
 
-df_cols = [
-  "train set 1",
-  "train set 1 size",
-  "train set 1 jsd",
-  "train set 2",
-  "train set 2 size",
-  "train set 2 jsd",
-  "language from",
-  "language to",
-  "test set",
-  "geographic",
-  "genetic",
-  "syntactic",
-  "phonological",
-  "inventory",
-  "featural",
-  "sp-BLEU"
-]
-df_dtypes = {
-    "train set 1 size": "Int64",
-    "train set 2 size": "Int64",
-}
+  def __init__(self, title: str, short: str, dtype: str) -> None:
+    self.title = title
+    self.short = short
+    self.dtype = dtype
+
+  @staticmethod
+  def all() -> list[Var]:
+    return list(Var)
+  
+  @staticmethod
+  def main() -> list[Var]:
+    return [Var.TRAIN1, Var.TRAIN1_SIZE, Var.TRAIN2, Var.TRAIN2_SIZE,
+            Var.TEST, Var.LANG]
+  
+  @staticmethod
+  def rest(vars: list[Var]) -> list[Var]:
+    return [var for var in Var.main() if var not in vars]
+  
+  def values(self, df: pd.DataFrame=main_df) -> list:
+    return list(set(df[self.title]))
 
 # == Splitting Functions ==
 
-def split(vary_list, df=main_df):  # TODO change id to not contain NAs
+def split(vary_list: list[Var], df: pd.DataFrame=main_df) -> T.Tuple[pd.DataFrame, list[pd.DataFrame]]: # TODO change id to not contain NAs
   """ Returns list of ids and dataframes corresponding to split.
 
   == Arguments ==
@@ -86,33 +56,28 @@ def split(vary_list, df=main_df):  # TODO change id to not contain NAs
                 In each Slice: Points have a different value of VARY vars.
     df: Dataframe to perform slicing on.
   """
-  fixed_indices = [i for i in range(len(vars)) if vars[i] not in vary_list]
+  fix_list = Var.rest(vary_list)
 
   ids, slices = [], []
-  prd = list(product(*var_lists[fixed_indices]))
+  prd = list(product(*[var.values(df) for var in fix_list]))
   for comb in prd:
-    id = np.full(varN, pd.NA)
-    # find values to fix
-    for j, i in enumerate(fixed_indices):
-      # i is index of flags (out of varN), j is index of fixed_indices/comb
-      id[i] = comb[j]
-
-    # slice to fix values
+    id = []
     slice = df
-    for i in fixed_indices:
-      slice = slice[slice[vars[i]] == id[i]]
+    for i, var in enumerate(fix_list):
+      id.append(comb[i])
+      slice = slice[slice[var.title] == comb[i]]
 
     if not slice.empty:
       ids.append(id)
       slices.append(slice)
-  ids = pd.DataFrame(np.array(ids), columns=list(vars)).astype(df_dtypes)
+  cols, dtypes = [var.title for var in fix_list], dict([(var.title, var.dtype) for var in fix_list])
+  ids = pd.DataFrame(np.array(ids), columns=cols).astype(dtypes)
   return ids, slices
 
-def split_by_fix(fix_list, df=main_df):
-  vary_list = [var for var in vars if var not in fix_list]
-  return split(vary_list, df=df)
+def split_by_fix(fix_list: list[Var], df: pd.DataFrame=main_df) -> T.Tuple[pd.DataFrame, list[pd.DataFrame]]: # TODO remove
+  return split(Var.rest(fix_list), df=df)
 
-def random_split(num_parts, df=main_df):
+def random_split(num_parts: int, df: pd.DataFrame=main_df) -> list[pd.DataFrame]:
   indices = list(df.index.values)
   random.shuffle(indices)
   size = int(len(indices) / num_parts)
@@ -125,14 +90,14 @@ def random_split(num_parts, df=main_df):
     slices.append(df.iloc[selected].sort_index())
   return slices
 
-def filter(df, preset_list, presets):
+def filter(df: pd.DataFrame, preset_list: list[Var], presets: list) -> pd.DataFrame:
   filtered = df
   for i, var in enumerate(preset_list):
-    filtered = filtered[filtered[var] == presets[i]]
+    filtered = filtered[filtered[var.title] == presets[i]]
   return filtered
 
-def filter_out(df, preset_list, presets):
+def filter_out(df: pd.DataFrame, preset_list: list[Var], presets: list) -> pd.DataFrame:
   filtered = df
   for i, var in enumerate(preset_list):
-    filtered = filtered[filtered[var] != presets[i]]
+    filtered = filtered[filtered[var.title] != presets[i]]
   return filtered

@@ -6,12 +6,13 @@ from kfold import *
 
 expr = SingleSizeTrial(1, linear_single, np.zeros(2), pars=["alpha", "C"],
                    trial="trial1", verbose=2)
+print("hi")
 # fits, costs = expr.fit_all() # Fit.
-fits, costs = expr.read_all_fits()
+# fits, costs = expr.read_all_fits()
 # ids, folds = extract_folds(expr, common_features=["train set 1", "language to"])
 # print(k_fold_cross_valid(expr, folds, ids, ["train set 1"]))
-expr.plot_all() # Plot "slice plots".
-expr.analyze_all() # Plot "analysis plots".
+# expr.plot_all() # Plot "slice plots".
+# expr.analyze_all() # Plot "analysis plots".
 
 # expr = DoubleSizeTrial(linear_double, np.zeros(3), pars=["beta1", "beta2", "C"],
 #                    trial="trial1", verbose=2)

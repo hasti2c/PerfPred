@@ -26,11 +26,12 @@ class SingleDomainTrial(SingleVar):
          If n == 1, uses train set 1. If n == 2, uses train set 2.
       trial: Name of trial. Used as subdirectory name.
     """
-    super().__init__([f"train set {n}", "test set"], f, init,
+    super().__init__([Var.TRAIN1 if n == 1 else Var.TRAIN2, "test set"], f, init,
                      fixed_init=fixed_init, bounds=bounds, loss=loss,
                      pars=pars, path=os.path.join(path_B, "jsd" + str(n), trial),
-                     xvars=[f"train set {n} jsd"], verbose=verbose)
-    self.alt_var = f"train set {3 - n}"
+                     xvars=[Var.TRAIN1_JSD if n == 1 else Var.TRAIN2_JSD, Var.TEST], 
+                     verbose=verbose)
+    self.alt_var = Var.TRAIN2 if n == 1 else Var.TRAIN1
 
   def init_analyzer(self):
     """ Initalizes self.analyzer with attributes:
@@ -39,10 +40,10 @@ class SingleDomainTrial(SingleVar):
       scatter_horiz = ["train set 1 size", "train set 2 size"]
       scatter_seper = [[], ["language to"]]
     """
-    numer = ["train set 1 size", "train set 2 size"] # TODO can have alt jsd
+    numer = [Var.TRAIN1_SIZE, Var.TRAIN2_SIZE] # TODO can have alt jsd
     super().init_analyzer(plot_horiz=numer, scatter_horiz=numer,
-                          bar_horiz=[self.alt_var, "language to"],
-                          scatter_seper=[[], ["language to"]])
+                          bar_horiz=[self.alt_var, Var.LANG],
+                          scatter_seper=[[], [Var.LANG]])
 
   def analyze_all(self, run_plots=True):
     """ Calls init_analyzer and super().analyze_all(). """
@@ -66,18 +67,18 @@ class DoubleDomainTrial(DoubleVar):
                pars: list[str]=[],
                trial: T.Optional[str]=None,
                verbose: int=1) -> None:
-    super().__init__(["train set 1", "train set 2", "test set"], f, init,
+    super().__init__([Var.TRAIN1, Var.TRAIN2, Var.TEST], f, init,
                      fixed_init=fixed_init, bounds=bounds, loss=loss,
                      pars=pars, path=os.path.join(path_B, "jsds", trial),
-                     xvars=["train set 1 jsd", "train set 2 jsd"],
-                     label_func=lambda i: f"train set {i}",
+                     xvars=[Var.TRAIN1_JSD, Var.TRAIN2_JSD],
+                     label_func=lambda i: Var.TRAIN1 if i == 1 else Var.TRAIN2,
                      verbose=verbose)
 
   def init_analyzer(self): # TODO should have plot and scatter
     """ Initalizes self.analyzer with attributes:
       bar_horiz = [[], ["language to"]]
     """
-    super().init_analyzer(bar_horiz=["language to"])
+    super().init_analyzer(bar_horiz=[Var.LANG])
 
   def analyze_all(self, run_plots=True):
     """ Calls init_analyzer and super().analyze_all(). """

@@ -26,11 +26,12 @@ class SingleSizeTrial(SingleVar):
          If n == 1, uses train set 1. If n == 2, uses train set 2.
       trial: Name of trial. Used as subdirectory name.
     """
-    super().__init__([f"train set {n} size"], f, init, fixed_init=fixed_init,
-                     bounds=bounds, loss=loss, pars=pars,
+    super().__init__([Var.TRAIN1_SIZE if n == 1 else Var.TRAIN2_SIZE], f, init,
+                     fixed_init=fixed_init, bounds=bounds, loss=loss, pars=pars,
                      path=os.path.join(path_A, "size" + str(n), trial),
-                     xvars=[f"train set {n} size"], verbose=verbose)
-    self.alt_var = f"train set {3 - n} size"
+                     xvars=[Var.TRAIN1_SIZE if n == 1 else Var.TRAIN2_SIZE], 
+                     verbose=verbose)
+    self.alt_var = Var.TRAIN2_SIZE if n == 1 else Var.TRAIN1_SIZE
 
   def init_analyzer(self):
     """ Initalizes self.analyzer with attributes:
@@ -40,8 +41,8 @@ class SingleSizeTrial(SingleVar):
       scatter_seper = [[], ["language to"]]
     """
     super().init_analyzer([self.alt_var], [self.alt_var],
-                          ["train set 1", "train set 2", "test set", "language to"],
-                          [[], ["language to"]])
+                          [Var.TRAIN1, Var.TRAIN2, Var.TEST, Var.LANG],
+                          [[], [Var.LANG]])
 
   def analyze_all(self, run_plots=True):
     """ Calls init_analyzer and super().analyze_all(). """
@@ -65,10 +66,10 @@ class DoubleSizeTrial(DoubleVar):
                pars: list[str]=[],
                trial: T.Optional[str]=None,
                verbose: int=1) -> None:
-    super().__init__(["train set 1 size", "train set 2 size"], f, init,
+    super().__init__([Var.TRAIN1_SIZE, Var.TRAIN2_SIZE], f, init,
                      fixed_init=fixed_init, bounds=bounds, loss=loss,
                      pars=pars, path=os.path.join(path_A, "sizes", trial),
-                     xvars=["train set 1 size", "train set 2 size"],
+                     xvars=[Var.TRAIN1_SIZE, Var.TRAIN2_SIZE],
                      verbose=verbose)
 
   def init_analyzer(self):
@@ -78,7 +79,7 @@ class DoubleSizeTrial(DoubleVar):
       scatter_horiz = []
       scatter_seper = []
     """
-    super().init_analyzer(bar_horiz=["train set 1", "train set 2", "test set", "language to"])
+    super().init_analyzer(bar_horiz=[Var.TRAIN1, Var.TRAIN2, Var.TEST, Var.LANG])
 
   def analyze_all(self, run_plots=True):
     """ Calls init_analyzer and super().analyze_all(). """

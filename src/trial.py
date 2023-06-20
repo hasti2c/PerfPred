@@ -52,7 +52,7 @@ class Trial:
   df: pd.DataFrame
   analyzer: Analyzer
 
-  def __init__(self, slice_vars: list[str],
+  def __init__(self, slice_vars: list[Var],
                f: T.Callable[[FloatArray, FloatArray], FloatArray],
                init: T.Union[FloatArray, list[FloatArray]],
                fixed_init: bool=True,
@@ -60,7 +60,7 @@ class Trial:
                loss: str='soft_l1',
                pars: list[str]=[],
                path: T.Optional[str]=None,
-               xvars: list[str]=None,
+               xvars: list[Var]=None,
                plot_f: T.Callable[[Slice, FloatArray], None]=None,
                verbose: int=1) -> None:
     """ Initializes a slice.
@@ -279,7 +279,7 @@ class SingleVar(Trial):
   """ Represents a trial which is "single variable" when plotting.
   Same as Trial, except with self.plot_f = plot_single_var.
   """
-  def __init__(self, slice_vars: list[str],
+  def __init__(self, slice_vars: list[Var],
                f: T.Callable[[FloatArray, FloatArray], FloatArray],
                init: T.Union[FloatArray, list[FloatArray]],
                fixed_init: bool=True,
@@ -287,7 +287,7 @@ class SingleVar(Trial):
                loss: str='soft_l1',
                pars: list[str]=[],
                path: T.Optional[str]=None,
-               xvars: list[str]=None,
+               xvars: list[Var]=None,
                verbose: int=1) -> None:
     """ Initializes a SingleVar Trial.
     Pre-condition: Should have only one xvar.
@@ -307,7 +307,7 @@ class SingleVar(Trial):
     plt.plot(xs, ys)
     plt.scatter(slice.x[:, 0], slice.y)
 
-    plt.xlabel(slice.xvars[0])
+    plt.xlabel(slice.xvars[0].title)
     plt.ylabel('sp-BLEU')
     plt.title(slice.description)
     plt.savefig(os.path.join(self.path, "plots", slice.title + ".png"))
@@ -318,7 +318,7 @@ class DoubleVar(Trial):
   """ Represents a trial which is "double variable" when plotting.
   Same as Trial, except with self.plot_f = plot_double_var_both.
   """
-  def __init__(self, slice_vars: list[str],
+  def __init__(self, slice_vars: list[Var],
                f: T.Callable[[FloatArray, FloatArray], FloatArray],
                init: T.Union[FloatArray, list[FloatArray]],
                fixed_init: bool=True,
@@ -326,7 +326,7 @@ class DoubleVar(Trial):
                loss: str='soft_l1',
                pars: list[str]=[],
                path: T.Optional[str]=None,
-               xvars: list[str]=None,
+               xvars: list[Var]=None,
                label_func: T.Optional[T.Callable[[int], str]]=None,
                verbose: int=1) -> None:
     """ Initializes a DoubleVar Trial.
@@ -349,7 +349,7 @@ class DoubleVar(Trial):
 
     z = slice.x[:, hue]
     if label is None:
-      label = slice.xvars[hue]
+      label = slice.xvars[hue].title
     l_all = slice.df.loc[:, label]
     l, indices = np.unique(l_all, return_index=True)
     z = z[indices]
@@ -366,11 +366,11 @@ class DoubleVar(Trial):
     plt.scatter(x, slice.y, c=[colors[np.where(l == k)[0][0]] for k in l_all])
     # TODO labels
 
-    plt.xlabel(slice.xvars[horiz])
+    plt.xlabel(slice.xvars[horiz].title)
     plt.ylabel('sp-BLEU')
     plt.legend(title=label)
     plt.title(slice.description)
-    horiz_name = var_names[slice.xvars[horiz]]
+    horiz_name = slice.xvars[horiz].short
     plt.savefig(os.path.join(self.path, "plots", horiz_name, slice.title + ".png"))
     plt.clf()
 

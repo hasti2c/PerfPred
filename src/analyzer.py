@@ -12,37 +12,36 @@ class Analyzer: # TODO change dependency structure
       scatter_seper: List variables by which to separate scatter plots.
       slice_vars, par_num, pars: Same as attributes of Trial.
     """
-  slice_vars: list[str]
+  slice_vars: list[Var]
   df: pd.DataFrame
   par_num: int
   pars: list[str]
   path: str
-  plot_horiz: list[str]
-  bar_horiz: list[str]
-  scatter_horiz: list[str]
-  scatter_seper: list[list[str]]
+  plot_horiz: list[Var]
+  bar_horiz: list[Var]
+  scatter_horiz: list[Var]
+  scatter_seper: list[list[Var]]
   fit_stats: list[FloatArray]
   cost_stats: list[FloatArray]
 
   def __init__(self,
-               slice_vars: list[str],
+               slice_vars: list[Var],
                df: pd.DataFrame=None,
                par_num: int=None,
                pars: list[str]=None,
                path: T.Optional[str]=None,
-               plot_horiz: list[str]=[],
-               scatter_horiz: list[str]=[],
-               bar_horiz: list[str]=[],
-               scatter_seper: list[list[str]]=[[]]) -> None:
+               plot_horiz: list[Var]=[],
+               scatter_horiz: list[Var]=[],
+               bar_horiz: list[Var]=[],
+               scatter_seper: list[list[Var]]=[[]]) -> None:
     """ Initializes an Analyzer. """
-
     self.slice_vars, self.df = slice_vars, df
     self.par_num, self.pars, self.path = par_num, pars, path
     self.plot_horiz, self.bar_horiz = plot_horiz, bar_horiz
     self.scatter_horiz, self.scatter_seper = scatter_horiz, scatter_seper
 
-  def split_slices(self, split_vars: list[str]=[], seper_vars: list[str]=[],
-                   sort_var: T.Optional[str]=None, df: pd.DataFrame=None): # TODO not great interface
+  def split_slices(self, split_vars: list[Var]=[], seper_vars: list[Var]=[],
+                   sort_var: T.Optional[Var]=None, df: pd.DataFrame=None): # TODO remove
     """
     split_vars: Variables which will vary in a slice.
     seper_vars: Variables which will be fixed for each slice.
@@ -51,13 +50,13 @@ class Analyzer: # TODO change dependency structure
     if df is None:
       df = self.df
     if sort_var is not None:
-      df = df.sort_values(by=sort_var)
+      df = df.sort_values(by=sort_var.title)
       df.reset_index(drop=True, inplace=True)
 
     if len(split_vars) > 0:
       return SliceGroup(split_vars + self.slice_vars, df=df, set_xvar=False)
     else:
-      split_vars = [var for var in vars if var not in seper_vars]
+      split_vars = Var.rest(seper_vars)
       return SliceGroup(split_vars + self.slice_vars, df=df, set_xvar=False)
 
   def fits_analysis(self, save_prints=True): # TODO make np array
@@ -92,8 +91,8 @@ class Analyzer: # TODO change dependency structure
     plot_slices = self.split_slices(split_vars=[horiz], sort_var=horiz)
     for i in range(plot_slices.N):
       slice = plot_slices.slices[i]
-      plt.plot(slice.df[horiz], slice.df["cost"])
-      plt.xlabel(horiz)
+      plt.plot(slice.df[horiz.title], slice.df["cost"])
+      plt.xlabel(horiz.title)
       plt.ylabel("rmse loss")
       plt.title(slice.title)
       plt.savefig(os.path.join(self.path, "plots", subdir, slice.title + ".png"))
@@ -104,7 +103,7 @@ class Analyzer: # TODO change dependency structure
     subdir = ""
     for horiz in self.plot_horiz:
       if len(self.plot_horiz) > 1:
-        subdir = var_names[horiz]
+        subdir = horiz.short
       self.plot_costs(horiz, subdir=subdir)
 
   def scatter_costs(self, horiz, seper=[], subdir=""):
@@ -115,15 +114,14 @@ class Analyzer: # TODO change dependency structure
       hue_slices = self.split_slices(split_vars=[horiz], df=slice.df)
       for j in range(hue_slices.N):
         hue_slice = hue_slices.slices[j]
-        plt.scatter(hue_slice.df[horiz], hue_slice.df["cost"],
+        plt.scatter(hue_slice.df[horiz.title], hue_slice.df["cost"],
                     label=hue_slice.title)
 
-      plt.xlabel(horiz)
+      plt.xlabel(horiz.title)
       plt.ylabel("rsme")
-      title = slice.title
-      plt.title(title)
+      plt.title(slice.title)
       lgd = plt.legend(bbox_to_anchor=(0.5, -0.2), loc='upper center', ncol=2)
-      plt.savefig(os.path.join(self.path, "scatters", subdir, title + ".png"),
+      plt.savefig(os.path.join(self.path, "scatters", subdir, slice.title + ".png"),
                   bbox_extra_artists=(lgd,), bbox_inches='tight')
       plt.clf()
 
@@ -132,22 +130,22 @@ class Analyzer: # TODO change dependency structure
     subdir = ""
     for horiz, seper in product(self.scatter_horiz, self.scatter_seper):
       if len(self.scatter_horiz) > 1:
-        subdir = var_names[horiz]
+        subdir = horiz.short
       if len(self.scatter_seper) > 1:
-        subdir = os.path.join(subdir, "-".join([var_names[var] for var in seper]))
+        subdir = os.path.join(subdir, "-".join([var.short for var in seper]))
       self.scatter_costs(horiz, seper, subdir=subdir)
 
   def bar_chart_costs(self, horiz):
     """ Creates a bar chart of costs with horiz as x-axis."""
-    groups = self.df.groupby(horiz)
+    groups = self.df.groupby(horiz.title)
     means = groups["cost"].mean().reset_index()
-    plt.bar(means[horiz], means["cost"])
+    plt.bar(means[horiz.title], means["cost"])
     for i, cost in enumerate(means["cost"]):
       plt.text(i, cost, f'{cost:.4f}', ha='center', va='bottom')
-    plt.xlabel(horiz)
+    plt.xlabel(horiz.title)
     plt.ylabel("rsme")
     plt.tight_layout()
-    plt.savefig(os.path.join(self.path, "bar_charts", horiz + ".png"))
+    plt.savefig(os.path.join(self.path, "bar_charts", horiz.title + ".png"))
     plt.clf()
 
   def bar_chart_all_costs(self):

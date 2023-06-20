@@ -5,7 +5,6 @@ import matplotlib as mpl
 import os
 import sys
 import csv
-import random
 from pprint import pprint
 
 # === Globals ===

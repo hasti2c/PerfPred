@@ -12,7 +12,7 @@ class LanguageTrial(SingleVar):
 #     slice_vars = ["train set n", "test set"]
 #     x_vars = ["train set n jsd"]
   """
-  def __init__(self, type: str,
+  def __init__(self, type: Var,
                f: T.Callable[[FloatArray, FloatArray], FloatArray],
                init: T.Union[FloatArray, list[FloatArray]],
                fixed_init: bool=True,
@@ -26,9 +26,9 @@ class LanguageTrial(SingleVar):
       type: Which l2v distance to use.
       trial: Name of trial. Used as subdirectory name.
     """
-    super().__init__(["language to"], f, init, fixed_init=fixed_init, 
+    super().__init__(Var.LANG, f, init, fixed_init=fixed_init, 
                      bounds=bounds, loss=loss, pars=pars, 
-                     path=os.path.join(path_C, var_names[type], trial),
+                     path=os.path.join(path_C, type.short, trial),
                      xvars=[type], verbose=verbose)
 
   def init_analyzer(self):
@@ -38,9 +38,9 @@ class LanguageTrial(SingleVar):
       scatter_horiz = ["train set 1 size", "train set 2 size"]
       scatter_seper = [[]]
     """
-    numer = ["train set 1 size", "train set 2 size"] # TODO can have jsd
+    numer = [Var.TRAIN1_SIZE, Var.TRAIN2_SIZE] # TODO can have jsd
     super().init_analyzer(plot_horiz=numer, scatter_horiz=numer,
-                          bar_horiz=["train set 1", "train set 2", "test set"],
+                          bar_horiz=[Var.TRAIN1, Var.TRAIN2, Var.TEST],
                           scatter_seper=[[]])
 
   def analyze_all(self, run_plots=True):

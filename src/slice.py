@@ -23,15 +23,15 @@ class Slice:
   """
   df: pd.DataFrame
   id: pd.Series
-  vary: list[str]
+  vary: list[Var]
   title: str
   description: str
-  xvars: list[str]
+  xvars: list[Var]
   x: FloatArray
   y: FloatArray
 
-  def __init__(self, df: pd.DataFrame, id: pd.Series, vary_list: list[str], 
-               xvars: list[str]) -> None:
+  def __init__(self, df: pd.DataFrame, id: pd.Series, vary_list: list[Var], 
+               xvars: list[Var]) -> None:
     """ Initializes slice. """
     self.df = df
     self.id = id
@@ -39,7 +39,7 @@ class Slice:
     self.title, self.description = self.get_title()
     if xvars is not None:
       self.xvars = xvars
-      self.x = self.df.loc[:, xvars].astype(float).to_numpy()
+      self.x = self.df.loc[:, [var.title for var in xvars]].astype(float).to_numpy()
       self.y = self.df.loc[:, "sp-BLEU"].to_numpy()
 
   def get_title(self) -> tuple[str]:
@@ -49,20 +49,20 @@ class Slice:
       description: Non NA values in id with short var names ("var=val")
                    seperated by ",".
     """
-    fix = [i for i in range(len(vars)) if var not in self.vary]
+    fix = Var.rest(self.vary)
     if len(fix) == 0:
       return "all", "all"
-
-    fix_vars, vals = [], []
-    for i in fix:
-      fix_vars.append(var_names[vars[i]])
-      if vars[i] in ["train set 1 size", "train set 2 size"]:
-        vals.append(str(self.id[vars[i]]) + "k")
+    
+    names = [var.short for var in fix]
+    vals = []
+    for var in fix:
+      if var in [Var.TRAIN1_SIZE, Var.TRAIN2_SIZE]:
+        vals.append(str(self.id[var.title]) + "k")
       else:
-        vals.append(str(self.id[vars[i]]))
+        vals.append(str(self.id[var.title]))
 
     title = '-'.join(vals)
-    description = ','.join([fix_vars[i] + "=" + vals[i]
+    description = ','.join([names[i] + "=" + vals[i]
                             for i in range(len(vals))])
     return title, description
   
@@ -83,9 +83,10 @@ class SliceGroup:
   ids: pd.DataFrame
   slices: list[Slice]
   N: int
-  vary: list[str]
+  vary: list[Var]
 
-  def __init__(self, vary_list, df=main_df, xvars=None, set_xvar=True) -> None:
+  def __init__(self, vary_list: list[Var], df: pd.DataFrame=main_df,
+               xvars: list[Var]=None, set_xvar: bool=True) -> None:
     """ Initializes SliceGroup. 
     
     == Arguments ==
@@ -98,16 +99,9 @@ class SliceGroup:
             will be used as xvars.
     """
     self.vary = vary_list
-    self.ids, slices = split(vary_list, df=df)
+    self.ids, slices = split(self.vary, df=df)
     if set_xvar and xvars is None:
-      xvars = vary_list
+      xvars = self.vary
     self.slices = [Slice(slices[i], self.ids.iloc[i], self.vary, xvars)
                    for i in range(len(slices))]
     self.N = len(self.slices)
-
-  def ids_as_list(self):
-    ret = []
-    for row in self.ids.values:
-      indices = [i for i in range(len(vars)) if vars[i] not in self.vary]
-      ret.append(list(row[indices]))
-    return ret
