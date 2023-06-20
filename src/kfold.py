@@ -5,6 +5,13 @@ from slice import *
 import random
 from sklearn.metrics import mean_squared_error
 
+from enum import Enum
+
+class Most_rep(Enum):
+  Average = 1
+  Best_set = 2
+  Mini_k = 3
+
 class Fold:
   slices: list[Slice]
   df: pd.DataFrame
@@ -20,14 +27,8 @@ class Fold:
     self.costs = list(df["cost"])
     self.N = len(slices)
     self.parN = len(pars)
-
-  def average_fits(self):
-    """
-    Returns an array of average fits in this fold
-    """
-    return np.mean(self.fits, axis=0)
-
-  def run_trial(self, trial_func, fits_to_test):
+  
+  def run_trial(self, trial_func, fits_to_test, ignore_slice=None):
     """
     Take in a trial function and test on this fold
     Return average RMSE of testing trial_func using fits_to_test on this fold
@@ -35,12 +36,67 @@ class Fold:
     total_rmse = 0
 
     for slice in self.slices:
+        if slice == ignore_slice:
+          continue
         predicted_value = trial_func(fits_to_test, slice.x)
         rmse = np.sqrt(mean_squared_error(slice.y, predicted_value))
         total_rmse += rmse
 
     average_rmse = total_rmse / self.N
     return average_rmse
+
+  def average_fits(self):
+    """
+    Returns an array of average fits in this fold
+    """
+    return np.mean(self.fits, axis=0)
+  
+  def best_set_of_fits(self, trial_func):
+    """
+    Returns the set of fits from a slice in the fold that 
+    yields the lowest average RMSE when used to fit other slices in the fold.
+    """
+    best_set = None
+    best_rmse = float('inf')
+    
+    for i in range (self.N):
+      cur_set = self.fits[i]
+      cur_rmse = self.run_trial(trial_func,best_set,self.slices[i])
+      if cur_rmse < best_rmse:
+        best_set = cur_set
+        best_rmse = cur_rmse
+      
+    return best_set
+  
+  def opt_mini_k(self, trial_func):
+    """
+    For each slice in the fold, the average fits across the remaining 
+    $n-1$ slices are used to fit the current slice. The set of average fits 
+    across $n-1$ slices that yields the lowest RMSE when fitted on the 
+    remaining slice is selected.
+    """
+    best_set = None
+    best_rmse = float('inf')
+    
+    for i in range(self.N):
+      left_out_slice = self.slices[i]
+      cur_set = np.mean([self.fits[j] for j in range(self.N) if j != i], axis=0)
+      predicted_value = trial_func(cur_set, left_out_slice.x)
+      cur_rmse = np.sqrt(mean_squared_error(left_out_slice.y, predicted_value))
+      if cur_rmse < best_rmse:
+        best_set = cur_set
+        best_rmse = cur_rmse
+    
+    return best_set
+  
+  def most_rep_fits(self, trial_func, most_rep):
+    if (most_rep == Most_rep.Average):
+      return self.average_fits()
+    elif (most_rep == Most_rep.Best_set):
+      return self.best_set_of_fits(trial_func)
+    else:
+      return self.opt_mini_k(trial_func)
+      
   
 def extract_slices_to_fold(com_features, all_slices): # com_features: a list of pairs
   """
@@ -94,7 +150,7 @@ def extract_folds(expr, num_folds = None, common_features = None):
   else:
     return folds
 
-def k_fold_cross_valid(expr, folds, fold_ids=None, inclusive_features=None, exclusive_features=None):
+def k_fold_cross_valid(expr, most_rep, folds, fold_ids=None, inclusive_features=None, exclusive_features=None):
   """
   If common_features is passed in -> SFold
     If inclusive_features is passed in -> Inclusive Delta
@@ -125,9 +181,12 @@ def k_fold_cross_valid(expr, folds, fold_ids=None, inclusive_features=None, excl
   # Step 1: Get fold fits. # TODO
   fold_fits = []
   for fold in folds:
-    fold_fits.append(fold.average_fits())
+    fold_fits.append(fold.most_rep_fits(expr.f, most_rep))
   
   # Step 2: Use fold fits on the left out fold. # TODO
   test_fit = np.mean(fold_fits, axis=0)
   rmse = leftout_fold.run_trial(expr.f, test_fit)
   return rmse
+
+# TODO: Function that returns K matrix 
+
