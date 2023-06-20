@@ -188,5 +188,39 @@ def k_fold_cross_valid(expr, most_rep, folds, fold_ids=None, inclusive_features=
   rmse = leftout_fold.run_trial(expr.f, test_fit)
   return rmse
 
-# TODO: Function that returns K matrix 
+def get_k_mat(expr, k, inclusive_feat=None, exclusive_feat=None):
+  """
+  Returns K-matrix of a trial function
+  For now, only use test_set for common feature for systematic partitioning
+  In/exclusive features: depend on factor being tested
+  """
+  k_mat = np.empty((3, 4))
+  
+  # General: first call extract_folds, pass to k_fold_cross_valid, fill in mat
+  
+  #----------Random partition------------
+  folds = extract_folds(expr, num_folds = k)
+  k_mat[0][0] = k_fold_cross_valid(expr, Most_rep.Average, folds)
+  k_mat[1][0] = k_fold_cross_valid(expr, Most_rep.Best_set, folds)
+  k_mat[2][0] = k_fold_cross_valid(expr, Most_rep.Mini_k, folds)
+  
+  # TODO for all systematic fold: fold_ids (Sorry Eric forgot what it is)
+  
+  #----------Systematic & avg-------------
+  fold = extract_folds(expr, common_features = 'language to')
+  k_mat[0][1] = k_fold_cross_valid(expr, Most_rep.Average, folds, fold_ids=None)
+  k_mat[1][1] = k_fold_cross_valid(expr, Most_rep.Best_set, folds, fold_ids=None)
+  k_mat[2][1] = k_fold_cross_valid(expr, Most_rep.Mini_k, folds, fold_ids=None)
 
+  #----------Systematic & inclusive -------------
+  fold = extract_folds(expr, common_features = 'language to')
+  k_mat[0][2] = k_fold_cross_valid(expr, Most_rep.Average, folds, fold_ids=None, inclusive_features=inclusive_feat)
+  k_mat[1][2] = k_fold_cross_valid(expr, Most_rep.Best_set, folds, fold_ids=None, inclusive_features=inclusive_feat)
+  k_mat[2][2] = k_fold_cross_valid(expr, Most_rep.Mini_k, folds, fold_ids=None, inclusive_features=inclusive_feat)
+  
+
+  #----------Systematic & exclusive -------------
+  fold = extract_folds(expr, common_features = 'language to')
+  k_mat[0][3] = k_fold_cross_valid(expr, Most_rep.Average, folds, fold_ids=None, exclusive_features=exclusive_feat)
+  k_mat[1][3] = k_fold_cross_valid(expr, Most_rep.Best_set, folds, fold_ids=None, exclusive_features=exclusive_feat)
+  k_mat[2][3] = k_fold_cross_valid(expr, Most_rep.Mini_k, folds, fold_ids=None, exclusive_features=exclusive_feat)
