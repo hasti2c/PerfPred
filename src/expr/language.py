@@ -65,5 +65,5 @@ class DoubleLanguageTrial(LanguageTrial):
                      subpath=os.path.join("2var", "+".join([var.short for var in dists]), trial),
                      plot_f=lambda slice, fit: self.plot_double_var_both(slice, fit, self.plot_label))
     
-    def plot_label(self, i):
-      return Var.LANG
+  def plot_label(self, i):
+    return Var.LANG

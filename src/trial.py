@@ -186,4 +186,6 @@ class Trial:
       self.analyzer.bar_chart_all_costs()
       if len(self.analyzer.bar_horiz) != 0 and verbose >= 2:
         print("Finished bar charts.")
+    if verbose >= 1:
+      print("Done analyzing.")
     return self.analyzer.fit_stats, self.analyzer.cost_stats
