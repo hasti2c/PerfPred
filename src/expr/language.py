@@ -13,15 +13,14 @@ class LanguageTrial(Trial):
 #     x_vars = ["train set n jsd"]
   """
   def __init__(self, dists: Var, model: Model,
-               subpath: T.Optional[str]=None,
-               plot_f: T.Callable[[Slice, FloatArray], None]=None) -> None:
+               subpath: T.Optional[str]=None) -> None:
     """ Initializes a Language trial.
     == Arguments ==
       dists: List of distances to use
       trial: Name of trial. Used as subdirectory name.
     """
     super().__init__(SliceGroup([Var.LANG], xvars=dists), model, 
-                     path=os.path.join(path_C, subpath), plot_f=plot_f)
+                     path=os.path.join(path_C, subpath))
         
   def init_analyzer(self):
     """ Initalizes self.analyzer with attributes:
@@ -50,8 +49,7 @@ class SingleLanguageTrial(LanguageTrial):
       trial: Name of trial. Used as subdirectory name.
     """
     super().__init__([dist], model=model, 
-                     subpath=os.path.join("1var", dist.short, trial),
-                     plot_f=self.plot_single_var)
+                     subpath=os.path.join("1var", dist.short, trial))
     
 
 class DoubleLanguageTrial(LanguageTrial):
@@ -62,8 +60,20 @@ class DoubleLanguageTrial(LanguageTrial):
       trial: Name of trial. Used as subdirectory name.
     """
     super().__init__(dists, model=model,
-                     subpath=os.path.join("2var", "+".join([var.short for var in dists]), trial),
-                     plot_f=lambda slice, fit: self.plot_double_var_both(slice, fit, self.plot_label))
+                     subpath=os.path.join("2var", "+".join([var.short for var in dists]), trial))
+    
+  def plot_label(self, i):
+    return Var.LANG
+
+
+class MultiLanguageTrial(LanguageTrial):
+  def __init__(self, dists: Var, model: Model, trial: T.Optional[str]=None) -> None:
+    """ Initializes a Language trial.
+    == Arguments ==
+      dist: Distances to use
+      trial: Name of trial. Used as subdirectory name.
+    """
+    super().__init__(dists, model=model, subpath=os.path.join("temp", trial))
     
   def plot_label(self, i):
     return Var.LANG

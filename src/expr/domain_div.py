@@ -21,8 +21,7 @@ class SingleDomainTrial(Trial):
     vars = [Var.TRAIN1 if n == 1 else Var.TRAIN2, Var.TEST]
     xvars = [Var.TRAIN1_JSD if n == 1 else Var.TRAIN2_JSD]
     super().__init__(SliceGroup(vars, xvars=xvars), model,
-                     path=os.path.join(path_B, "jsd" + str(n), trial),
-                     plot_f=self.plot_single_var)
+                     path=os.path.join(path_B, "jsd" + str(n), trial))
     self.alt_var = Var.TRAIN2 if n == 1 else Var.TRAIN1
 
   def init_analyzer(self):
@@ -55,8 +54,7 @@ class DoubleDomainTrial(Trial):
     vars = [Var.TRAIN1, Var.TRAIN2, Var.TEST]
     xvars = [Var.TRAIN1_JSD, Var.TRAIN2_JSD] 
     super().__init__(SliceGroup(vars, xvars=xvars), model,
-                     path=os.path.join(path_B, "jsds", trial),
-                     plot_f=lambda slice, fit: self.plot_double_var_both(slice, fit, self.plot_label))
+                     path=os.path.join(path_B, "jsds", trial))
 
   def init_analyzer(self): # TODO should have plot and scatter
     """ Initalizes self.analyzer with attributes:
@@ -68,6 +66,3 @@ class DoubleDomainTrial(Trial):
     """ Calls init_analyzer and super().analyze_all(). """
     self.init_analyzer()
     super().analyze_all(run_plots=run_plots)
-
-  def plot_label(self, i):
-    return Var.TRAIN1 if i == 1 else Var.TRAIN2

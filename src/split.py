@@ -6,23 +6,24 @@ from itertools import product
 import random
 
 class Var (Enum):
-  TRAIN1 = "train set 1", "train1", "object"
-  TRAIN1_SIZE = "train set 1 size", "size1", "Int64"
-  TRAIN1_JSD = "train set 1 jsd", "jsd1", "Float64"
-  TRAIN2 = "train set 2", "train2", "object"
-  TRAIN2_SIZE = "train set 2 size", "size2", "Int64"
-  TRAIN2_JSD = "train set 2 jsd", "jsd2", "Float64"
-  TEST = "test set", "test", "object"
-  LANG = "language to", "lang", "object"
-  GEO_DIST = "geographic", "geo", "Float64"
-  GEN_DIST = "genetic", "gen", "Float64"
-  SYN_DIST = "syntactic", "syn", "Float64"
-  PHO_DIST = "phonological", "pho", "Float64"
-  INV_DIST = "inventory", "inv", "Float64"
-  FEA_DIST = "featural", "fea", "Float64"
+  TRAIN1      = "train set 1",      ["TRAIN1"],         "train1", "object"
+  TRAIN1_SIZE = "train set 1 size", ["TRAIN1_SIZE"],    "size1",  "Int64"
+  TRAIN2      = "train set 2",      ["TRAIN2"],         "train2", "object"
+  TRAIN2_SIZE = "train set 2 size", ["TRAIN2_SIZE"],    "size2",  "Int64"
+  TEST        = "test set",         ["TEST"],           "test",   "object"
+  LANG        = "language to",      ["LANG"],           "lang",   "object"
+  TRAIN1_JSD  = "train set 1 jsd",  ["TRAIN1", "TEST"], "jsd1",   "Float64"
+  TRAIN2_JSD  = "train set 2 jsd",  ["TRAIN2", "TEST"], "jsd2",   "Float64"
+  GEO_DIST    = "geographic",       ["LANG"],           "geo",    "Float64"
+  GEN_DIST    = "genetic",          ["LANG"],           "gen",    "Float64"
+  SYN_DIST    = "syntactic",        ["LANG"],           "syn",    "Float64"
+  PHO_DIST    = "phonological",     ["LANG"],           "pho",    "Float64"
+  INV_DIST    = "inventory",        ["LANG"],           "inv",    "Float64"
+  FEA_DIST    = "featural",         ["LANG"],           "fea",    "Float64"
 
-  def __init__(self, title: str, short: str, dtype: str) -> None:
+  def __init__(self, title: str, main_vars: list[str], short: str, dtype: str) -> None:
     self.title = title
+    self.main_vars = main_vars
     self.short = short
     self.dtype = dtype
 
@@ -41,6 +42,9 @@ class Var (Enum):
   
   def values(self, df: pd.DataFrame=main_df) -> list:
     return list(set(df[self.title]))
+  
+  def get_main_vars(self) -> list[Var]:
+    return [Var[var] for var in self.main_vars]
 
 # == Splitting Functions ==
 

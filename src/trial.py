@@ -8,29 +8,25 @@ class Trial:
   == Attributes ==
     slices: SliceGroup for the trial.
     model: Model for the trial.
-    plot_f: Function for plotting fits.
-            plot_f takes a slice and an array of coefficient values as input.
     path: Path for saving files related to the trial.
     df: Dataframe containing slice ids, fits, and costs.
     analyzer: Instance of Analayzer for this trial.
 
   == Methods ==
     fit_all: Fits all slices in self.slices. Puts result in self.df.
-    plot_all: Plots all slices using plot_f.
+    plot_all: Plots all slices.
     read_all_fits: Reads fits and costs into self.df from csv.
   """
   slices: SliceGroup
   model: Model
-  plot_f: T.Callable[[Slice, FloatArray], None]
   path: T.Optional[str]
   df: pd.DataFrame
   analyzer: Analyzer
 
-  def __init__(self, slices: SliceGroup, model: Model,
-               path: T.Optional[str]=None, 
-               plot_f: T.Callable[[Slice, FloatArray], None]=None) -> None:
+  def __init__(self, slices: SliceGroup, model: Model, 
+               path: T.Optional[str]=None) -> None:
     """ Initializes a slice. """
-    self.slices, self.model, self.plot_f, self.path = slices, model, plot_f, path
+    self.slices, self.model, self.path = slices, model, path
     if not os.path.exists(self.path):
       os.makedirs(self.path)
 
@@ -73,89 +69,61 @@ class Trial:
     self.df["cost"] = costs
     self.df = self.df.astype({"cost": "Float64"})
 
-  def plot_all(self) -> None:
-    """ Plots all slices using plot_f.
-    Pre-Condition: At least one of fit_all and read_all_fits has been called.
-    """
-    for i in range(self.slices.N):
-      slice = self.slices.slices[i]
-      self.plot_f(slice, self.df[self.model.pars].iloc[i])
-      if verbose >= 2:
-        p = verbose_helper(i + 1, self.slices.N)
-        if p > 0:
-          print(f"Have plotted {p * 10}% of slices... [{i + 1}/{self.slices.N}]")
-    if verbose >= 1:
-      print("Done plotting.")
-
-  def plot_single_var(self, slice: Slice, fit: FloatArray) -> None:
-    """ Plots a slice against its xvar.
-    Line plots the fitted function, scatter plots the real values.
-    """
-    n, N = min(slice.x[:, 0]), max(slice.x[:, 0])
-    xs = np.linspace(n, N, 100, endpoint=True)
-    xs = xs.reshape((len(xs), 1))
-    ys = self.model.f(fit, xs)
-    plt.plot(xs, ys)
-    plt.scatter(slice.x[:, 0], slice.y)
-
-    plt.xlabel(slice.xvars[0].title)
-    plt.ylabel('sp-BLEU')
-    plt.title(slice.description)
-    path = os.path.join(self.path, "plots")
-    if not os.path.exists(path):
-      os.makedirs(path)
-    plt.savefig(os.path.join(path, slice.title + ".png"))
-    plt.clf()
-
-  def plot_double_var(self, slice: Slice, fit: FloatArray, horiz: int,
-                      label: T.Optional[str]=None) -> None:
-    """ Plots a slice against the xvar[horiz]. horiz should be 0 or 1.
-    x-axis will be xvar[horiz] and hue will be xvar[1 - horiz].
-    Line plots the fitted function, scatter plots the real values.
-    """
-    hue = 1 - horiz
-    x = slice.x[:, horiz]
+  def plot_slice(self, slice: Slice, fit: FloatArray, horiz: Var, labels: Var):
+    horiz_i = slice.xvars.index(horiz)
+    x = slice.x[:, horiz_i]
     n, N = min(x), max(x)
 
-    z = slice.x[:, hue]
-    if label is None:
-      label = slice.xvars[hue]
-    l_all = slice.df.loc[:, label.title]
-    l, indices = np.unique(l_all, return_index=True)
-    z = z[indices]
-    colors = get_colors(len(l))
+    l_all = slice.df.loc[:, [var.title for var in labels]].to_numpy(dtype=str)
+    l, indices = np.unique(l_all, axis=0, return_index=True)
+    z_all = slice.x[:, [i for i in range(len(slice.xvars)) if i != horiz_i]]
+    z = z_all[indices]
+    if labels:
+      c = get_colors(len(z))
+      c_all = [c[np.where(l == k)[0][0]] for k in l_all]
+    else:
+      c = get_colors(1)
+      c_all = [c[0]] * len(l_all)
 
+    plt.scatter(x, slice.y, c=c_all)
     for i in range(len(l)):
-      xs = np.linspace(n, N, 100, endpoint=True)
-      if horiz == 0:
-        xs_in = np.column_stack((xs, np.full(len(xs), z[i])))
-      else:
-        xs_in = np.column_stack((np.full(len(xs), z[i]), xs))
+      m = 100
+      xs = np.linspace(n, N, m, endpoint=True)
+      xs_in = np.column_stack((np.full((m, horiz_i), z[i][:horiz_i]), xs,
+                            np.full((m, len(slice.xvars) - horiz_i - 1), z[i][horiz_i:])))
       ys = self.model.f(fit, xs_in)
-      plt.plot(xs, ys, c=colors[i], label=f'{l[i]}')
-    plt.scatter(x, slice.y, c=[colors[np.where(l == k)[0][0]] for k in l_all])
-    # TODO labels
+      plt.plot(xs, ys, c=c[i], label=",".join(l[i]))
 
-    plt.xlabel(slice.xvars[horiz].title)
+    plt.xlabel(horiz.title)
     plt.ylabel('sp-BLEU')
-    plt.legend(title=label.title)
+    if labels:
+      plt.legend(title=",".join([var.title for var in labels]))
     plt.title(slice.description)
-    horiz_name = slice.xvars[horiz].short
-    path = os.path.join(self.path, "plots", horiz_name)
+    if labels:
+      path = os.path.join(self.path, "plots", horiz.short)
+    else:
+      path = os.path.join(self.path, "plots")
     if not os.path.exists(path):
       os.makedirs(path)
     plt.savefig(os.path.join(path, slice.title + ".png"))
     plt.clf()
 
-  def plot_double_var_both(self, slice: Slice, fit: FloatArray, 
-                           label_func: T.Optional[T.Callable[[int], str]]=None):
-    """ Calls plot_double var with horiz=0 and horiz=1. """
-    if label_func is None:
-      self.plot_double_var(slice, fit, 0)
-      self.plot_double_var(slice, fit, 1)
-    else:
-      self.plot_double_var(slice, fit, 0, label=label_func(2))
-      self.plot_double_var(slice, fit, 1, label=label_func(1))
+  def plot_all(self) -> None:
+    """ Plots all slices.
+    Pre-Condition: At least one of fit_all and read_all_fits has been called.
+    """
+    prd = product(range(len(self.slices.xvars)), range(self.slices.N))
+    for k, (j, i) in enumerate(prd):
+      horiz = self.slices.xvars[j]
+      slice = self.slices.slices[i]
+      labels = list(set.union(*[set(var.get_main_vars()) for var in self.slices.xvars if var != horiz], set()))
+      self.plot_slice(slice, self.df[self.model.pars].iloc[i].to_numpy(), horiz, labels)
+      if verbose >= 2:
+        p = verbose_helper(k + 1, len(prd))
+        if p > 0:
+          print(f"Have plotted {p * 10}% of slices... [{k + 1}/{len(prd)}]")
+    if verbose >= 1:
+      print("Done plotting.")
 
   def init_analyzer(self, plot_horiz=[], scatter_horiz=[], bar_horiz=[],
                     scatter_seper=[[]]):
