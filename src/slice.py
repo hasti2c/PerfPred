@@ -75,6 +75,7 @@ class SliceGroup:
     slices: List of slices.
     N: Number of slices.
     vary: List of VARY vars in the slicing.
+    xvars: Variables used as input of model function.
 
   == Static Methods ==
     get_slices: Takes lists of variable types and returns a corresponding
@@ -84,6 +85,7 @@ class SliceGroup:
   slices: list[Slice]
   N: int
   vary: list[Var]
+  xvars: list[Var]
 
   def __init__(self, vary_list: list[Var], df: pd.DataFrame=main_df,
                xvars: list[Var]=None, set_xvar: bool=True) -> None:
@@ -98,10 +100,10 @@ class SliceGroup:
             By Default (i.e. if xvars is None and set_xvar is True), VARY vars
             will be used as xvars.
     """
-    self.vary = vary_list
-    self.ids, slices = split(self.vary, df=df)
     if set_xvar and xvars is None:
       xvars = self.vary
+    self.vary, self.xvars = vary_list, xvars
+    self.ids, slices = split(self.vary, df=df)
     self.slices = [Slice(slices[i], self.ids.iloc[i], self.vary, xvars)
                    for i in range(len(slices))]
     self.N = len(self.slices)
