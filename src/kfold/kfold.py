@@ -143,7 +143,7 @@ def extract_folds(expr, num_folds = None, common_features = None):
   folds = []
   for fold_df in fold_dfs:
     slices = [expr.slices.slices[i] for i in list(fold_df.index.values)]
-    folds.append(Fold(slices, fold_df, expr.pars))
+    folds.append(Fold(slices, fold_df, expr.model.pars))
 
   if common_features:
      return fold_ids, folds
@@ -181,11 +181,11 @@ def k_fold_cross_valid(expr, most_rep, folds, fold_ids=None, inclusive_features=
   # Step 1: Get fold fits. # TODO
   fold_fits = []
   for fold in folds:
-    fold_fits.append(fold.most_rep_fits(expr.f, most_rep))
+    fold_fits.append(fold.most_rep_fits(expr.model.f, most_rep))
   
   # Step 2: Use fold fits on the left out fold. # TODO
   test_fit = np.mean(fold_fits, axis=0)
-  rmse = leftout_fold.run_trial(expr.f, test_fit)
+  rmse = leftout_fold.run_trial(expr.model.f, test_fit)
   return rmse
 
 def get_k_mat(expr, k, inclusive_feat=None, exclusive_feat=None):

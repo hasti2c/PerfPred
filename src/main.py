@@ -1,5 +1,5 @@
 from expr import all
-from kfold import *
+from kfold.kfold import *
 
 for expr in all.C_trials:
   print([var.title for var in expr.slices.vary], expr.model.f.__name__)
