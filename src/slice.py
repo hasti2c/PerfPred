@@ -1,6 +1,7 @@
 from util import *
 from split import *
 
+# TODO store slice groups already computed somehow
 class Slice:
   """ A slice of the data, representing a subset of rows of main dataframe.
 

@@ -29,12 +29,7 @@ class Trial:
   def __init__(self, slices: SliceGroup, model: Model,
                path: T.Optional[str]=None, 
                plot_f: T.Callable[[Slice, FloatArray], None]=None) -> None:
-    """ Initializes a slice.
-    == Arguments ==
-      slice_vars: VARY vars for slicing.
-      xvars: xvars for each slice.
-      model, path, plot_f: Same as corresponding attributes.
-    """
+    """ Initializes a slice. """
     self.slices, self.model, self.plot_f, self.path = slices, model, plot_f, path
     if not os.path.exists(self.path):
       os.makedirs(self.path)
