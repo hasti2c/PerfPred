@@ -43,8 +43,10 @@ class Var (Enum):
   def values(self, df: pd.DataFrame=main_df) -> list:
     return list(set(df[self.title]))
   
-  def get_main_vars(self) -> list[Var]:
-    return [Var[var] for var in self.main_vars]
+  @staticmethod
+  def get_main_vars(vars) -> list[Var]:
+    mains = [set([Var[v] for v in var.main_vars]) for var in vars]
+    return list(set.union(*mains, set()))
 
 # == Splitting Functions ==
 

@@ -13,14 +13,14 @@ class LanguageTrial(Trial):
 #     x_vars = ["train set n jsd"]
   """
   def __init__(self, dists: Var, model: Model,
-               subpath: T.Optional[str]=None) -> None:
+               trial: T.Optional[str]=None) -> None:
     """ Initializes a Language trial.
     == Arguments ==
       dists: List of distances to use
       trial: Name of trial. Used as subdirectory name.
     """
     super().__init__(SliceGroup([Var.LANG], xvars=dists), model, 
-                     path=os.path.join(path_C, subpath))
+                     path=os.path.join(path_C, f"{len(dists)}var", "+".join([var.short for var in dists]), trial))
         
   def init_analyzer(self):
     """ Initalizes self.analyzer with attributes:
@@ -38,42 +38,3 @@ class LanguageTrial(Trial):
     """ Calls init_analyzer and super().analyze_all(). """
     self.init_analyzer()
     super().analyze_all(run_plots=run_plots)
-
-
-
-class SingleLanguageTrial(LanguageTrial):
-  def __init__(self, dist: Var, model: Model, trial: T.Optional[str]=None) -> None:
-    """ Initializes a Language trial.
-    == Arguments ==
-      dist: Distances to use
-      trial: Name of trial. Used as subdirectory name.
-    """
-    super().__init__([dist], model=model, 
-                     subpath=os.path.join("1var", dist.short, trial))
-    
-
-class DoubleLanguageTrial(LanguageTrial):
-  def __init__(self, dists: Var, model: Model, trial: T.Optional[str]=None) -> None:
-    """ Initializes a Language trial.
-    == Arguments ==
-      dist: Distances to use
-      trial: Name of trial. Used as subdirectory name.
-    """
-    super().__init__(dists, model=model,
-                     subpath=os.path.join("2var", "+".join([var.short for var in dists]), trial))
-    
-  def plot_label(self, i):
-    return Var.LANG
-
-
-class MultiLanguageTrial(LanguageTrial):
-  def __init__(self, dists: Var, model: Model, trial: T.Optional[str]=None) -> None:
-    """ Initializes a Language trial.
-    == Arguments ==
-      dist: Distances to use
-      trial: Name of trial. Used as subdirectory name.
-    """
-    super().__init__(dists, model=model, subpath=os.path.join("temp", trial))
-    
-  def plot_label(self, i):
-    return Var.LANG

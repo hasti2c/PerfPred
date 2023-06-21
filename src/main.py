@@ -3,7 +3,7 @@ from trial import *
 from expr.language import *
 from kfold.kfold import *
 
-for expr in all.lang_2var:
+for expr in all.C_trials:
   print([var.title for var in expr.slices.vary], expr.model.f.__name__)
   expr.fit_all()
   # expr.read_all_fits()
@@ -17,4 +17,4 @@ for expr in all.lang_2var:
 
 # expr = all.jsds[0]
 # expr.fit_all()
-# expr.plot_all()l
+# expr.plot_all()

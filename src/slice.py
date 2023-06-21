@@ -89,7 +89,7 @@ class SliceGroup:
   xvars: list[Var]
 
   def __init__(self, vary_list: list[Var], df: pd.DataFrame=main_df,
-               xvars: list[Var]=None, set_xvar: bool=True) -> None:
+               xvars: list[Var]=None, set_xvar: bool=True) -> None: # TODO remove xvars and vary_list as separate inputs
     """ Initializes SliceGroup. 
     
     == Arguments ==

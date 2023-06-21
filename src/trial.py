@@ -116,7 +116,7 @@ class Trial:
     for k, (j, i) in enumerate(prd):
       horiz = self.slices.xvars[j]
       slice = self.slices.slices[i]
-      labels = list(set.union(*[set(var.get_main_vars()) for var in self.slices.xvars if var != horiz], set()))
+      labels = Var.get_main_vars([var for var in self.slices.xvars if var != horiz])
       self.plot_slice(slice, self.df[self.model.pars].iloc[i].to_numpy(), horiz, labels)
       if verbose >= 2:
         p = verbose_helper(k + 1, len(prd))
