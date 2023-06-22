@@ -24,6 +24,10 @@ class Model:
           (More info: https://docs.scipy.org/doc/scipy/reference/generated/scipy.optimize.least_squares.html)
     par_num: Number of coefficients of f.
     pars: Names of coefficients of f.
+
+  == Methods ==
+    rmse: Calculates rmse for a slice given fitted coeffs.
+    fit_slice: Fits the trial function f for a slice.
   """
   f: T.Callable[[FloatArray, FloatArray], FloatArray]
   residual: T.Callable[[FloatArray, FloatArray], FloatArray]
@@ -37,13 +41,7 @@ class Model:
                init: FloatArray, bounds: T.Optional[tuple[list[float]]]=None,
                loss: str='soft_l1', pars: list[str]=[]):
     """ Initializes a model.
-    == Arguments ==
-      f: Trial function used for fitting. (More info in pre-conditions.)
-      init: Initial value for all slices.
-            (More info in pre-conditions.)
-      bounds: Bounds for each coefficient.       (More info in pre-conditions.)
-      loss, pars: Same as corresponding attributes.
-
+    
     == Pre-Conditions ==
     * Let N be the number of slices in the slice group.
     * Let K be the number of xvars.
@@ -60,10 +58,6 @@ class Model:
       - mins and maxes are each an array of len C.
       - The model will obey mins[i] <= c[i] <= maxes[i] for each i, i.e. mins[i]
         and maxes[i] define the bounds for the i-th coefficient.
-    
-    == Methods ==
-      rmse: Calculates rmse for a slice given fitted coeffs.
-      fit_slice: Fits the trial function f for a slice.
     """
     self.f, self.residual = f, lambda c, x, y : f(c, x) - y
     self.init = init

@@ -8,15 +8,13 @@ class Trial:
   == Attributes ==
     slices: SliceGroup for the trial.
     model: Model for the trial.
-    plot_f: Function for plotting fits.
-            plot_f takes a slice and an array of coefficient values as input.
     path: Path for saving files related to the trial.
     df: Dataframe containing slice ids, fits, and costs.
     analyzer: Instance of Analayzer for this trial.
 
   == Methods ==
     fit_all: Fits all slices in self.slices. Puts result in self.df.
-    plot_all: Plots all slices using plot_f.
+    plot_all: Plots all slices.
     read_all_fits: Reads fits and costs into self.df from csv.
   """
   slices: SliceGroup
@@ -109,22 +107,24 @@ class Trial:
       c = get_colors(1)
       c_all = [c[0]] * len(l_all)
 
+    plt.scatter(x, slice.y, c=c_all)
     for i in range(len(l)):
       m = 100
       xs = np.linspace(n, N, m, endpoint=True)
       xs_in = np.column_stack((np.full((m, horiz_i), z[i][:horiz_i]), xs,
                             np.full((m, len(self.xvars) - horiz_i - 1), z[i][horiz_i:])))
       ys = self.model.f(fit, xs_in)
-      plt.plot(xs, ys, c=colors[i], label=f'{l[i]}')
-    plt.scatter(x, slice.y, c=[colors[np.where(l == k)[0][0]] for k in l_all])
-    # TODO labels
+      plt.plot(xs, ys, c=c[i], label=",".join(l[i]))
 
-    plt.xlabel(slice.xvars[horiz].title)
+    plt.xlabel(horiz.title)
     plt.ylabel('sp-BLEU')
-    plt.legend(title=label.title)
+    if labels:
+      plt.legend(title=",".join([var.title for var in labels]))
     plt.title(slice.description)
-    horiz_name = slice.xvars[horiz].short
-    path = os.path.join(self.path, "plots", horiz_name)
+    if labels:
+      path = os.path.join(self.path, "plots", horiz.short)
+    else:
+      path = os.path.join(self.path, "plots")
     if not os.path.exists(path):
       os.makedirs(path)
     plt.savefig(os.path.join(path, slice.title + ".png"))

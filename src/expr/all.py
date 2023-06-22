@@ -50,21 +50,41 @@ jsds = [
 B_trials = jsd1 + jsd2 + jsds
 
 lang_1var = [
-  SingleLanguageTrial(Var.GEN_DIST, Model.linear(1), trial="trial1"),
-  SingleLanguageTrial(Var.GEO_DIST, Model.linear(1), trial="trial1"),
-  SingleLanguageTrial(Var.INV_DIST, Model.linear(1), trial="trial1"),
-  SingleLanguageTrial(Var.PHO_DIST, Model.linear(1), trial="trial1"),
-  SingleLanguageTrial(Var.SYN_DIST, Model.linear(1), trial="trial1"),
-  SingleLanguageTrial(Var.FEA_DIST, Model.linear(1), trial="trial1")
+  LanguageTrial([Var.FEA_DIST], Model.linear(1), trial="trial1"),
+  LanguageTrial([Var.INV_DIST], Model.linear(1), trial="trial1"),
+  LanguageTrial([Var.PHO_DIST], Model.linear(1), trial="trial1"),
+  LanguageTrial([Var.SYN_DIST], Model.linear(1), trial="trial1"),
+  LanguageTrial([Var.GEN_DIST], Model.linear(1), trial="trial1"),
+  LanguageTrial([Var.GEO_DIST], Model.linear(1), trial="trial1")
 ]
 
 lang_2var = [
-  DoubleLanguageTrial([Var.INV_DIST, Var.PHO_DIST], Model.linear(2), trial="trial1"),
-  DoubleLanguageTrial([Var.INV_DIST, Var.SYN_DIST], Model.linear(2), trial="trial1"),
-  DoubleLanguageTrial([Var.PHO_DIST, Var.SYN_DIST], Model.linear(2), trial="trial1"),
+  LanguageTrial([Var.INV_DIST, Var.PHO_DIST], Model.linear(2), trial="trial1"),
+  LanguageTrial([Var.INV_DIST, Var.SYN_DIST], Model.linear(2), trial="trial1"),
+  LanguageTrial([Var.PHO_DIST, Var.SYN_DIST], Model.linear(2), trial="trial1"),
+  LanguageTrial([Var.GEN_DIST, Var.GEO_DIST], Model.linear(2), trial="trial1"),
+  LanguageTrial([Var.FEA_DIST, Var.INV_DIST], Model.linear(2), trial="trial1"),
+  LanguageTrial([Var.FEA_DIST, Var.PHO_DIST], Model.linear(2), trial="trial1"),
+  LanguageTrial([Var.FEA_DIST, Var.SYN_DIST], Model.linear(2), trial="trial1"),
+  LanguageTrial([Var.FEA_DIST, Var.GEN_DIST], Model.linear(2), trial="trial1"),
+  LanguageTrial([Var.FEA_DIST, Var.GEO_DIST], Model.linear(2), trial="trial1")
 ]
 
-C_trials = lang_1var + lang_2var
+lang_3var = [
+  LanguageTrial([Var.INV_DIST, Var.PHO_DIST, Var.SYN_DIST], Model.linear(3), trial="trial1"),  
+  LanguageTrial([Var.FEA_DIST, Var.INV_DIST, Var.PHO_DIST], Model.linear(3), trial="trial1"),
+  LanguageTrial([Var.FEA_DIST, Var.INV_DIST, Var.SYN_DIST], Model.linear(3), trial="trial1"),
+  LanguageTrial([Var.FEA_DIST, Var.PHO_DIST, Var.SYN_DIST], Model.linear(3), trial="trial1"),
+  LanguageTrial([Var.FEA_DIST, Var.GEN_DIST, Var.GEO_DIST], Model.linear(3), trial="trial1"),
+]
+
+lang_many_var = [
+  LanguageTrial([Var.FEA_DIST, Var.INV_DIST, Var.PHO_DIST, Var.SYN_DIST], Model.linear(4), trial="trial1"),
+  LanguageTrial([Var.INV_DIST, Var.PHO_DIST, Var.SYN_DIST, Var.GEN_DIST, Var.GEO_DIST], Model.linear(5), trial="trial1"),
+  LanguageTrial([Var.FEA_DIST, Var.INV_DIST, Var.PHO_DIST, Var.SYN_DIST, Var.GEN_DIST, Var.GEO_DIST], Model.linear(6), trial="trial1")
+]
+
+C_trials = lang_1var + lang_2var + lang_3var + lang_many_var
 
 all_trials = A_trials + B_trials + C_trials
 

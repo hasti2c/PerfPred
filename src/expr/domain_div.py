@@ -66,6 +66,3 @@ class DoubleDomainTrial(Trial):
     """ Calls init_analyzer and super().analyze_all(). """
     self.init_analyzer()
     super().analyze_all(run_plots=run_plots)
-
-  def plot_label(self, i):
-    return Var.TRAIN1 if i == 1 else Var.TRAIN2
