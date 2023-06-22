@@ -56,10 +56,10 @@ class Analyzer: # TODO change dependency structure
       df.reset_index(drop=True, inplace=True)
 
     if len(split_vars) > 0:
-      return SliceGroup(split_vars + self.slice_vars, df=df, set_xvar=False)
+      return SliceGroup(split_vars + self.slice_vars, df=df)
     else:
       split_vars = Var.rest(seper_vars)
-      return SliceGroup(split_vars + self.slice_vars, df=df, set_xvar=False)
+      return SliceGroup(split_vars + self.slice_vars, df=df)
 
   def fits_analysis(self, save_prints=True): # TODO make np array
     """ Prints analysis of fits (to file or stdout). """

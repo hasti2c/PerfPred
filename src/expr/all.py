@@ -67,3 +67,8 @@ lang_2var = [
 C_trials = lang_1var + lang_2var
 
 all_trials = A_trials + B_trials + C_trials
+
+linear_trials = [size1[0], size2[0], sizes[0]] + B_trials + C_trials
+
+for trial in all_trials:
+    trial.read_all_fits()

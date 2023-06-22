@@ -25,11 +25,6 @@ class Var (Enum):
     self.title = title
     self.short = short
     self.dtype = dtype
-
-  @staticmethod
-  def all() -> list[Var]:
-    return list(Var)
-  
   @staticmethod
   def main() -> list[Var]:
     return [Var.TRAIN1, Var.TRAIN1_SIZE, Var.TRAIN2, Var.TRAIN2_SIZE,
@@ -39,8 +34,21 @@ class Var (Enum):
   def rest(vars: list[Var]) -> list[Var]:
     return [var for var in Var.main() if var not in vars]
   
+  @staticmethod
+  def get_main_vars(vars) -> list[Var]:
+    mains = [set([Var[v] for v in var.main_vars]) for var in vars]
+    return sorted(list(set.union(*mains, set())))
+  
+  @staticmethod
+  def get_flags(vars) -> tuple[Var]:
+    return tuple([var in vars for var in Var.main()])
+  
   def values(self, df: pd.DataFrame=main_df) -> list:
     return list(set(df[self.title]))
+  
+  def __lt__(self, other: Var) -> bool:
+    return list(Var).index(other) - list(Var).index(self) > 0
+
 
 # == Splitting Functions ==
 

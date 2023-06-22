@@ -71,25 +71,6 @@ class Model:
     if bounds is None:
       bounds = ([-np.inf]*self.par_num, [np.inf]*self.par_num)
     self.bounds, self.loss = bounds, loss
-
-  def rmse(self, slice: Slice, fit: FloatArray) -> float:
-    """ Calculates rmse for a slice given fitted coeffs. """
-    y_true = slice.y
-    y_pred = self.f(fit, slice.x)
-    return np.sqrt(mean_squared_error(y_true, y_pred))
-
-  def fit_slice(self, slice: Slice) -> T.Tuple[FloatArray, float]:
-    """Fits the trial function f for a slice.
-    == Return Values ==
-      fit_x: Fitted values for coefficients of f.
-      cost: rmse of resulting fit.
-    """
-    fit = scipy.optimize.least_squares(self.residual, self.init,
-                                       args=(slice.x, slice.y),
-                                       bounds=self.bounds, loss=self.loss)
-    fit_x = fit.x.copy()
-    cost = self.rmse(slice, fit_x)
-    return fit_x, cost
   
   @staticmethod
   def linear(n):

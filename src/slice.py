@@ -1,7 +1,7 @@
 from util import *
 from split import *
 
-class Slice:
+class Slice: # TODO update docs
   """ A slice of the data, representing a subset of rows of main dataframe.
 
   == Attributes ==
@@ -26,21 +26,13 @@ class Slice:
   vary: list[Var]
   title: str
   description: str
-  xvars: list[Var]
-  x: FloatArray
-  y: FloatArray
 
-  def __init__(self, df: pd.DataFrame, id: pd.Series, vary_list: list[Var], 
-               xvars: list[Var]) -> None:
+  def __init__(self, df: pd.DataFrame, id: pd.Series, vary_list: list[Var]) -> None:
     """ Initializes slice. """
     self.df = df
     self.id = id
     self.vary = vary_list
     self.title, self.description = self.get_title()
-    if xvars is not None:
-      self.xvars = xvars
-      self.x = self.df.loc[:, [var.title for var in xvars]].astype(float).to_numpy()
-      self.y = self.df.loc[:, "sp-BLEU"].to_numpy()
 
   def get_title(self) -> tuple[str]:
     """ Returns title and description for slice.
@@ -66,8 +58,14 @@ class Slice:
                             for i in range(len(vals))])
     return title, description
   
+  def x(self, xvars: list[Var]):
+    return self.df.loc[:, [var.title for var in xvars]].astype(float).to_numpy()
+  
+  def y(self, xvars: list[Var]):
+    return self.df.loc[:, "sp-BLEU"].to_numpy()
 
 class SliceGroup:
+  GROUPS = {}
   """ A group of slices as defined by vary_list.
 
   == Attributes ==
@@ -85,13 +83,11 @@ class SliceGroup:
   slices: list[Slice]
   N: int
   vary: list[Var]
-  xvars: list[Var]
 
-  def __init__(self, vary_list: list[Var], df: pd.DataFrame=main_df,
-               xvars: list[Var]=None, set_xvar: bool=True) -> None:
+  def __init__(self, xvars: list[Var], df: pd.DataFrame=main_df) -> None:
     """ Initializes SliceGroup. 
     
-    == Arguments ==
+    == Arguments == # TODO update doc
     vary_list: List of VARY vars.
     df: Dataframe to perform slicing on.
     set_xvar: Whether or not to give slices xvars value when initializing.
@@ -100,10 +96,16 @@ class SliceGroup:
             By Default (i.e. if xvars is None and set_xvar is True), VARY vars
             will be used as xvars.
     """
-    if set_xvar and xvars is None:
-      xvars = self.vary
-    self.vary, self.xvars = vary_list, xvars
+    self.vary = Var.get_main_vars(xvars)
     self.ids, slices = split(self.vary, df=df)
-    self.slices = [Slice(slices[i], self.ids.iloc[i], self.vary, xvars)
+    self.slices = [Slice(slices[i], self.ids.iloc[i], self.vary)
                    for i in range(len(slices))]
     self.N = len(self.slices)
+
+  @staticmethod
+  def get_instance(xvars: list[Var]):
+    flags = Var.get_flags(Var.get_main_vars(xvars))
+    if flags not in SliceGroup.GROUPS:
+      SliceGroup.GROUPS[flags] = SliceGroup(xvars)
+    return SliceGroup.GROUPS[flags]
+    

@@ -19,9 +19,9 @@ class SingleSizeTrial(Trial):
       trial: Name of trial. Used as subdirectory name.
     """
     vars = [Var.TRAIN1_SIZE if n == 1 else Var.TRAIN2_SIZE]
-    super().__init__(SliceGroup(vars, xvars=vars), model,
+    super().__init__(vars, model,
                      path=os.path.join(path_A, "size" + str(n), trial),
-                     plot_f=self.plot_single_var)
+                     name=trial)
     self.alt_var = Var.TRAIN2_SIZE if n == 1 else Var.TRAIN1_SIZE
 
   def init_analyzer(self):
@@ -51,9 +51,9 @@ class DoubleSizeTrial(Trial):
   """
   def __init__(self, model: Model, trial: T.Optional[str]=None) -> None:
     vars = [Var.TRAIN1_SIZE, Var.TRAIN2_SIZE]
-    super().__init__(SliceGroup(vars, xvars=vars), model,
+    super().__init__(vars, model,
                      path=os.path.join(path_A, "sizes", trial),
-                     plot_f=self.plot_double_var_both)
+                     name=trial)
 
   def init_analyzer(self):
     """ Initalizes self.analyzer with attributes:

@@ -7,6 +7,8 @@ import sys
 import csv
 from pprint import pprint
 
+from gsheet_util import get_gcreds
+
 # === Globals ===
 main_df = pd.read_csv("data/data_na_disc.csv") # TODO: consider na_keep
 
@@ -61,7 +63,13 @@ def create_trial_folder(path: str) -> None:
   os.mkdir(os.path.join(path, "analysis", "plots"))
   os.mkdir(os.path.join(path, "analysis", "scatters"))
   os.mkdir(os.path.join(path, "analysis", "bar_charts"))
-  
+
+# === GSheet Helpers 
+
+def write_to_sheet(df, sheet, page):
+  gc = get_gcreds()
+  worksheet = gc.open(sheet).get_worksheet(page)
+  worksheet.update([df.columns.values.tolist()] + df.values.tolist())
 
 # === Misc Helpers ===
 

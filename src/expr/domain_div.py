@@ -18,11 +18,10 @@ class SingleDomainTrial(Trial):
          If n == 1, uses train set 1. If n == 2, uses train set 2.
       trial: Name of trial. Used as subdirectory name.
     """
-    vars = [Var.TRAIN1 if n == 1 else Var.TRAIN2, Var.TEST]
     xvars = [Var.TRAIN1_JSD if n == 1 else Var.TRAIN2_JSD]
-    super().__init__(SliceGroup(vars, xvars=xvars), model,
+    super().__init__(xvars, model,
                      path=os.path.join(path_B, "jsd" + str(n), trial),
-                     plot_f=self.plot_single_var)
+                     name=trial)
     self.alt_var = Var.TRAIN2 if n == 1 else Var.TRAIN1
 
   def init_analyzer(self):
@@ -52,11 +51,10 @@ class DoubleDomainTrial(Trial):
     x_vars = ["train set 1 jsd", "train set 2 jsd"]
   """
   def __init__(self, model: Model, trial: T.Optional[str]=None) -> None:
-    vars = [Var.TRAIN1, Var.TRAIN2, Var.TEST]
     xvars = [Var.TRAIN1_JSD, Var.TRAIN2_JSD] 
-    super().__init__(SliceGroup(vars, xvars=xvars), model,
+    super().__init__(xvars, model,
                      path=os.path.join(path_B, "jsds", trial),
-                     plot_f=lambda slice, fit: self.plot_double_var_both(slice, fit, self.plot_label))
+                     name=trial)
 
   def init_analyzer(self): # TODO should have plot and scatter
     """ Initalizes self.analyzer with attributes:

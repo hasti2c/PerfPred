@@ -13,15 +13,15 @@ class LanguageTrial(Trial):
 #     x_vars = ["train set n jsd"]
   """
   def __init__(self, dists: Var, model: Model,
-               subpath: T.Optional[str]=None,
-               plot_f: T.Callable[[Slice, FloatArray], None]=None) -> None:
+               trial: T.Optional[str]=None) -> None:
     """ Initializes a Language trial.
     == Arguments ==
       dists: List of distances to use
       trial: Name of trial. Used as subdirectory name.
     """
-    super().__init__(SliceGroup([Var.LANG], xvars=dists), model, 
-                     path=os.path.join(path_C, subpath), plot_f=plot_f)
+    super().__init__(dists, model, 
+                     path=os.path.join(path_C, f"{len(dists)}var", "+".join([var.short for var in dists]), trial),
+                     name=trial)
         
   def init_analyzer(self):
     """ Initalizes self.analyzer with attributes:
