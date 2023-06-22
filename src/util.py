@@ -12,7 +12,7 @@ from gsheet_util import get_gcreds
 # === Globals ===
 main_df = pd.read_csv("data/data_na_disc.csv") # TODO: consider na_keep
 
-verbose = 1
+verbose = 3
 eps = 1e-6
 
 FloatT = (T.Any, float)
@@ -87,3 +87,5 @@ def get_colors(n): # TODO
     return
   cm = mpl.color_sequences['tab10']
   return cm
+
+GREEK = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta', 'iota', 'kappa', 'lamda', 'mu', 'nu', 'xi', 'omicron', 'pi', 'rho', 'sigma', 'tau', 'upsilon', 'phi', 'chi', 'psi', 'omega']

@@ -107,7 +107,7 @@ class Trial:
       c = get_colors(1)
       c_all = [c[0]] * len(l_all)
 
-    plt.scatter(x, slice.y, c=c_all)
+    plt.scatter(x, slice.y(self.xvars), c=c_all)
     for i in range(len(l)):
       m = 100
       xs = np.linspace(n, N, m, endpoint=True)

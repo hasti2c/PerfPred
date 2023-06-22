@@ -5,12 +5,25 @@ eps = 1e-6
 
 # === Function Getters ===
 def linear(c, x):
-  """ Linear with (m - 1) variables.
-  c: Array with dim m, corresponding to alpha1, ..., alpha(m-1), C.
+  """ Linear with m variables.
+  c: Array with dim m+1, corresponding to alpha1, ..., alpham, C.
   x: Array with dim (n, m).
   y: Array with dim n.
   """
   return np.dot(x, c[:-1]) + c[-1]
+
+def polynomial(c, x):
+  """ Polynomial (of degree k) with m variables.
+  c: Array with dim k*m+1 (groups of k).
+  x: Array with dim (n, m).
+  y: Array with dim n.
+  """
+  n, m = x.shape
+  k = int((c.shape[0] - 1) / m)
+  xs = np.zeros((n, k * m))
+  for i in range(k):
+    xs[:, i::k] = np.power(x, i + 1)
+  return np.dot(xs, c[:-1]) + c[-1]
 
 # === Single Variable ===
 def log_single(c, x):

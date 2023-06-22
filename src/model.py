@@ -73,3 +73,10 @@ class Model:
     else:
       pars = [f"beta{i}" for i in range(1, n + 1)] + ["C"]
     return Model(func.linear, np.zeros(n + 1), pars=pars)
+  
+  @staticmethod
+  def polynomial(n, k):
+    names = sum([[var] * k for var in GREEK[:n]], [])
+    nums = list(range(1, k + 1)) * n
+    pars = [name + str(num) for name, num in zip(names, nums)] + ["C"]
+    return Model(func.polynomial, np.zeros(n * k + 1), pars=pars)
