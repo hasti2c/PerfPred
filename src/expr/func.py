@@ -1,4 +1,5 @@
 import numpy as np
+import math
 
 eps = 1e-6
 
@@ -49,3 +50,91 @@ def depend_double(c, x):
   x1 = 1 / (x[:, 0] + 1/1000)
   x2 = 1 / (x[:, 1] + 1/1000)
   return c[0] * np.power(x1 * x2, c[2]) + c[1] * np.power(x2, c[3]) + c[4]
+
+def poly_reg(c, x, n):
+  """ 
+  n: degree of polynomial
+  c: array of dimension 2n+1, corresponding to beta_0, beta_1, ..., beta_n, beta_{n+1}, ..., beta_{2n}
+  x: Array with dim (n, 2).
+  y: Array with dim n.
+  """
+  x1 = float
+  x2 = float
+  for i in range (n):
+    x1 += c[i] * np.power(x[:, 0], i)
+  for j in range (n):
+    x2 += c[j + n] * np.power(x[:, 1], i)
+  return c[0] + x1 + x2
+
+def exp_reg(c, x):
+  """ 
+  c: Array of dim 3, corresonding to bet_0, beta_1, and beta_2
+  x: Array with dim (n, 2).
+  y: Array with dim n.
+  """
+  return c[0] * np.exp * (c[1] * x[:, 0] + c[2] * x[:, 1])
+
+def log_reg(c, x):
+  """ 
+  c: Array of dim 3, corresonding to bet_0, beta_1, and beta_2
+  x: Array with dim (n, 2).
+  y: Array with dim n.
+  """
+  return c[0] + c[1] * np.log(x[:, 0]) + c[2] * np.log(x[:, 0])
+
+def pow_reg(c, x):
+  """ 
+  c: Array of dim 3, corresonding to bet_0, beta_1, and beta_2
+  x: Array with dim (n, 2).
+  y: Array with dim n.
+  """
+  return c[0] * (np.power(x[:, 0], c[1]) + np.power(x[:, 1], c[2]))
+
+def mul_mod(c, x):
+  """ 
+  c: Array of dim 3, corresonding to bet_0, beta_1, and beta_2
+  x: Array with dim (n, 2).
+  y: Array with dim n.
+  """
+  return c[0] * (np.power(x[:, 0], c[1]) * np.power(x[:, 1], c[2]))
+
+def hyb_mul(c, x):
+  """ 
+  c: Array of dim 3, corresonding to bet_0, beta_1, and beta_2
+  x: Array with dim (n, 2).
+  y: Array with dim n.
+  """
+  return c[0] + (np.power(x[:, 0], c[1]) * np.power(x[:, 1], c[2]))
+
+def lnr_div_diff(c, x):
+  """ 
+  c: Array of dim 3, corresonding to bet_0, beta_1, and beta_2
+  x: Array with dim (n, 2).
+  y: Array with dim n.
+  """
+  return c[0] + c[1] * x[:, 0] + c[2] * x[:, 1] + c[3] * (abs(x[:, 0] - x[:, 1]))
+
+def div_am(c, x):
+  """ 
+  c: Array of dim 2, corresonding to bet_0, and beta_1
+  x: Array with dim (n, 2).
+  y: Array with dim n.
+  """
+  return c[0] + c[1] * (0.5 * x[:, 0] + 0.5 * x[:, 1])
+
+def div_gm(c, x):
+  """ 
+  c: Array of dim 3, corresonding to bet_0, and beta_1
+  x: Array with dim (n, 2).
+  y: Array with dim n.
+  """
+  return c[0] + c[1] * math.sqrt((x[:, 0] * x[:, 1]))
+
+def div_hm(c, x):
+  """ 
+  c: Array of dim 3, corresonding to bet_0, and beta_1
+  x: Array with dim (n, 2).
+  y: Array with dim n.
+  """
+  return c[0] + 2 * c[1] * np.reciprocal(np.reciprocal(x[:, 0] + np.reciprocal(x[:, 1])))
+
