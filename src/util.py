@@ -9,10 +9,15 @@ from pprint import pprint
 
 from gsheet_util import get_gcreds
 
+# TODO reorganize files
+# TODO fix imports
+# TODO repr and str for different classes
+# TODO sort when save_all_fits
+
 # === Globals ===
 main_df = pd.read_csv("data/data_na_disc.csv") # TODO: consider na_keep
 
-verbose = 3
+verbose = 1
 eps = 1e-6
 
 FloatT = (T.Any, float)

@@ -64,9 +64,9 @@ class Trial:
       if verbose >= 3:
         p = verbose_helper(i + 1, self.slices.N)
         if p > 0:
-          print(f"Have fit {p * 10}% of slices... [{i + 1}/{self.slices.N}]")
-    if verbose >= 2:
-      print("Done fitting.")
+          print(f"[{self.__repr__()}] Have fit {p * 10}% of slices... [{i + 1}/{self.slices.N}]")
+    if verbose >= 1:
+      print(f"[{self.__repr__()}] Done fitting.")
 
     self.init_df(fits, costs)
     self.write_all_fits()
@@ -143,9 +143,9 @@ class Trial:
       if verbose >= 2:
         p = verbose_helper(k + 1, len(prd))
         if p > 0:
-          print(f"Have plotted {p * 10}% of slices... [{k + 1}/{len(prd)}]")
+          print(f"[{self.__repr__()}] Have plotted {p * 10}% of slices... [{k + 1}/{len(prd)}]")
     if verbose >= 1:
-      print("Done plotting.")
+      print(f"[{self.__repr__()}] Done plotting.")
 
   def init_analyzer(self, plot_horiz=[], scatter_horiz=[], bar_horiz=[],
                     scatter_seper=[[]]):
@@ -163,14 +163,17 @@ class Trial:
     if run_plots:
       self.analyzer.plot_all_costs()
       if len(self.analyzer.plot_horiz) > 0 and verbose >= 2:
-        print("Finished line plots.")
+        print(f"[{self.__repr__()}] Finished line plots.")
       self.analyzer.scatter_all_costs()
       if len(self.analyzer.scatter_horiz) > 0 and \
          len(self.analyzer.scatter_seper) > 0 and verbose >= 2:
-        print("Finished scatter plots.")
+        print(f"[{self.__repr__()}] Finished scatter plots.")
       self.analyzer.bar_chart_all_costs()
       if len(self.analyzer.bar_horiz) != 0 and verbose >= 2:
-        print("Finished bar charts.")
+        print(f"[{self.__repr__()}] Finished bar charts.")
     if verbose >= 1:
-      print("Done analyzing.")
+      print(f"[{self.__repr__()}] Done analyzing.")
     return self.analyzer.fit_stats, self.analyzer.cost_stats
+  
+  def __repr__(self):
+    return f"{'+'.join(map(Var.__repr__, self.xvars))}:{self.name}"

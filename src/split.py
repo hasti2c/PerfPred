@@ -49,6 +49,12 @@ class Var (Enum):
   
   def __lt__(self, other: Var) -> bool:
     return list(Var).index(other) - list(Var).index(self) > 0
+  
+  def __repr__(self) -> str:
+    return self.short
+
+  def __str__(self) -> str:
+    return self.title
 
 
 # == Splitting Functions ==

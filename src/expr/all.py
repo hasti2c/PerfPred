@@ -3,36 +3,39 @@ from expr.train_size import *
 from expr.domain_div import *
 from expr.language import *
 
+
+TRIALS = pd.DataFrame(columns=["expr", "# of vars", "sub-expr", "trial", "type", "path", "object"])
+
 # dim 1: expr (1A, 1B, 1C)
 # dim 2: # of xvars
 # dim 3: sub-expr (e.g. size1, size2, jsd1, jsd2, dfea, etc.)
 # dim 4: trial
-TRIALS = np.empty((3, 6, 6, 4), dtype=Trial)
+# TRIALS = np.empty((3, 6, 6, 4), dtype=Trial)
 
-for n in [1, 2]:
-  TRIALS[0, 0, n-1, :] = [
-    SingleSizeTrial(n, Model.linear(1), trial="trial1"),
-    SingleSizeTrial(n, Model.polynomial(1, 2), trial="trial2"),
-    SingleSizeTrial(n, Model(func.log_single, np.array([0.1, 0.1, 0.1]),
-                            bounds=([-np.inf, 0, -np.inf], [np.inf, np.inf, np.inf]),
-                            pars=["C", "alpha", "beta"]), trial="trial3"),
-    SingleSizeTrial(n, Model(func.recip_single, np.array([0, 0, -1]),
-                            bounds=([-np.inf, 0, -np.inf], [np.inf, np.inf, np.inf]),
-                            pars=["alpha", "C", "p"]), trial="trial4")
-  ]
+# for n in [1, 2]:
+#   TRIALS[0, 0, n-1, :] = [
+#     SingleSizeTrial(n, Model.linear(1), trial="trial1"),
+#     SingleSizeTrial(n, Model.polynomial(1, 2), trial="trial2"),
+#     SingleSizeTrial(n, Model(func.log_single, np.array([0.1, 0.1, 0.1]),
+#                             bounds=([-np.inf, 0, -np.inf], [np.inf, np.inf, np.inf]),
+#                             pars=["C", "alpha", "beta"]), trial="trial3"),
+#     SingleSizeTrial(n, Model(func.recip_single, np.array([0, 0, -1]),
+#                             bounds=([-np.inf, 0, -np.inf], [np.inf, np.inf, np.inf]),
+#                             pars=["alpha", "C", "p"]), trial="trial4")
+#   ]
 
-TRIALS[0, 0, 2, :] = [
-  DoubleSizeTrial(Model.linear(2), trial="trial1"),
-  DoubleSizeTrial(Model.polynomial(2, 2), trial="trial2"),
-  DoubleSizeTrial(Model(func.product_double, np.zeros(4),
-                        bounds=([-np.inf, 0, 0, 0], [0, np.inf, np.inf, np.inf]),
-                        pars=["alpha", "p1", "p2", "C"]), trial="trial3"),
-  DoubleSizeTrial(Model(func.depend_double, np.zeros(5),
-                        bounds=([-np.inf, -np.inf, 0, 0, 0], [0, 0, np.inf, np.inf, np.inf]),
-                        pars=["alpha1", "alpha2", "p1", "p2", "C"]), trial="trial4")
-]
+# TRIALS[0, 0, 2, :] = [
+#   DoubleSizeTrial(Model.linear(2), trial="trial1"),
+#   DoubleSizeTrial(Model.polynomial(2, 2), trial="trial2"),
+#   DoubleSizeTrial(Model(func.product_double, np.zeros(4),
+#                         bounds=([-np.inf, 0, 0, 0], [0, np.inf, np.inf, np.inf]),
+#                         pars=["alpha", "p1", "p2", "C"]), trial="trial3"),
+#   DoubleSizeTrial(Model(func.depend_double, np.zeros(5),
+#                         bounds=([-np.inf, -np.inf, 0, 0, 0], [0, 0, np.inf, np.inf, np.inf]),
+#                         pars=["alpha1", "alpha2", "p1", "p2", "C"]), trial="trial4")
+# ]
 
-print(TRIALS[0, 0])
+# print(TRIALS[0, 0])
 # size2 = [
 #   SingleSizeTrial(2, Model.linear(1), trial="trial1"),
 #   SingleSizeTrial(2, Model.polynomial(1, 2), trial="trial2"),

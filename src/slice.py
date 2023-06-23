@@ -64,6 +64,9 @@ class Slice: # TODO update docs
   def y(self, xvars: list[Var]):
     return self.df.loc[:, "sp-BLEU"].to_numpy()
 
+  def __repr__(self):
+    return "-".join(id.astype(str))
+
 class SliceGroup:
   GROUPS = {}
   """ A group of slices as defined by vary_list.
@@ -109,3 +112,5 @@ class SliceGroup:
       SliceGroup.GROUPS[flags] = SliceGroup(xvars)
     return SliceGroup.GROUPS[flags]
     
+  def __repr__(self):
+    return '+'.join(map(Var.__repr__, self.vary))

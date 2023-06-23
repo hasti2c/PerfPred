@@ -67,16 +67,25 @@ class Model:
     self.bounds, self.loss = bounds, loss
   
   @staticmethod
-  def linear(n):
-    if n == 1:
-      pars = ["beta", "C"]
-    else:
-      pars = [f"beta{i}" for i in range(1, n + 1)] + ["C"]
-    return Model(func.linear, np.zeros(n + 1), pars=pars)
+  def linear(m):
+    pars = [f"beta{i}" for i in range(1, m + 1)] + ["C"]
+    return Model(func.linear, np.zeros(m + 1), pars=pars)
   
   @staticmethod
-  def polynomial(n, k):
-    names = sum([[var] * k for var in GREEK[:n]], [])
-    nums = list(range(1, k + 1)) * n
+  def polynomial(m, k):
+    names = sum([[var] * k for var in GREEK[:m]], [])
+    nums = list(range(1, k + 1)) * m
     pars = [name + str(num) for name, num in zip(names, nums)] + ["C"]
-    return Model(func.polynomial, np.zeros(n * k + 1), pars=pars)
+    return Model(func.polynomial, np.zeros(m * k + 1), pars=pars)
+  
+  @staticmethod
+  def nonlinear(m, f):
+    pars = [f"beta{i}" for i in range(m + 1)]
+    return Model(f, np.zeros(m + 1), pars=pars)
+  
+  @staticmethod
+  def mean(f):
+    return Model(f, np.zeros(2), pars=["alpha", "beta"])
+  
+  def __repr__(self):
+    return self.f.__name__
