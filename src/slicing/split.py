@@ -1,11 +1,17 @@
 from __future__ import annotations
-from util import *
 
-from enum import Enum
-from itertools import product
+import itertools as it
 import random
+import typing as T
+from enum import Enum
 
-class Var (Enum):
+import numpy as np
+import pandas as pd
+
+from slicing.util import RECORDS
+
+
+class Variable (Enum):
   TRAIN1      = "train set 1",      ["TRAIN1"],         "train1", "object"
   TRAIN1_SIZE = "train set 1 size", ["TRAIN1_SIZE"],    "size1",  "Int64"
   TRAIN2      = "train set 2",      ["TRAIN2"],         "train2", "object"
@@ -27,28 +33,28 @@ class Var (Enum):
     self.short = short
     self.dtype = dtype
   @staticmethod
-  def main() -> list[Var]:
-    return [Var.TRAIN1, Var.TRAIN1_SIZE, Var.TRAIN2, Var.TRAIN2_SIZE,
-            Var.TEST, Var.LANG]
+  def main() -> list[Variable]:
+    return [Variable.TRAIN1, Variable.TRAIN1_SIZE, Variable.TRAIN2, Variable.TRAIN2_SIZE,
+            Variable.TEST, Variable.LANG]
   
   @staticmethod
-  def rest(vars: list[Var]) -> list[Var]:
-    return [var for var in Var.main() if var not in vars]
+  def rest(vars: list[Variable]) -> list[Variable]:
+    return [var for var in Variable.main() if var not in vars]
   
   @staticmethod
-  def get_main_vars(vars) -> list[Var]:
-    mains = [set([Var[v] for v in var.main_vars]) for var in vars]
+  def get_main_vars(vars) -> list[Variable]:
+    mains = [set([Variable[v] for v in var.main_vars]) for var in vars]
     return sorted(list(set.union(*mains, set())))
   
   @staticmethod
-  def get_flags(vars) -> tuple[Var]:
-    return tuple([var in vars for var in Var.main()])
+  def get_flags(vars) -> tuple[Variable]:
+    return tuple([var in vars for var in Variable.main()])
   
-  def values(self, df: pd.DataFrame=main_df) -> list:
+  def values(self, df: pd.DataFrame=RECORDS) -> list:
     return list(set(df[self.title]))
   
-  def __lt__(self, other: Var) -> bool:
-    return list(Var).index(other) - list(Var).index(self) > 0
+  def __lt__(self, other: Variable) -> bool:
+    return list(Variable).index(other) - list(Variable).index(self) > 0
   
   def __repr__(self) -> str:
     return self.short
@@ -59,7 +65,8 @@ class Var (Enum):
 
 # == Splitting Functions ==
 
-def split(vary_list: list[Var], df: pd.DataFrame=main_df) -> T.Tuple[pd.DataFrame, list[pd.DataFrame]]:
+def split(vary_list: list[Variable], df: pd.DataFrame=RECORDS) -> \
+    T.Tuple[pd.DataFrame, list[pd.DataFrame]]:
   """ Returns list of ids and dataframes corresponding to split.
 
   == Arguments ==
@@ -71,10 +78,10 @@ def split(vary_list: list[Var], df: pd.DataFrame=main_df) -> T.Tuple[pd.DataFram
                 In each Slice: Points have a different value of VARY vars.
     df: Dataframe to perform slicing on.
   """
-  fix_list = Var.rest(vary_list)
+  fix_list = Variable.rest(vary_list)
 
   ids, slices = [], []
-  prd = list(product(*[var.values(df) for var in fix_list]))
+  prd = list(it.product(*[var.values(df) for var in fix_list]))
   for comb in prd:
     id = []
     slice = df
@@ -89,7 +96,7 @@ def split(vary_list: list[Var], df: pd.DataFrame=main_df) -> T.Tuple[pd.DataFram
   ids = pd.DataFrame(np.array(ids), columns=cols).astype(dtypes)
   return ids, slices
 
-def random_split(num_parts: int, df: pd.DataFrame=main_df) -> list[pd.DataFrame]:
+def random_split(num_parts: int, df: pd.DataFrame=RECORDS) -> list[pd.DataFrame]:
   indices = list(df.index.values)
   random.shuffle(indices)
   size = int(len(indices) / num_parts)
@@ -102,13 +109,13 @@ def random_split(num_parts: int, df: pd.DataFrame=main_df) -> list[pd.DataFrame]
     slices.append(df.iloc[selected].sort_index())
   return slices
 
-def filter(df: pd.DataFrame, preset_list: list[Var], presets: list) -> pd.DataFrame:
+def filter(df: pd.DataFrame, preset_list: list[Variable], presets: list) -> pd.DataFrame:
   filtered = df
   for i, var in enumerate(preset_list):
     filtered = filtered[filtered[var.title] == presets[i]]
   return filtered
 
-def filter_out(df: pd.DataFrame, preset_list: list[Var], presets: list) -> pd.DataFrame:
+def filter_out(df: pd.DataFrame, preset_list: list[Variable], presets: list) -> pd.DataFrame:
   filtered = df
   for i, var in enumerate(preset_list):
     filtered = filtered[filtered[var.title] != presets[i]]

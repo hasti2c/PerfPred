@@ -1,11 +1,14 @@
-import pandas as pd
 import os
 import sys
 
-from split import Var as V
-from model import Model as M
-from trial import Trial as T
-import expr.func as F
+import numpy as np
+import pandas as pd
+
+import modeling.func as F
+from modeling.model import Model as M
+from slicing.split import Variable as V
+from trial import Trial as Tr
+import slicing.util as U
 
 TRIALS = pd.DataFrame(columns=["type", "vars", "trial", "expr"])
 
@@ -39,7 +42,7 @@ def init_trial(expr, vars, trial):
     row = {"type": expr, "vars": vars, "trial": trial}
     model = MODELS[trial](len(vars))
     path = os.path.join("results", expr, "+".join([var.short for var in vars]), trial)
-    row["expr"] = T(vars, model, path, trial)
+    row["expr"] = Tr(vars, model, path, trial)
     TRIALS.loc[len(TRIALS.index)] = row    
 
 def init_all():
@@ -60,8 +63,29 @@ def run_on_all(f, types=None, trials=None):
         except Exception as e:
             print(f"{f.__name__} on {expr} gives error: {e}.", file=sys.stderr)
         sys.stdout.flush()
-        sys.stderr.flush ()
+        sys.stderr.flush()
+
+def get_stats_df():
+    df = TRIALS[["type", "vars", "trial"]].copy()
+    df["vars"] = ["+".join(map(V.__repr__, vars)) for vars in df["vars"]]
+    df["# of slices"] = [trial.slices.N for trial in TRIALS["expr"]]
+    df["avg slice size"] = [np.mean([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["expr"]]
+    df["mean"] = [trial.df["cost"].mean() for trial in TRIALS["expr"]]
+    df["min"] = [trial.df["cost"].min() for trial in TRIALS["expr"]]
+    df["Q1"] = [trial.df["cost"].quantile(0.25) for trial in TRIALS["expr"]]
+    df["median"] = [trial.df["cost"].quantile(0.5) for trial in TRIALS["expr"]]
+    df["Q3"] = [trial.df["cost"].quantile(0.75) for trial in TRIALS["expr"]]
+    df["max"] = [trial.df["cost"].max() for trial in TRIALS["expr"]]
+    df["var"] = [trial.df["cost"].var() for trial in TRIALS["expr"]]
+    df["SD"] = [trial.df["cost"].std() for trial in TRIALS["expr"]]
+    return df.round(decimals=4)
+
+def compare_costs():
+    df = get_stats_df()
+    U.write_to_sheet(df, "Experiment 1 Results", 0)
 
 init_all()
-run_on_all(T.fit_all, trials=["log", "power", "mult", "hybrid_mult"])
-run_on_all(T.plot_all, trials=["log", "power", "mult", "hybrid_mult"])
+# run_on_all(Tr.fit_all, trials=["log", "power", "mult", "hybrid_mult"])
+# run_on_all(Tr.plot_all, trials=["log", "power", "mult", "hybrid_mult"])
+run_on_all(Tr.read_all_fits)
+compare_costs()

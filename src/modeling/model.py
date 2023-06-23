@@ -1,8 +1,10 @@
-from slice import *
-from expr import func
+import typing as T
 
-import scipy
-from sklearn.metrics import mean_squared_error
+import numpy as np
+
+import modeling.func as F
+from slicing.util import GREEK, FloatT
+
 
 class Model:
   """ Represents a model.
@@ -29,16 +31,16 @@ class Model:
     rmse: Calculates rmse for a slice given fitted coeffs.
     fit_slice: Fits the trial function f for a slice.
   """
-  f: T.Callable[[FloatArray, FloatArray], FloatArray]
-  residual: T.Callable[[FloatArray, FloatArray], FloatArray]
-  init: FloatArray
+  f: T.Callable[[np.ndarray[FloatT], np.ndarray[FloatT]], np.ndarray[FloatT]]
+  residual: T.Callable[[np.ndarray[FloatT], np.ndarray[FloatT]], np.ndarray[FloatT]]
+  init: np.ndarray[FloatT]
   bounds: tuple[list[float]]
   loss: str
   par_num: int
   pars: list[str]
 
-  def __init__(self, f: T.Callable[[FloatArray, FloatArray], FloatArray],
-               init: FloatArray, bounds: T.Optional[tuple[list[float]]]=None,
+  def __init__(self, f: T.Callable[[np.ndarray[FloatT], np.ndarray[FloatT]], np.ndarray[FloatT]],
+               init: np.ndarray[FloatT], bounds: T.Optional[tuple[list[float]]]=None,
                loss: str='soft_l1', pars: list[str]=[]):
     """ Initializes a model.
     
@@ -69,14 +71,14 @@ class Model:
   @staticmethod
   def linear(m):
     pars = [f"beta{i}" for i in range(1, m + 1)] + ["C"]
-    return Model(func.linear, np.zeros(m + 1), pars=pars)
+    return Model(F.linear, np.zeros(m + 1), pars=pars)
   
   @staticmethod
   def polynomial(m, k):
     names = sum([[var] * k for var in GREEK[:m]], [])
     nums = list(range(1, k + 1)) * m
     pars = [name + str(num) for name, num in zip(names, nums)] + ["C"]
-    return Model(func.polynomial, np.zeros(m * k + 1), pars=pars)
+    return Model(F.polynomial, np.zeros(m * k + 1), pars=pars)
   
   @staticmethod
   def nonlinear(m, f):

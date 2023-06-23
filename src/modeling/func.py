@@ -1,6 +1,7 @@
+from math import sqrt
+
 import numpy as np
 import scipy.stats as sp
-import math
 
 eps = 1e-6
 
@@ -92,6 +93,7 @@ def harmonic_mean_linear(c, x):
   """
   return c[0] + c[1] * sp.hmean(x, axis=1)
 
+# TODO remove
 # === Single Variable ===
 def log_single(c, x):
   """ f(x) = clog(ax) + b
@@ -208,7 +210,7 @@ def div_gm(c, x):
   x: Array with dim (n, 2).
   y: Array with dim n.
   """
-  return c[0] + c[1] * math.sqrt((x[:, 0] * x[:, 1]))
+  return c[0] + c[1] * sqrt((x[:, 0] * x[:, 1]))
 
 def div_hm(c, x):
   """ 

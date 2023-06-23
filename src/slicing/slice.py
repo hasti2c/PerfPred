@@ -1,5 +1,10 @@
-from util import *
-from split import *
+import numpy as np
+import pandas as pd
+
+from slicing.split import Variable as V
+from slicing.split import split
+from slicing.util import RECORDS, FloatT
+
 
 class Slice: # TODO update docs
   """ A slice of the data, representing a subset of rows of main dataframe.
@@ -23,16 +28,18 @@ class Slice: # TODO update docs
   """
   df: pd.DataFrame
   id: pd.Series
-  vary: list[Var]
+  vary: list[V]
   title: str
   description: str
+  y: np.ndarray[FloatT]
 
-  def __init__(self, df: pd.DataFrame, id: pd.Series, vary_list: list[Var]) -> None:
+  def __init__(self, df: pd.DataFrame, id: pd.Series, vary_list: list[V]) -> None:
     """ Initializes slice. """
     self.df = df
     self.id = id
     self.vary = vary_list
     self.title, self.description = self.get_title()
+    self.y = self.df.loc[:, "sp-BLEU"].to_numpy()
 
   def get_title(self) -> tuple[str]:
     """ Returns title and description for slice.
@@ -41,14 +48,14 @@ class Slice: # TODO update docs
       description: Non NA values in id with short var names ("var=val")
                    seperated by ",".
     """
-    fix = Var.rest(self.vary)
+    fix = V.rest(self.vary)
     if len(fix) == 0:
       return "all", "all"
     
     names = [var.short for var in fix]
     vals = []
     for var in fix:
-      if var in [Var.TRAIN1_SIZE, Var.TRAIN2_SIZE]:
+      if var in [V.TRAIN1_SIZE, V.TRAIN2_SIZE]:
         vals.append(str(self.id[var.title]) + "k")
       else:
         vals.append(str(self.id[var.title]))
@@ -58,11 +65,8 @@ class Slice: # TODO update docs
                             for i in range(len(vals))])
     return title, description
   
-  def x(self, xvars: list[Var]):
+  def x(self, xvars: list[V]):
     return self.df.loc[:, [var.title for var in xvars]].astype(float).to_numpy()
-  
-  def y(self, xvars: list[Var]):
-    return self.df.loc[:, "sp-BLEU"].to_numpy()
 
   def __repr__(self):
     return "-".join(id.astype(str))
@@ -85,9 +89,9 @@ class SliceGroup:
   ids: pd.DataFrame
   slices: list[Slice]
   N: int
-  vary: list[Var]
+  vary: list[V]
 
-  def __init__(self, xvars: list[Var], df: pd.DataFrame=main_df) -> None:
+  def __init__(self, xvars: list[V], df: pd.DataFrame=RECORDS) -> None:
     """ Initializes SliceGroup. 
     
     == Arguments == # TODO update doc
@@ -99,18 +103,18 @@ class SliceGroup:
             By Default (i.e. if xvars is None and set_xvar is True), VARY vars
             will be used as xvars.
     """
-    self.vary = Var.get_main_vars(xvars)
+    self.vary = V.get_main_vars(xvars)
     self.ids, slices = split(self.vary, df=df)
     self.slices = [Slice(slices[i], self.ids.iloc[i], self.vary)
                    for i in range(len(slices))]
     self.N = len(self.slices)
 
   @staticmethod
-  def get_instance(xvars: list[Var]):
-    flags = Var.get_flags(Var.get_main_vars(xvars))
+  def get_instance(xvars: list[V]):
+    flags = V.get_flags(V.get_main_vars(xvars))
     if flags not in SliceGroup.GROUPS:
       SliceGroup.GROUPS[flags] = SliceGroup(xvars)
     return SliceGroup.GROUPS[flags]
     
   def __repr__(self):
-    return '+'.join(map(Var.__repr__, self.vary))
+    return '+'.join(map(V.__repr__, self.vary))

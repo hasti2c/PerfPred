@@ -1,6 +1,6 @@
-from util import *
-from split import *
-from slice import *
+from slicing.util import *
+from slicing.split import *
+from slicing.slice import *
 
 import random
 from sklearn.metrics import mean_squared_error
@@ -15,7 +15,7 @@ class Most_rep(Enum):
 class Fold:
   slices: list[Slice]
   df: pd.DataFrame
-  fits: list[FloatArray]
+  fits: list[np.ndarray[FloatT]]
   costs: list[float]
   N: int
   parN: int
@@ -136,7 +136,7 @@ def partition_rand_folds(num_folds, all_slices):
 def extract_folds(expr, num_folds = None, common_features = None):
   # Systematic Fold
   if common_features:
-    fold_ids, fold_dfs = split(Var.rest(common_features), df=expr.df)
+    fold_ids, fold_dfs = split(Variable.rest(common_features), df=expr.df)
   else:
     fold_dfs = random_split(num_folds, df=expr.df)
   
