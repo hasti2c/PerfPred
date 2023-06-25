@@ -7,6 +7,7 @@ import numpy as np
 import pandas as pd
 import scipy.optimize as sp
 import sklearn.metrics as skl
+from sklearn.model_selection import LeaveOneOut as LOO
 
 import modeling.model as M
 import slicing.util as U
@@ -46,24 +47,46 @@ class Trial:
     if not os.path.exists(self.path):
       os.makedirs(self.path)
 
-  def rmse(self, slice: S, fit: np.ndarray[FloatT]) -> float:
+  def rmse(self, slice: S, fit: np.ndarray[FloatT], 
+           indices: T.Optional[np.ndarray[FloatT]]=None) -> float:
     """ Calculates rmse for a slice given fitted coeffs. """
+    if indices is None:
+      indices = np.arange(len(slice.df))
     y_true = slice.y
     y_pred = self.model.f(fit, slice.x(self.xvars))
     return np.sqrt(skl.mean_squared_error(y_true, y_pred))
 
-  def fit_slice(self, slice: S) -> T.Tuple[np.ndarray[FloatT], float]:
+  def fit_slice(self, slice: S, 
+                indices: T.Optional[np.ndarray[FloatT]]=None) -> \
+                T.Tuple[np.ndarray[FloatT], float]:
     """Fits the trial function f for a slice.
     == Return Values ==
       fit_x: Fitted values for coefficients of f.
       cost: rmse of resulting fit.
     """
+    if indices is None:
+      indices = np.arange(len(slice.df))
     fit = sp.least_squares(self.model.residual, self.model.init,
-                           args=(slice.x(self.xvars), slice.y),
+                           args=(slice.x(self.xvars)[indices], slice.y[indices]),
                            bounds=self.model.bounds, loss=self.model.loss)
     fit_x = fit.x.copy()
     cost = self.rmse(slice, fit_x)
     return fit_x, cost
+  
+  def loo_slice(self, slice: S) -> T.Tuple[np.ndarray[FloatT], float]:
+    costs = np.zeros(len(slice.df))
+    loo = LOO()
+    for i, (train, test) in enumerate(loo.split(slice.df)):
+      fit, _ = self.fit_slice(slice, train)
+      costs[i] = self.rmse(slice, fit, test)
+    return costs[i].mean()
+
+    # fit = sp.least_squares(self.model.residual, self.model.init,
+    #                        args=(slice.x(self.xvars), slice.y),
+    #                        bounds=self.model.bounds, loss=self.model.loss)
+    # fit_x = fit.x.copy()
+    # cost = self.rmse(slice, fit_x)
+    # return fit_x, cost
 
   def fit_all(self) -> T.Tuple[list[np.ndarray[FloatT]], list[float]]:
     """ Fits all slices in self.slices. Puts result in self.df.
@@ -72,8 +95,10 @@ class Trial:
     """
     fits = np.empty((self.slices.N, self.model.par_num))
     costs = np.empty(self.slices.N)
+    loos = np.empty(self.slices.N)
     for i, slice in enumerate(self.slices.slices):
       fits[i, :], costs[i] = self.fit_slice(slice)
+      loos[i] = self.loo_slice(slice)
       if VERBOSE >= 3:
         p = U.verbose_helper(i + 1, self.slices.N)
         if p > 0:
@@ -81,9 +106,9 @@ class Trial:
     if VERBOSE >= 1:
       print(f"[{self.__repr__()}] Done fitting.")
 
-    self.init_df(fits, costs)
+    self.init_df(fits, costs, loos)
     self.write_all_fits()
-    return fits, costs
+    return fits, costs, loos
 
   def write_all_fits(self):
     if self.path is not None:
@@ -95,14 +120,16 @@ class Trial:
     """
     self.df = pd.read_csv(os.path.join(self.path, "fits.csv"))
     fits = np.array(self.df[self.model.pars])
-    costs = np.array(self.df["cost"])
-    return fits, costs
+    costs = np.array(self.df["rmse"])
+    loos = np.array(self.df["loo rmse"])
+    return fits, costs, loos
 
-  def init_df(self, fits, costs):
+  def init_df(self, fits, costs, loos):
     self.df = self.slices.ids.copy()
     self.df[self.model.pars] = fits
-    self.df["cost"] = costs
-    self.df = self.df.astype({"cost": "Float64"})
+    self.df["rmse"] = costs
+    self.df["loo rmse"] = loos
+    self.df = self.df.astype({"rmse": "Float64", "loo rmse": "Float64"})
 
   def plot_slice(self, slice: S, fit: np.ndarray[FloatT], horiz: V, labels: V):
     horiz_i = self.xvars.index(horiz)

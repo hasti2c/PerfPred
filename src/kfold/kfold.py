@@ -24,7 +24,7 @@ class Fold:
     self.slices = slices
     self.df = df 
     self.fits = list(df[pars].values)
-    self.costs = list(df["cost"])
+    self.costs = list(df["rmse"])
     self.N = len(slices)
     self.parN = len(pars)
   

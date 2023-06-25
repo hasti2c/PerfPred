@@ -13,9 +13,6 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-# TODO reorganize files
-# TODO fix imports
-# TODO repr and str for different classes
 # TODO sort when save_all_fits
 
 # === Globals ===
@@ -73,12 +70,12 @@ def verbose_helper(i, N, num=10):
   else:
     return -1
 
-def get_colors(n): # TODO
-  if n > 10:
-    print("more than 10 colours")
-    return
-  cm = mpl.color_sequences['tab10']
-  return cm
+def get_colors(n):
+  if n <= 10:
+    return mpl.color_sequences['tab10']
+  elif n <= 20:
+    return mpl.color_sequences['tab20']
+  print("More than 20 colors.")
 
 GREEK = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta', 
          'iota', 'kappa', 'lamda', 'mu', 'nu', 'xi', 'omicron', 'pi', 'rho', 

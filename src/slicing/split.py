@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import itertools as it
+import itertools
 import random
 import typing as T
 from enum import Enum
@@ -51,7 +51,7 @@ class Variable (Enum):
     return tuple([var in vars for var in Variable.main()])
   
   def values(self, df: pd.DataFrame=RECORDS) -> list:
-    return list(set(df[self.title]))
+    return list(df[self.title].unique())
   
   def __lt__(self, other: Variable) -> bool:
     return list(Variable).index(other) - list(Variable).index(self) > 0
@@ -81,7 +81,7 @@ def split(vary_list: list[Variable], df: pd.DataFrame=RECORDS) -> \
   fix_list = Variable.rest(vary_list)
 
   ids, slices = [], []
-  prd = list(it.product(*[var.values(df) for var in fix_list]))
+  prd = list(itertools.product(*[var.values(df) for var in fix_list]))
   for comb in prd:
     id = []
     slice = df

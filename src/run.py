@@ -10,7 +10,7 @@ from slicing.split import Variable as V
 from trial import Trial as Tr
 import slicing.util as U
 
-TRIALS = pd.DataFrame(columns=["type", "vars", "trial", "expr"])
+TRIALS = pd.DataFrame(columns=["type", "vars", "model", "trial"])
 
 TRIAL_TYPES = {
     "1A": [[V.TRAIN1_SIZE], [V.TRAIN2_SIZE], [V.TRAIN1_SIZE, V.TRAIN2_SIZE]],
@@ -38,54 +38,75 @@ MODELS = {
 }
 # TODO dont use mean models for single var
 
-def init_trial(expr, vars, trial):
-    row = {"type": expr, "vars": vars, "trial": trial}
-    model = MODELS[trial](len(vars))
-    path = os.path.join("results", expr, "+".join([var.short for var in vars]), trial)
-    row["expr"] = Tr(vars, model, path, trial)
+def init_trial(expr, vars, model):
+    var_names = "+".join(map(V.__repr__, vars))
+    model_obj = MODELS[model](len(vars))
+    path = os.path.join("results", expr, var_names, model)
+    row = {"type": expr, "vars": var_names, "model": model,
+           "trial": Tr(vars, model_obj, path, model)}
     TRIALS.loc[len(TRIALS.index)] = row    
 
 def init_all():
     for expr in TRIAL_TYPES:
         for vars in TRIAL_TYPES[expr]:
-            for trial in MODELS:
-                init_trial(expr, vars, trial)
+            for model in MODELS:
+                init_trial(expr, vars, model)
 
-def run_on_all(f, types=None, trials=None):
+def run_on_all(f, types=None, vars=None, models=None):
     df = TRIALS
     if types:
         df = df.loc[df["type"].isin(types)]
-    if trials:
-        df = df.loc[df["trial"].isin(trials)]
-    for expr in df["expr"]:
+    if vars:
+        df = df.loc[df["vars"].isin(vars)]
+    if models:
+        df = df.loc[df["model"].isin(models)]
+    for trial in df["trial"]:
         try:
-            f(expr)
+            f(trial)
         except Exception as e:
-            print(f"{f.__name__} on {expr} gives error: {e}.", file=sys.stderr)
+            print(f"{f.__name__} on {trial} gives error: {e}.", file=sys.stderr)
         sys.stdout.flush()
         sys.stderr.flush()
 
 def get_stats_df():
-    df = TRIALS[["type", "vars", "trial"]].copy()
-    df["vars"] = ["+".join(map(V.__repr__, vars)) for vars in df["vars"]]
-    df["# of slices"] = [trial.slices.N for trial in TRIALS["expr"]]
-    df["avg slice size"] = [np.mean([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["expr"]]
-    df["mean"] = [trial.df["cost"].mean() for trial in TRIALS["expr"]]
-    df["min"] = [trial.df["cost"].min() for trial in TRIALS["expr"]]
-    df["Q1"] = [trial.df["cost"].quantile(0.25) for trial in TRIALS["expr"]]
-    df["median"] = [trial.df["cost"].quantile(0.5) for trial in TRIALS["expr"]]
-    df["Q3"] = [trial.df["cost"].quantile(0.75) for trial in TRIALS["expr"]]
-    df["max"] = [trial.df["cost"].max() for trial in TRIALS["expr"]]
-    df["var"] = [trial.df["cost"].var() for trial in TRIALS["expr"]]
-    df["SD"] = [trial.df["cost"].std() for trial in TRIALS["expr"]]
+    df = TRIALS[["type", "vars", "model"]].copy()
+    df["mean"] = [trial.df["loo rmse"].mean() for trial in TRIALS["trial"]]
+    df["min"] = [trial.df["loo rmse"].min() for trial in TRIALS["trial"]]
+    df["Q1"] = [trial.df["loo rmse"].quantile(0.25) for trial in TRIALS["trial"]]
+    df["median"] = [trial.df["loo rmse"].quantile(0.5) for trial in TRIALS["trial"]]
+    df["Q3"] = [trial.df["loo rmse"].quantile(0.75) for trial in TRIALS["trial"]]
+    df["max"] = [trial.df["loo rmse"].max() for trial in TRIALS["trial"]]
+    df["var"] = [trial.df["loo rmse"].var() for trial in TRIALS["trial"]]
+    df["SD"] = [trial.df["loo rmse"].std() for trial in TRIALS["trial"]]
+    df["# of slices"] = [trial.slices.N for trial in TRIALS["trial"]]
+    df["avg slice size"] = [np.mean([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["trial"]]
+    df["min slice size"] = [np.min([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["trial"]]
+    df["max slice size"] = [np.max([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["trial"]]
     return df.round(decimals=4)
 
-def compare_costs():
+def compare_costs(df, page, types=None, vars=None, models=None):
+    if types:
+        df = df.loc[df["type"].isin(types)]
+    if vars:
+        df = df.loc[df["vars"].isin(vars)]
+    if models:
+        df = df.loc[df["model"].isin(models)]
+    U.write_to_sheet(df, "Experiment 1 Results", page)
+
+def compare_all_costs():
     df = get_stats_df()
-    U.write_to_sheet(df, "Experiment 1 Results", 0)
+    compare_costs(df, 0)
+    k = 1
+    for type in TRIAL_TYPES:
+        compare_costs(df, k, types=[type])
+        k += 1
+    for model in MODELS:
+        compare_costs(df, k, models=[model])
+        k += 1
 
 init_all()
-# run_on_all(Tr.fit_all, trials=["log", "power", "mult", "hybrid_mult"])
-# run_on_all(Tr.plot_all, trials=["log", "power", "mult", "hybrid_mult"])
-run_on_all(Tr.read_all_fits)
-compare_costs()
+run_on_all(Tr.fit_all)
+# run_on_all(Tr.plot_all)
+# run_on_all(Tr.read_all_fits, types=["1B"])
+# run_on_all(Tr.plot_all, types=["1B"])
+compare_all_costs()

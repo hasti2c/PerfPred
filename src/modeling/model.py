@@ -41,7 +41,7 @@ class Model:
 
   def __init__(self, f: T.Callable[[np.ndarray[FloatT], np.ndarray[FloatT]], np.ndarray[FloatT]],
                init: np.ndarray[FloatT], bounds: T.Optional[tuple[list[float]]]=None,
-               loss: str='soft_l1', pars: list[str]=[]):
+               loss: str='linear', pars: list[str]=[]):
     """ Initializes a model.
     
     == Pre-Conditions ==
@@ -83,7 +83,9 @@ class Model:
   @staticmethod
   def nonlinear(m, f):
     pars = [f"beta{i}" for i in range(m + 1)]
-    return Model(f, np.zeros(m + 1), pars=pars)
+    bounds = (list(np.full(m + 1, -np.inf)), list(np.full(m + 1, 1000))) \
+             if f == F.hybrid_multiplicative else None
+    return Model(f, np.zeros(m + 1), bounds=bounds, pars=pars)
   
   @staticmethod
   def mean(f):
