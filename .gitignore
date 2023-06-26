@@ -5,6 +5,14 @@ lang2vec/
 credentials.json
 token.json
 
+# LaTeX
+*.log
+*.aux
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
