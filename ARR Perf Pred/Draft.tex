@@ -138,17 +138,12 @@ $$KL(\mathcal{D}, M) = \sum_{\forall w_i \in M} (\mathbb{P}_{M}(w_i) - \mathbb{P
     
 \end{enumerate}
 
-\begin{enumerate}
-
-    
-\end{enumerate}
-
 \subsection{Modeling}
 
 Each model is defined by a trial function that is used to model the performance score with respect to some selected variables. In the first phase of modeling, trial functions focused on variables within a single factor, while in the second phase, multifactor trial functions were developed using insights from the single-factor models.
 % In the first stage of the modeling, a trial function only contains variable(s) from one factor, while keeping features related to other factors constant. 
 % For example, for single-factor experiment on dataset size factor, we sliced the experimental records such that each slice shares the same training dataset, testing dataset, testing dataset, and target language. 
-The trial functions were used to plot the line of best fit for each slice, and the resulting fit coefficients were tabulated. The root mean square error (RMSE) was then calculated to evaluate the fit of each trial function to its corresponding slice. Relevant overfitting and underfitting were also measured. Through these two analysis, the trial functions were refined by adjusting the range of the coefficients or by constructing an improved trial function.
+The trial functions were used to plot the line of best fit for each slice, and the resulting fit coefficients were tabulated. In choosing the initial values of the cofficients, we used Grid search method to avoid XXX. The root mean square error (RMSE) was then calculated to evaluate the fit of each trial function to its corresponding slice. Relevant overfitting and underfitting were also measured. TOADD: LOO. Through these two analysis, the trial functions were refined by adjusting the range of the coefficients or by constructing an improved trial function.
 
 % In the second stage, variables of multiple factors were considered in the trial functions. These multifactor trial functions were constructed based on insights gained from the single-factor experiments. Similar analysis of fits and RMSE was conducted on the trial functions to identify the trial function that best model the experimental records.
 
