@@ -1,0 +1,62 @@
+\ProvidesPackage{preambles}
+
+\usepackage [english]{babel}
+\usepackage [autostyle, english = american]{csquotes}
+\MakeOuterQuote{"}
+\usepackage{amsmath}
+\usepackage{amsthm}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{csquotes}
+\usepackage{enumerate}
+\usepackage[shortlabels]{enumitem}
+\usepackage{mdframed}
+\usepackage{multicol}
+\usepackage{verbatim}
+\usepackage{tikz}
+\usepackage[T1]{fontenc}
+\usepackage[hidelinks]{hyperref}
+\usepackage{graphicx}
+\usepackage{pgfplots}
+\usetikzlibrary{math}
+
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\newtheorem{prop}{Proposition}
+\newtheorem{claim}{Claim}
+\newtheorem{cor}{Corollary}[prop]
+\newtheorem{exmp}{Example}
+%\newtheorem{lemma}{Lemma}[section]
+
+\theoremstyle{remark}
+\newtheorem{remark}{Remark}[prop]
+
+\newenvironment{solution}
+  {\renewcommand\qedsymbol{$\blacksquare$}\begin{proof}[Solution]}
+  {\end{proof}}
+
+% Brackets stuff
+\newcommand{\pr}[1]{\left(#1\right)}
+\newcommand{\br}[1]{\left[#1\right]}
+\newcommand{\bra}[1]{\left\{#1\right\}}
+\newcommand{\abs}[1]{\left|#1\right|}
+\newcommand{\flr}[1]{\left \lfloor{#1}\right \rfloor}
+\newcommand{\ceil}[1]{\left \lceil{#1}\right \rceil}
+\newcommand{\norm}[1]{\lVert{#1}\rVert}
+
+% Calculus stuff
+\newcommand{\dip}[1]{\left.\pr{#1}\right|} %definite integral with parentheses
+\newcommand{\f}[1]{\text{func} \pr{#1}} %func(x)
+
+% Stats stuff
+\DeclareMathOperator{\prob}{\mathbb{P}}
+\DeclareMathOperator{\E}{\mathbb{E}}
+\newcommand{\var}[1]{\text{Var}\pr{#1}}
+\newcommand{\cov}[1]{\text{Cov}\pr{#1}}
+
+% Mis
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\func}{func}
+\newcommand{\eps}{\varepsilon}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}

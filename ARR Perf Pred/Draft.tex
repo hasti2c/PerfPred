@@ -1,0 +1,303 @@
+\pdfoutput=1
+
+\documentclass[11pt]{article}
+
+\usepackage[review]{acl}
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+
+% My stuff ------------------
+\usepackage{preambles}
+%---------------------------
+
+\title{Performance Prediction}
+
+\author{First Author \\
+  Affiliation / Address line 1 \\
+  Affiliation / Address line 2 \\
+  Affiliation / Address line 3 \\
+  \texttt{email@domain} \\\And
+  Second Author \\
+  Affiliation / Address line 1 \\
+  Affiliation / Address line 2 \\
+  Affiliation / Address line 3 \\
+  \texttt{email@domain} \\}
+
+\begin{document}
+\maketitle
+\begin{abstract}
+TODO
+\end{abstract}
+
+\section{Introduction}
+Motivation: Training and testing translaton model can be expensive- LRLs don't have the privilege- nice if we could tell directly if a model works for a language directly without actually running it.
+
+State of the art: TOADD literature that mentioned factors that we also consider- explain why they're important- currently best/ most popular model is XXX
+
+Flaws in state of the art: Point out factors that they are missing, not much on LRLs
+
+Our proposition: can't immediately come out with a perfect model? Let's try a bunch: first consider single factor then multifactor- rigorous model selection that considered over/under fit, trade off between factors, and worst case
+
+Evaluation: Compare with baselines from State of the art- even if worse, at least we tried on LRLs
+
+\section{Problem Formulation}
+- Want a good math model that can predict the performance of a Neural Machine Translation (NMT) model with respect to quantifiable factors. \\
+- Performance of NMT in this paper: sp-BLEU scores.
+\begin{definition}
+    The \textit{Pareto-Efficiency Principle} suggests that a model $A$ is better than a model $B$ if $A$ \textit{Pareto-dominates} $B$, i.e., $A$ performs better than $B$ in at least one situation without being worse in any other situation.
+\end{definition}
+\begin{definition}
+    A model $A$ is said to be \textit{Pareto-optimal}, if there is no other model that performs better than $A$ in \textbf{every} situation, i.e., no other model \textit{Pareto-dominates} it. 
+\end{definition}
+- Choosing a Pareto-optimal model ensures that the model represent the best trade-off in terms of minimizing cost across all situation simultaneously, without any other trial function outperforming them in every situation.
+\begin{definition}
+    A model $A$ is said to be a \textit{Rawlsian choice} among all possible models if, under the principles of Rawlsian Fairness, it ensures that even its worst performance is better than the worst performance of any other model.
+\end{definition}
+- Rawlsian Fairness is taken into consideration to prioritize the performance of the model in worst-case scenarios.
+- We seek for a Rawlsian choice math model that is also Pareto-optimal. 
+\section{Methodology}
+
+\subsection{Data}
+We collected experimental records from prior training and testing of the mBart model across different datasets and target languages. Each experimental record consists of a sp-BLEU score along with a ID of corresponding descriptive features, including training dataset in stage 1, $\phi_{t_1}$ and its size, $\phi_{s_1}$, training dataset in stage 2, $\phi_{t_2}$ an its size, $\phi_{s_2}$, testing dataset $\phi_{\tau}$, source language (always English (en)), and target language, $\phi_{l}$. 
+% The size of first training set ranges from 0k to 100k tokens, whereas the size of second training dataset ranges from 1k to 50k tokens. The complete set of each non-numerical feature is listed as follows:
+% \begin{itemize}
+%     \item $\Phi_{t_1} = \{$cc\_align, Bible, PMO/Gov$\}$
+%     \item $\Phi_{t_2} = \{$Bible, PMO/Gov$\}$
+%     \item $\Phi_{\tau} = \{$Flores, Bible, PMO/Gov$\}$
+%     \item $\Phi_{l} = \{$Kannada (ka), Gujarati (gu), Hindi (hi), Sinhala (si), Tamil (ta)$\}$
+% \end{itemize}
+ In the process of modeling, we often slice the experimental records by grouping records that share similar feature(s), as described by slice ID. These groups of records with similar features are referred as slices of experimental records.
+
+\subsection{Parameters}
+We considered three potential factors that affect the performance of the translation model listed below. Each factor is parametrized by different sets of variables.
+
+\textbf{Size of training datasets:} We took $\phi_{s_1}$ and $\phi_{s_2}$ of the experimental records directly as the variables under this factor, denoted by $s_1$ and $s_2$ respectively.
+
+\textbf{Domain relatedness:} We calculated Jensen-Shannon divergence (JSD) between each training dataset and testing dataset, denoted by $j_1$ and $j_2$ respectively.
+% JSD is calculated between two distributions $P$ and $Q$ using the formula
+% \begin{equation*}
+%     JSD(P||Q) = \frac{1}{2} KL(P||M) + \frac{1}{2}KL(Q||M)
+% \end{equation*}
+% where $M$ is the weighted sum of distributions $P$ and $Q$ and $KL(\cdot || \cdot)$ is the Kullback-Leibler divergence between two distributions.
+JSD between a training dataset $t$ and a testing dataset $\tau$ is calculated as follows: Suppose the unigram distribution of a word $i$, $w_i$ is $\mathbb{P}_{t}(w_i)$ in the source language text of $t$ and is $\mathbb{P}_{\tau}(w_i)$ in the unigram distribution $\tau$, then the JSD between the training and testing datasets is given by
+\begin{equation*}
+    j_t = \frac{1}{2} KL (t, M) + \frac{1}{2} KL (\tau, M) 
+\end{equation*}
+where $M$ is the merged distribution of $t$ and $\tau$ such that
+$$\mathbb{P}_{M}(w_i) = \begin{cases}
+    \frac{1}{2} \mathbb{P}_{t}(w_i) + \frac{1}{2} \mathbb{P}_{\tau}(w_i) & \text {if $w_i \in t \cap \tau$} \\
+    \mathbb{P}_{t}(w_i) & \text{if $w_i \in t \setminus \tau$} \\
+    \mathbb{P}_{\tau}(w_i) & \text{if $w_i \in \tau \setminus t$} \\
+\end{cases}$$
+and $KL(\mathcal{D}, M)$ is the Kullback–Leibler (KL) divergence between the original unigram distribution $\mathcal{D}$ and the merged distribution $M$ such that
+$$KL(\mathcal{D}, M) = \sum_{\forall w_i \in M} (\mathbb{P}_{M}(w_i) - \mathbb{P}_{\mathcal{D}}(w_i))\log \left( \frac{\mathbb{P}_{M}(w_i)}{\mathbb{P}_{\mathcal{D}}(w_i)} \right)$$
+
+\textbf{Language relatedness:} We considered following two categories of variables under this factor:
+\begin{enumerate}[(a)]
+    \item \textbf{Dataset independent variables:} We utilized six distance features from URIEL Typological Database to measure the level of relatedness between the source and target language, namely, syntatic distance, $d_{syc}$, phonological distance, $d_{pho}$, inventory distance, $d_{inv}$, featural distance, $d_{fea}$, geographical distance, $d_{geo}$, and genetic distance, $d_{gen}$.
+    % \item \textbf{Dataset independent variables:} We utilized the following distance features from URIEL Typological Database to measure the level of relatedness between the source and target language:
+    % \begin{enumerate}[(i)]
+    %     \item $d_{syn}$: Cosine distance between vectors of syntatic features of $\phi_l$ and en.
+    %     \item $d_{pho}$: Cosine distance between vectors of phonological features of $\phi_l$ and en.
+    %     \item $d_{inv}$: Cosine distance between vectors of inventory features of $\phi_l$ and en.
+    %     \item $d_{fea}$: Cosine distance between vectors of linguistics features of $\phi_l$ and en, consisting of syntactic, phonological, and inventory features.
+    %     \item $d_{geo}$: Distance between location estimates of $\phi_l$ and en on the surface of the earth.
+    %     \item $d_{gen}$: Distance of $\phi_l$ and en in the genealogical family tree. 
+    % \end{enumerate}
+    \item \textbf{Dataset dependent variables:} We considered the following variables to measure the language similarities between the source language text $D_t^{(S)}$ and target language text $D_t^{(T)}$ in each training dataset $t$:
+    \begin{enumerate}[(i)]
+        \item Ratio of dataset size
+        \begin{equation*}
+            \rho_t = \frac{|D_t^{(S)}|}{|D_t^{(T)}|}
+        \end{equation*}
+        where $|D_t^{(\cdot)}|$ is the number of tokens in dataset $D_t^{(\cdot)}$.
+        
+        \item Distance of type-token ratio
+        \begin{equation*}
+            d_{ttr,t} = \left( 1 - \frac{TTR_{D_t^{(S)}}}{TTR_{D_t^{(T)}}}\right)^2
+        \end{equation*}
+        where $TTR_{D_t^{(\cdot)}}$ = type-token ratio of dataset $D_t^{(\cdot)}$.
+
+        \item Word overlap
+        \begin{equation*}
+            o_{w,t} = \frac{|W_{D_t^{(S)}} \cap W_{D_t^{(T)}}|}{|W_{D_t^{(S)}}| + |W_{D_t^{(T)}}|}
+        \end{equation*}
+        where $W_{D_t^{(\cdot)}}$ = set of types in dataset $D_t^{(\cdot)}$.
+
+        \item Subword overlap
+        \begin{equation*}
+            o_{sw,t} = \frac{|S_{D_t^{(S)}} \cap S_{D_t^{(T)}}|}{|S_{D_t^{(S)}}| + |S_{D_t^{(T)}}|}
+        \end{equation*}
+        where $s_{D_t^{(\cdot)}}$ = set of subwords, Obtained by unsupervised word segmentation, in dataset $D_t^{(\cdot)}$.
+
+        \item Total distance of word alignment done when running AWESOME (Aligning Word Embedding Spaces of Multilingual Encoders) on the training dataset, denoted by $d_{a,t}$.
+    \end{enumerate}
+    
+\end{enumerate}
+
+\begin{enumerate}
+
+    
+\end{enumerate}
+
+\subsection{Modeling}
+
+Each model is defined by a trial function that is used to model the performance score with respect to some selected variables. In the first phase of modeling, trial functions focused on variables within a single factor, while in the second phase, multifactor trial functions were developed using insights from the single-factor models.
+% In the first stage of the modeling, a trial function only contains variable(s) from one factor, while keeping features related to other factors constant. 
+% For example, for single-factor experiment on dataset size factor, we sliced the experimental records such that each slice shares the same training dataset, testing dataset, testing dataset, and target language. 
+The trial functions were used to plot the line of best fit for each slice, and the resulting fit coefficients were tabulated. The root mean square error (RMSE) was then calculated to evaluate the fit of each trial function to its corresponding slice. Relevant overfitting and underfitting were also measured. Through these two analysis, the trial functions were refined by adjusting the range of the coefficients or by constructing an improved trial function.
+
+% In the second stage, variables of multiple factors were considered in the trial functions. These multifactor trial functions were constructed based on insights gained from the single-factor experiments. Similar analysis of fits and RMSE was conducted on the trial functions to identify the trial function that best model the experimental records.
+
+\subsection{Evaluation}
+To ensure the performance of each trial function is well-measured, we conducted the following procedure:
+\begin{enumerate}
+    \item Partition the set of all slices into $k$ partitions such that 
+    % This can be done randomly or systematically (
+    slices within a partition share common features as described by the partition ID. 
+    \item A partition is chosen at random to be used for evaluation, denoted by $\pi_k$.
+    \item Determine the \textit{most representative fits} (MRF) within each $k-1$ partition.
+    \item Using the MRFs from $k-1$ partition, determine the fits estimator as values of coefficients in the trial function to curve fit on all slices in $\pi_k$.
+    \item Calculate the RMSE for each curve fitting. Record the average RMSE in the % performance matrix 
+    cost vectors of the trial function.
+\end{enumerate}
+
+\textbf{Most Representative Fits (MRF):} 
+Consider a slice partition $\pi_i$ with $n$ slices $\psi_1^{(i)}, ... ,\psi_n^{(i)}$. Suppose the trial function $f$ has $m$ coefficients, slice $j$ in the partition would have fits vector $\textbf{b}^{(i,j)} = (\beta_1^{(i,j)}, ..., \beta_m^{(i,j)})$ that correspond to each coefficient value in the equation of best fit line. The \textit{most representative fits} (MRF) for this slice is
+$$
+    \bar{\textbf{b}}^{(i)} = (\bar\beta_1^{(i)}, ..., \bar\beta_m^{(i)})
+$$
+where $\bar{\textbf{b}}^{(i)}$ is determined using one of the following approaches:
+\begin{enumerate}[I.]
+    \item Simple Average: The set of average fits across all slices in the fold, i.e.,
+    $$
+        % \bar\beta_{\iota} = \frac{1}{n} \left( \sum_{j=1}^{n}\beta_{\iota}^{(i,j)} \right) 
+        % \text { for all } \iota = 1, ..., m
+        \bar{\textbf{b}}^{(i)} = \frac{1}{n} \sum_{j=1}^{n} \textbf{b}^{(i,j)}
+    $$
+    \item Best set of fits: The set of fits from a slice in the partition that yields the lowest average RMSE when used to fit other slices in the fold, i.e., 
+    $$
+    \bar{\textbf{b}}^{(i)} = \argmin_{\textbf{b}^{(i,b)}} \frac{1}{n-1}  \sum_{j \neq b} R(f, B^{(i,b)}, \psi_j^{(i)})
+    $$
+    where $R$ calculates the RMSE when fitting the trial function $f$ onto $\psi_j^{(i)}$ using $\textbf{b}^{(i,b)}$ as coefficient values.
+    
+    \item Cross average fitting: The set of average fits from $n-1$ slices in the partition that yields the lowest RMSE when used to fit the remaining slice, i.e., 
+    $$
+        \bar{\textbf{b}}^{(i)} = \argmin_{\tilde{\textbf{b}}^{(i,l)}} R(f, \tilde{\textbf{b}}^{(i,l)}, \psi_l^{(i)})
+    $$
+    where
+    $$
+        \tilde{\textbf{b}}^{(i,l)} = \frac{1}{n-1} \sum_{j \neq l} \textbf{b}^{(i,j)}
+    $$
+    % \textit{Remark}: Summing over lists of fits involves adding the elements at corresponding indices together.
+    % For each slice in the fold, the average fits across the remaining $n-1$ slices are used to fit the current slice. The set of average fits across $n-1$ slices that yields the lowest RMSE when fitted on the remaining slice is selected.
+\end{enumerate}
+
+\textbf{Fits Estimator:}
+The average of most representative fits from $k-1$ partitions,  
+$$
+    \hat{\textbf{b}} = \frac{1}{k-1} \sum_{i=1}^{k-1} \bar{\textbf{b}}^{(i)}
+$$
+is used to estimate the fits for the remaining partition. The following average RMSE is calculated as the cost of this evaluation:
+$$
+    C_{\mathcal{M}}(f, \Phi_{com}) = \frac{1}{m-1} \sum_{j=1}^{n} R(f, \hat{\textbf{b}}, \psi_{j}^{(k)})
+$$
+where $\mathcal{M}$ is the chosen MRF approach while $\Phi_{com}$ is the set of common features within a partition.
+
+% If the partition was done systematically, the following two variations of estimation were also conducted:
+% \begin{enumerate}
+%     \item Inclusive on features $\Phi_{in}$: Only estimate from partitions that share the same set of features in $\Phi_{in}$ as the remaining fold.
+
+%     \item Exclusive on features $\Phi_{ex}$: Only estimate from partitions that differ from the remaining fold on all features in $\Phi_{ex}$.
+% \end{enumerate}
+
+% \textbf{Performance matrix:} Suppose there are $\mathfrak{n}$ ways of systematic partitioning, then the performance matrix of a trial function $f$ is given by
+% \[
+%    \mathcal{P}(f) = 
+%      \bordermatrix{ & \text{Rand} & \text{Syst}_1 & ... & \text{Syst}_{\mathfrak{n}} \cr
+%        A & * & * & ... & * \cr
+%        B & * & * & ... & * \cr
+%        C & * & * & ... & * } \qquad
+% \]
+%  where each entry records the average RMSE of conducting evaluation of each combination between MRF approaches (rows) and partitioning methods (columns). 
+%  \textit{Note:} We have separate matrices for different variation of fits estimator for systematic partitioning. We have yet to decide if we want to keep all variations. 
+ % The trial function, employing the fit estimators as coefficients, was then used to fit the slices in the remaining fold, and the average RMSE was calculated accordingly. A $3 \times 4$ matrix $K$ of RMSE from each variation of $k$-fold cross validation was constructed for each trial function. The rows correspond to each approach in getting the most representative fit within the folds. The first column corresponds to random partition, second to fourth column correspond to systematic fold with simple average, inclusive on features, and exclusive on features respectively. 
+
+ \textbf{Cost vectors:} Suppose there are $p$ ways of partitioning, a trial function has three cost vectors, correspond to $\mathcal{M} = \{$\text{I}, \text{II}, \text{III}$\}$, that records the cost of each evaluation for each way of partitioning. 
+ $$
+    \textbf{c}_{\mathcal{M}}(f) = \left(C_{\mathcal{M}}(f, \Phi_{com_1}), ..., C_{\mathcal{M}}(f, \Phi_{com_p}) \right)
+ $$
+ \textit{Note:} The left out fold, $\pi_k$ should be kept constant for all cost vectors. 
+ 
+\textbf{Choosing the best trial function:} The best trial function was determined based on its cost vectors. For each MRF approach, we first identified the set of \textit{Pareto-optimal} trial functions, ensuring that no other function had a lower cost than the Pareto-optimal functions for every entry in the cost vector. 
+$$
+    \mathcal{P} = \{ f \in F: \nexists g \in F \text { s.t. } \textbf{c}_{\mathcal{M}}(g) < \textbf{c}_{\mathcal{M}}(f)\}
+$$
+where $\textbf{c}_{\mathcal{M}}(g) < \textbf{c}_{\mathcal{M}}(f)$ means all entries in $\textbf{c}_{\mathcal{M}}(g)$ are strictly less than its corresponding entry in $\textbf{c}_{\mathcal{M}}(f)$ for each coordinate. 
+
+Rawlsian Fairness analysis was then conducted among all Pareto-optimal trial functions by selecting the trial function with the lowest maximum RMSE among all entries in its corresponding cost vector. 
+$$
+    f^{*} = \argmin_{f \in \mathcal{P}} \{\max C_{\mathcal{M}}(f, \Phi_{com_{\iota}}) \} \text { for } \iota = \{1, ..., p\}
+$$
+The selected trial function, $f^*$ is the overall best trial function.
+
+\subsection{Baselines} 
+- Simple linear regression over factors Neubig considered
+
+- Simple linear regression over ALL variables WE considered
+
+- Stepwise regression over ALL variables WE considered
+
+- Stepwise regression over lang-idp variables we considered, then combine with other variables for linear regression
+
+- What about using MRF-Simple Average as baselines for Best set of fits and Cross average fitting?
+% For the vector of variables $\textbf{v} = (s_1, s_2, j_1, j_2, d_{syn}, \\ d_{pho}, d_{inv}, d_{fea}, d_{geo}, d_{gen}, r_1, r_2, d_{ttr,1}, d_{ttr,2}, o_{w,1}, \\ o_{w,2}, o_{sw,1}, o_{sw,2}, d_{a,1}, d_{a,2})$, the following two models are used as baselines. 
+% \begin{enumerate}
+%     \item \textbf{ Simple linear regression}:
+%     \begin{equation*}
+%         \hat{\text{sp-BLEU}} = \boldsymbol\beta \cdot \textbf{v} + C 
+%     \end{equation*}
+%     for some coefficient vector $\boldsymbol\beta$ obtained from the line of best fit. 
+%     \item \textbf{Stepwise linear regression}: Similar to simple linear regression, but only consider variables that yield smaller RMSE when added to the model. The sequence of variable addition is determined based on the RMSE values obtained from their respective single-variable linear regressions.
+% \end{enumerate}
+\section{Results}
+\subsection{Phase 1 Modeling}
+Something like this?
+Should have one for each MRF approach- see if the best trial functions agree. 
+\begin{center}
+\begin{tabular}{l|c|c|c}
+    \textbf{Factor} & \textbf{$f^*$} & $\textbf{c}_{\mathcal{M}}(f^*)$ &  $\bar{\textbf{c}}(F)$\\
+     \hline 
+     Size & & &\\
+     Domain & & &\\
+     Lang-idp & & &\\
+     Lang-dp & & &
+\end{tabular}
+\end{center}
+where $f^*$ is the best trial function, $\textbf{c}_{\mathcal{M}}(f^*)$ is its performance matrix, $\bar{\textbf{c}}(F)$ is the entry-wise average of all cost vectors.
+
+Put some graphs of the best trial functions here.
+
+Put cost vectors of all trial functions in appendix?
+
+\subsection{Phase 2 Modeling}
+Should have only one best trial function. Compare with baselines here.
+
+Put graph of best trial function here.
+
+\section{Discussion}
+- Emphasis significance of our factors and why we did 2 phases
+
+- LRLs specific arguments?
+
+- Instead of doing complicated MRF stuff- could have use cost matrix e.g. lang vs test set
+
+- Not comprehensive because of outliers
+
+- Also too many dimensions- hard to see when considering >3 factors/ variables
+
+Last updated: 6/26 12:00am
+\end{document}
