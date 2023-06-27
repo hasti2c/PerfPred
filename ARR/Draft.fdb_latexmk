@@ -1,8 +1,8 @@
 # Fdb version 3
-["pdflatex"] 1687808859 "/home/erickhiu/PerfPred/ARR Perf Pred/Draft.tex" "/home/erickhiu/PerfPred/ARR Perf Pred/Draft.pdf" "Draft" 1687808859
+["pdflatex"] 1687811606 "/home/erickhiu/PerfPred/ARR/Draft.tex" "/home/erickhiu/PerfPred/ARR/Draft.pdf" "Draft" 1687811606
   "/etc/texmf/web2c/texmf.cnf" 1687808180 475 c0e671620eb5563b2130f56340a5fde8 ""
-  "/home/erickhiu/PerfPred/ARR Perf Pred/Draft.aux" 1687808859 8 a94a2480d3289e625eea47cd1b285758 ""
-  "/home/erickhiu/PerfPred/ARR Perf Pred/Draft.tex" 1687808855 20102 385b1656ef05dc929ed747aa411d907d ""
+  "/home/erickhiu/PerfPred/ARR/Draft.aux" 1687811606 8 a94a2480d3289e625eea47cd1b285758 ""
+  "/home/erickhiu/PerfPred/ARR/Draft.tex" 1687811562 20102 385b1656ef05dc929ed747aa411d907d ""
   "/usr/share/texlive/texmf-dist/fonts/enc/dvips/base/8r.enc" 1165713224 4850 80dc9bab7f31fb78a000ccfed0e27cab ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
   "/usr/share/texlive/texmf-dist/fonts/tfm/adobe/helvetic/phvb.tfm" 1136768653 2300 14616918391efa49ac8b481a75fbdc1a ""
@@ -258,13 +258,13 @@
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1687808360 4791332 e01c46533cea023ce4872971d82d5f44 ""
   "Draft.aux" 0 -1 0 "pdflatex"
   "Draft.out" 0 -1 0 "pdflatex"
-  "Draft.tex" 1687808855 20102 385b1656ef05dc929ed747aa411d907d ""
-  "acl.sty" 1687797599 11275 468f1d2bde9fb26cce6669c6d31f4899 ""
-  "preambles.sty" 1687797599 1707 022869affa299724a8706e960b7271be ""
+  "Draft.tex" 1687811562 20102 385b1656ef05dc929ed747aa411d907d ""
+  "acl.sty" 1687811562 11275 468f1d2bde9fb26cce6669c6d31f4899 ""
+  "preambles.sty" 1687811562 1734 e2c7a121366450582914a948431af6e0 ""
   (generated)
-  "/home/erickhiu/PerfPred/ARR Perf Pred/Draft.log"
-  "Draft.aux"
-  "/home/erickhiu/PerfPred/ARR Perf Pred/Draft.pdf"
-  "Draft.out"
   "Draft.pdf"
   "Draft.log"
+  "/home/erickhiu/PerfPred/ARR/Draft.pdf"
+  "/home/erickhiu/PerfPred/ARR/Draft.log"
+  "Draft.out"
+  "Draft.aux"
