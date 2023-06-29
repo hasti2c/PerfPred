@@ -1,0 +1,5 @@
+[Grid Search]
+# Choose loo or simple.
+cost type = loo
+# Choose min, mean, or max.
+best choice = mean

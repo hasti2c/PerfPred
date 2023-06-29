@@ -1,14 +1,15 @@
 from __future__ import print_function
 
+import json
 import os
 import os.path
 import typing as T
 from pprint import pprint
 
-import gspread
 import matplotlib as mpl
 import numpy as np
 import pandas as pd
+import pygsheets as pyg
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
@@ -17,8 +18,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 # === Globals ===
 RECORDS = pd.read_csv("data/data_na_disc.csv") # TODO: consider na_keep
-
-VERBOSE = 1
+VERBOSE = 0
 
 FloatT = (T.Any, float)
 ObjectT = (T.Any, object)
@@ -53,13 +53,30 @@ def get_gcreds():
       creds = flow.run_local_server(port=0)
     # Save the credentials for the next run
     with open('token.json', 'w') as token:
-        token.write(creds.to_json())
-  return gspread.authorize(creds)
+      token.write(creds.to_json())
+  return pyg.authorize(custom_credentials=creds)
+
+GOOGLE_CREDS = get_gcreds()
 
 def write_to_sheet(df, sheet, page):
-  gc = get_gcreds()
-  worksheet = gc.open(sheet).get_worksheet(page)
-  worksheet.update([df.columns.values.tolist()] + df.values.tolist())
+  worksheet = GOOGLE_CREDS.open(sheet).worksheet("index", page)
+  worksheet.update_values("A1:Z500", [df.columns.values.tolist()] + df.values.tolist())
+
+def get_format_json(rgb):
+  return json.dumps({"backgroundColorStyle": {"rgbColor": {"red": 0, "green": 0, "blue": 1}}})
+
+def format_column(sheet, page, col):
+  worksheet = GOOGLE_CREDS.open(sheet).worksheet("index", page)
+  start, end = pyg.Address((1, col)).label, pyg.Address((500, col)).label
+  vals = worksheet.get_col(col)[1:]
+  vals = [val for val in vals if val != ""]
+  mn, mx = float(min(vals)), float(max(vals))
+  rng = np.linspace(mn, mx, num=5, endpoint=True)
+  for i in range(1, 6):
+    frmt = get_format_json(0)
+    print(frmt)
+    worksheet.add_conditional_formatting(start, end, condition_type="NUMBER_BETWEEN", 
+                                         format=frmt, condition_values=[rng[i - 1], rng[i]])
 
 # == Misc Helpers ==
 def verbose_helper(i, N, num=10):
@@ -76,7 +93,3 @@ def get_colors(n):
   elif n <= 20:
     return mpl.color_sequences['tab20']
   print("More than 20 colors.")
-
-GREEK = ['alpha', 'beta', 'gamma', 'delta', 'epsilon', 'zeta', 'eta', 'theta', 
-         'iota', 'kappa', 'lamda', 'mu', 'nu', 'xi', 'omicron', 'pi', 'rho', 
-         'sigma', 'tau', 'upsilon', 'phi', 'chi', 'psi', 'omega']

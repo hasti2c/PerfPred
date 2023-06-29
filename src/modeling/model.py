@@ -1,9 +1,10 @@
 import typing as T
+from itertools import product
 
 import numpy as np
 
 import modeling.func as F
-from slicing.util import GREEK, FloatT
+from slicing.util import FloatT
 
 
 class Model:
@@ -69,27 +70,25 @@ class Model:
     self.bounds, self.loss = bounds, loss
   
   @staticmethod
-  def linear(m):
-    pars = [f"beta{i}" for i in range(1, m + 1)] + ["C"]
-    return Model(F.linear, np.zeros(m + 1), pars=pars)
+  def linear(n):
+    pars = [f"c{i}" for i in range(n + 1)]
+    return Model(F.linear, np.zeros(n + 1), pars=pars)
   
   @staticmethod
-  def polynomial(m, k):
-    names = sum([[var] * k for var in GREEK[:m]], [])
-    nums = list(range(1, k + 1)) * m
-    pars = [name + str(num) for name, num in zip(names, nums)] + ["C"]
-    return Model(F.polynomial, np.zeros(m * k + 1), pars=pars)
+  def polynomial(n, k):
+    pars = ["c0"] + [f"c{i},{j}" for i, j in product(range(1, n + 1), range(1, k + 1))]
+    return Model(F.polynomial, np.zeros(n * k + 1), pars=pars)
   
   @staticmethod
   def nonlinear(m, f):
     pars = [f"beta{i}" for i in range(m + 1)]
-    bounds = (list(np.full(m + 1, -np.inf)), list(np.full(m + 1, 1000))) \
+    bounds = (list(np.full(m + 1, -1000)), list(np.full(m + 1, 1000))) \
              if f == F.hybrid_multiplicative else None
     return Model(f, np.zeros(m + 1), bounds=bounds, pars=pars)
   
   @staticmethod
   def mean(f):
-    return Model(f, np.zeros(2), pars=["alpha", "beta"])
+    return Model(f, np.zeros(2), pars=["c0", "c1"])
   
   def __repr__(self):
     return self.f.__name__

@@ -1,14 +1,16 @@
 import os
 import sys
+from configparser import ConfigParser
+from itertools import product
 
 import numpy as np
 import pandas as pd
 
 import modeling.func as F
+import slicing.util as U
 from modeling.model import Model as M
 from slicing.split import Variable as V
 from trial import Trial as Tr
-import slicing.util as U
 
 TRIALS = pd.DataFrame(columns=["type", "vars", "model", "trial"])
 
@@ -38,21 +40,36 @@ MODELS = {
 }
 # TODO dont use mean models for single var
 
+CONFIG_FILE = "config.txt"
+INIT_CHOICE = ("loo", "mean")
+
+def read_config():
+    config = ConfigParser()
+    config.read(CONFIG_FILE)
+    global INIT_CHOICE
+    INIT_CHOICE = (config['Grid Search']['cost type'], config['Grid Search']['best choice'])
+
 def init_trial(expr, vars, model):
     var_names = "+".join(map(V.__repr__, vars))
-    model_obj = MODELS[model](len(vars))
     path = os.path.join("results", expr, var_names, model)
-    row = {"type": expr, "vars": var_names, "model": model,
-           "trial": Tr(vars, model_obj, path, model)}
+    model_obj = MODELS[model](len(vars))
+    trial = Tr(vars, model_obj, path, model)
+    try:
+        init = trial.read_grid_search(INIT_CHOICE)
+        trial.model.init = np.full(trial.model.init.shape, init) # TODO make less messy (after seeing if it works)
+    except Exception as e:
+        print(f"Failed reading init value for {trial}. Using default 0. Error: {e}.", file=sys.stderr)
+    row = {"type": expr, "vars": var_names, "model": model, "trial": trial}
     TRIALS.loc[len(TRIALS.index)] = row    
 
 def init_all():
+    read_config()
     for expr in TRIAL_TYPES:
         for vars in TRIAL_TYPES[expr]:
             for model in MODELS:
                 init_trial(expr, vars, model)
 
-def run_on_all(f, types=None, vars=None, models=None):
+def run_on_all(f, types=None, vars=None, models=None, suppress=True):
     df = TRIALS
     if types:
         df = df.loc[df["type"].isin(types)]
@@ -63,25 +80,32 @@ def run_on_all(f, types=None, vars=None, models=None):
     for trial in df["trial"]:
         try:
             f(trial)
+            print(f"{f.__name__} on {trial} done.")
         except Exception as e:
-            print(f"{f.__name__} on {trial} gives error: {e}.", file=sys.stderr)
+            print(f"{f.__name__} on {trial} results in error: {e}.", file=sys.stderr)
+            if not suppress:
+                raise e
         sys.stdout.flush()
         sys.stderr.flush()
 
 def get_stats_df():
     df = TRIALS[["type", "vars", "model"]].copy()
-    df["mean"] = [trial.df["loo rmse"].mean() for trial in TRIALS["trial"]]
-    df["min"] = [trial.df["loo rmse"].min() for trial in TRIALS["trial"]]
-    df["Q1"] = [trial.df["loo rmse"].quantile(0.25) for trial in TRIALS["trial"]]
-    df["median"] = [trial.df["loo rmse"].quantile(0.5) for trial in TRIALS["trial"]]
-    df["Q3"] = [trial.df["loo rmse"].quantile(0.75) for trial in TRIALS["trial"]]
-    df["max"] = [trial.df["loo rmse"].max() for trial in TRIALS["trial"]]
-    df["var"] = [trial.df["loo rmse"].var() for trial in TRIALS["trial"]]
-    df["SD"] = [trial.df["loo rmse"].std() for trial in TRIALS["trial"]]
+    costs = {"rmse": "simple", "loo rmse": "LOO"}
+    cols = {"mean": pd.Series.mean,
+            "min": pd.Series.min,
+            "Q1": lambda s: pd.Series.quantile(s, 0.25),
+            "median": lambda s: pd.Series.quantile(s, 0.5),
+            "Q3": lambda s: pd.Series.quantile(s, 0.75),
+            "max": pd.Series.max,
+            "var": pd.Series.var,
+            "SD": pd.Series.std}
+    for cost, col in product(costs, cols):
+        df[costs[cost] + " " + col] = [cols[col](trial.df[cost]) for trial in TRIALS["trial"]]
+    
     df["# of slices"] = [trial.slices.N for trial in TRIALS["trial"]]
-    df["avg slice size"] = [np.mean([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["trial"]]
-    df["min slice size"] = [np.min([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["trial"]]
-    df["max slice size"] = [np.max([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["trial"]]
+    slice_cols = {"mean": np.mean, "min": np.min, "max": np.max}
+    for col in slice_cols:
+        df[f"{col} slice size"] = [slice_cols[col]([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["trial"]]
     return df.round(decimals=4)
 
 def compare_costs(df, page, types=None, vars=None, models=None):
@@ -92,6 +116,7 @@ def compare_costs(df, page, types=None, vars=None, models=None):
     if models:
         df = df.loc[df["model"].isin(models)]
     U.write_to_sheet(df, "Experiment 1 Results", page)
+    U.format_column("Experiment 1 Results", page, 4)
 
 def compare_all_costs():
     df = get_stats_df()
@@ -103,11 +128,3 @@ def compare_all_costs():
     for model in MODELS:
         compare_costs(df, k, models=[model])
         k += 1
-
-init_all()
-run_on_all(Tr.fit_all)
-# run_on_all(Tr.plot_all)
-# run_on_all(Tr.read_all_fits, types=["1B"])
-# run_on_all(Tr.plot_all, types=["1B"])
-compare_all_costs()
-print("hi")
