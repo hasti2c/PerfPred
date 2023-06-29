@@ -62,22 +62,6 @@ def write_to_sheet(df, sheet, page):
   worksheet = GOOGLE_CREDS.open(sheet).worksheet("index", page)
   worksheet.update_values("A1:Z500", [df.columns.values.tolist()] + df.values.tolist())
 
-def get_format_json(rgb):
-  return json.dumps({"backgroundColorStyle": {"rgbColor": {"red": 0, "green": 0, "blue": 1}}})
-
-def format_column(sheet, page, col):
-  worksheet = GOOGLE_CREDS.open(sheet).worksheet("index", page)
-  start, end = pyg.Address((1, col)).label, pyg.Address((500, col)).label
-  vals = worksheet.get_col(col)[1:]
-  vals = [val for val in vals if val != ""]
-  mn, mx = float(min(vals)), float(max(vals))
-  rng = np.linspace(mn, mx, num=5, endpoint=True)
-  for i in range(1, 6):
-    frmt = get_format_json(0)
-    print(frmt)
-    worksheet.add_conditional_formatting(start, end, condition_type="NUMBER_BETWEEN", 
-                                         format=frmt, condition_values=[rng[i - 1], rng[i]])
-
 # == Misc Helpers ==
 def verbose_helper(i, N, num=10):
   """ Helps with verbose progress logs. """
