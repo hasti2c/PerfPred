@@ -116,7 +116,6 @@ def compare_costs(df, page, types=None, vars=None, models=None):
     if models:
         df = df.loc[df["model"].isin(models)]
     U.write_to_sheet(df, "Experiment 1 Results", page)
-    U.format_column("Experiment 1 Results", page, 4)
 
 def compare_all_costs():
     df = get_stats_df()
