@@ -17,6 +17,7 @@ from slicing.slice import SliceGroup as SG
 from slicing.split import Variable as V
 from slicing.util import VERBOSE, FloatT
 
+import trial_eval.tf_eval as E
 
 class Trial:
   """ Represents a trial.
@@ -244,3 +245,23 @@ class Trial:
   
   def __repr__(self):
     return f"{'+'.join(map(V.__repr__, self.xvars))}:{self.name}"
+
+  def cost_vec(self, MRF = None):
+    
+    com_feats_combos = []
+    # Based on recommendations in slides
+    if (V.TRAIN1_SIZE in self.xvars or V.TRAIN2_SIZE in self.xvars):
+      com_feats_combos = [[V.TRAIN1, V.TRAIN2], [V.TEST], [V.LANG], [V.TEST, V.LANG]]
+    elif (V.TRAIN1_JSD in self.xvars or V.TRAIN2_JSD in self.xvars):
+      com_feats_combos = [[V.TRAIN1_SIZE, V.TRAIN2_SIZE], [V.TEST], [V.LANG], [V.TEST, V.LANG]]
+    else: # Assuming not doing dataset independent lang
+      com_feats_combos = [[V.TRAIN1, V.TRAIN2],[V.TRAIN1_SIZE, V.TRAIN2_SIZE], [V.TEST]]
+    
+    if MRF:
+      return E.cost_vec(self, com_feats_combos, MRF)
+    
+    cost_I = E.cost_vec(self, com_feats_combos, E.MRF.Average)
+    cost_II = E.cost_vec(self, com_feats_combos, E.MRF.Best_set)
+    cost_III = E.cost_vec(self, com_feats_combos, E.MRF.Cross_avg)
+    
+    return cost_I, cost_II, cost_III
