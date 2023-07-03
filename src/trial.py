@@ -18,7 +18,7 @@ from slicing.slice import SliceGroup as SG
 from slicing.split import Variable as V
 from util import VERBOSE, FloatT
 
-import evaluation.eval as E
+# import evaluation.eval as E
 
 class Trial:
   """ Represents a trial.
