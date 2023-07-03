@@ -1,4 +1,4 @@
-train set 1,train set 2,train set 2 size,test set,language to,c0,c1,rmse,loo rmse
+train set 1,train set 2,train set 2 size,test set,language to,c0,c1,rmse,kfold rmse
 cc_align,gov,1,flores,ka,-0.4441132007534256,-1.2048947904971161,6.363961030678944,6.363961030678944
 cc_align,gov,1,flores,gu,-0.4441132007534256,-1.2048947904971161,10.807404868885055,10.807404868885055
 cc_align,gov,1,flores,hi,-0.4441132007534256,-1.2048947904971161,10.024470060806225,10.024470060806225
