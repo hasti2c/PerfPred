@@ -1,5 +1,5 @@
 .DS_Store
-results/
+*.png
 .vscode/
 lang2vec/
 credentials.json
