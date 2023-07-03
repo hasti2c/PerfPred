@@ -1,3 +1,5 @@
+import typing as T
+
 import numpy as np
 import pandas as pd
 
@@ -91,7 +93,8 @@ class SliceGroup:
   N: int
   vary: list[V]
 
-  def __init__(self, xvars: list[V], df: pd.DataFrame=RECORDS) -> None:
+  def __init__(self, xvars: list[V], df: pd.DataFrame=RECORDS, 
+               slice_by: T.Optional[list[V]]=None) -> None:
     """ Initializes SliceGroup. 
     
     == Arguments == # TODO update doc
@@ -103,7 +106,10 @@ class SliceGroup:
             By Default (i.e. if xvars is None and set_xvar is True), VARY vars
             will be used as xvars.
     """
-    self.vary = V.get_main_vars(xvars)
+    if slice_by is not None:
+      self.vary = slice_by
+    else:
+      self.vary = V.get_main_vars(xvars)
     self.ids, slices = split(self.vary, df=df)
     self.slices = [Slice(slices[i], self.ids.iloc[i], self.vary)
                    for i in range(len(slices))]

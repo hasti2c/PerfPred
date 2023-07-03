@@ -26,17 +26,17 @@ TRIAL_TYPES = {
 }
 
 MODELS = {
-    "linear": M.linear,
-    "poly2": lambda m: M.polynomial(m, 2),
-    "poly3": lambda m: M.polynomial(m, 3),
-    "exp": lambda m: M.nonlinear(m, F.exponential),
-    "log": lambda m: M.nonlinear(m, F.logarithmic),
-    "power": lambda m: M.nonlinear(m, F.power),
-    "mult": lambda m: M.nonlinear(m, F.multiplicative),
-    "hybrid_mult": lambda m: M.nonlinear(m, F.hybrid_multiplicative),
-    "am": lambda _: M.mean(F.arithmetic_mean_linear),
-    "gm": lambda _: M.mean(F.geometric_mean_linear),
-    "hm": lambda _: M.mean(F.harmonic_mean_linear),
+    "linear": {'f': F.linear},
+    "poly2": {'f': F.polynomial, 'k': 2},
+    "poly3": {'f': F.polynomial, 'k': 3},
+    "exp": {'f': F.exponential},
+    "log": {'f': F.logarithmic},
+    "power": {'f': F.power},
+    "mult": {'f': F.multiplicative},
+    "hybrid_mult": {'f': F.hybrid_multiplicative, 'bounds': (-1000, 1000)},
+    "am": {'f': F.arithmetic_mean_linear},
+    "gm": {'f': F.geometric_mean_linear},
+    "hm": {'f': F.harmonic_mean_linear},
 }
 # TODO dont use mean models for single var
 
@@ -52,11 +52,11 @@ def read_config():
 def init_trial(expr, vars, model):
     var_names = "+".join(map(V.__repr__, vars))
     path = os.path.join("results", expr, var_names, model)
-    model_obj = MODELS[model](len(vars))
+    model_obj = M.get_instance(n=len(vars), **MODELS[model])
     trial = Tr(vars, model_obj, path, model)
     try:
         init = trial.read_grid_search(INIT_CHOICE)
-        trial.model.init = np.full(trial.model.init.shape, init) # TODO make less messy (after seeing if it works)
+        trial.model.init = np.full(trial.model.init.shape, init) # TODO make less messy
     except Exception as e:
         print(f"Failed reading init value for {trial}. Using default 0. Error: {e}.", file=sys.stderr)
     row = {"type": expr, "vars": var_names, "model": model, "trial": trial}

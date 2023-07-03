@@ -68,27 +68,18 @@ class Model:
     if bounds is None:
       bounds = ([-np.inf]*self.par_num, [np.inf]*self.par_num)
     self.bounds, self.loss = bounds, loss
-  
+
   @staticmethod
-  def linear(n):
-    pars = [f"c{i}" for i in range(n + 1)]
-    return Model(F.linear, np.zeros(n + 1), pars=pars)
-  
-  @staticmethod
-  def polynomial(n, k):
-    pars = ["c0"] + [f"c{i},{j}" for i, j in product(range(1, n + 1), range(1, k + 1))]
-    return Model(F.polynomial, np.zeros(n * k + 1), pars=pars)
-  
-  @staticmethod
-  def nonlinear(m, f):
-    pars = [f"beta{i}" for i in range(m + 1)]
-    bounds = (list(np.full(m + 1, -1000)), list(np.full(m + 1, 1000))) \
-             if f == F.hybrid_multiplicative else None
-    return Model(f, np.zeros(m + 1), bounds=bounds, pars=pars)
-  
-  @staticmethod
-  def mean(f):
-    return Model(f, np.zeros(2), pars=["c0", "c1"])
+  def get_instance(f, n, k=1, init=None, bounds=None):
+    if k == 1:
+      pars = [f"c{i}" for i in range(n + 1)]
+    else:
+      pars = ["c0"] + [f"c{i},{j}" for i, j in product(range(1, n + 1), range(1, k + 1))]
+    if init is None:
+      init = np.zeros(n * k + 1)
+    if bounds is not None:
+      bounds = (list(np.full(n * k + 1, bounds[0])), list(np.full(n * k + 1, bounds[1])))
+    return Model(f, init, bounds=bounds, pars=pars)
   
   def __repr__(self):
     return self.f.__name__
