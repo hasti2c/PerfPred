@@ -9,6 +9,7 @@ import pandas as pd
 import scipy.optimize as sp
 import sklearn.metrics as skl
 from sklearn.model_selection import LeaveOneOut as LOO
+from sklearn.model_selection import KFold as KF
 
 import slicing.util as U
 from modeling.model import Model as M
@@ -41,11 +42,17 @@ class Trial:
   name: str
   df: pd.DataFrame
 
-  def __init__(self, xvars: list[V], model: M, 
+  def __init__(self, xvars: list[V], model: M, split_by: T.Optional[V]=None,
                path: T.Optional[str]=None, name: str="trial") -> None:
     """ Initializes a slice. """
     self.xvars, self.model, self.path, self.name = xvars, model, path, name
-    self.slices = SG.get_instance(xvars)
+    if split_by is None:
+      vary = V.get_main_vars(xvars)
+    else:
+      if not set(split_by).isdisjoint(V.get_main_vars(xvars)):
+        raise ValueError
+      vary = V.rest(split_by)
+    self.slices = SG.get_instance(vary)
     if self.path is not None and not os.path.exists(self.path):
       os.makedirs(self.path)
 
@@ -75,10 +82,13 @@ class Trial:
     cost = self.rmse(slice, fit_x)
     return fit_x, cost
   
-  def loo_slice(self, slice: S) -> T.Tuple[np.ndarray[FloatT], float]:
+  def kfold_slice(self, slice: S) -> T.Tuple[np.ndarray[FloatT], float]:
     costs = np.zeros(len(slice.df))
-    loo = LOO()
-    for i, (train, test) in enumerate(loo.split(slice.df)):
+    if len(slice.df) < 10:
+      kf = LOO()
+    else:
+      kf = KF(n_splits=10)
+    for i, (train, test) in enumerate(kf.split(slice.df)):
       fit, _ = self.fit_slice(slice, train)
       costs[i] = self.rmse(slice, fit, test)
     return costs[i].mean()
@@ -90,10 +100,10 @@ class Trial:
     """
     fits = np.empty((self.slices.N, self.model.par_num))
     costs = np.empty(self.slices.N)
-    loos = np.empty(self.slices.N)
+    kfs = np.empty(self.slices.N)
     for i, slice in enumerate(self.slices.slices):
       fits[i, :], costs[i] = self.fit_slice(slice)
-      loos[i] = self.loo_slice(slice)
+      kfs[i] = self.kfold_slice(slice)
       if VERBOSE >= 3:
         p = U.verbose_helper(i + 1, self.slices.N)
         if p > 0:
@@ -101,9 +111,9 @@ class Trial:
     if VERBOSE >= 1:
       print(f"[{self.__repr__()}] Done fitting.")
 
-    self.init_df(fits, costs, loos)
+    self.init_df(fits, costs, kfs)
     self.write_all_fits()
-    return fits, costs, loos
+    return fits, costs, kfs
 
   def write_all_fits(self):
     if self.path is not None:
@@ -116,15 +126,15 @@ class Trial:
     self.df = pd.read_csv(os.path.join(self.path, "fits.csv"))
     fits = np.array(self.df[self.model.pars])
     costs = np.array(self.df["rmse"])
-    loos = np.array(self.df["loo rmse"])
-    return fits, costs, loos
+    kfs = np.array(self.df["kfold rmse"])
+    return fits, costs, kfs
 
-  def init_df(self, fits, costs, loos):
+  def init_df(self, fits, costs, kfs):
     self.df = self.slices.ids.copy()
     self.df[self.model.pars] = fits
     self.df["rmse"] = costs
-    self.df["loo rmse"] = loos
-    self.df = self.df.astype({"rmse": "Float64", "loo rmse": "Float64"})
+    self.df["kfold rmse"] = kfs
+    self.df = self.df.astype({"rmse": "Float64", "kfold rmse": "Float64"})
 
   def plot_slice(self, slice: S, fit: np.ndarray[FloatT], horiz: V, labels: V):
     horiz_i = self.xvars.index(horiz)
@@ -182,14 +192,14 @@ class Trial:
     if VERBOSE >= 1:
       print(f"[{self.__repr__()}] Done plotting.")
 
-  def choose_init(self, inits: list[float], costs_list: list[float], loos_list: list[float], init_choice: tuple[str]) -> float:
-    costs, loos = np.array(costs_list), np.array(loos_list)
+  def choose_init(self, inits: list[float], costs_list: list[float], kfs_list: list[float], init_choice: tuple[str]) -> float:
+    costs, kfs = np.array(costs_list), np.array(kfs_list)
     hdr = ["", "best min inits", "best min rmse", "best mean inits", "best mean rmse", "best max inits", "best max rmse"]
     ret = None
     with open(os.path.join(self.path, "init_choices.csv"), "w") as f:
       writer = csv.writer(f)
       writer.writerow(hdr)
-      rows = [("simple", costs), ("loo", loos)]
+      rows = [("simple", costs), ("kfold", kfs)]
       for name, arr in rows:
         row = [name]
         ops = [("min", np.ndarray.min), ("mean", np.ndarray.mean), ("max", np.ndarray.max)]
@@ -206,14 +216,14 @@ class Trial:
 
   # TODO use sklearn instead
   def grid_search(self, init_range: tuple[float], num: int, init_choice: tuple[str]) -> tuple[list[float]]:
-    costs_list, loos_list = [], []
+    costs_list, kfs_list = [], []
     inits = list(np.linspace(init_range[0], init_range[1], num=num, endpoint=True))
     for init in inits:
       new_model = M(self.model.f, np.full(len(self.model.init), init), bounds=self.model.bounds,
                     loss=self.model.loss, pars=self.model.pars)
-      _, costs, loos = Trial(self.xvars, new_model, name=self.name).fit_all()
+      _, costs, kfs = Trial(self.xvars, new_model, name=self.name).fit_all()
       costs_list.append(costs)
-      loos_list.append(loos)
+      kfs_list.append(kfs)
 
     if self.path is not None:
       with open(os.path.join(self.path, "simple_grid.csv"), "w") as f:
@@ -221,27 +231,27 @@ class Trial:
         costs_writer.writerow(["init", "rmse of each slice"])
         for i, init in enumerate(inits):
           costs_writer.writerow([init] + list(costs_list[i]))
-      with open(os.path.join(self.path, "loo_grid.csv"), "w") as f:    
-        loos_writer = csv.writer(f)
-        loos_writer.writerow(["init", "loo rmse of each slice"])
+      with open(os.path.join(self.path, "kfold_grid.csv"), "w") as f:    
+        kfs_writer = csv.writer(f)
+        kfs_writer.writerow(["init", "kfold rmse of each slice"])
         for i, init in enumerate(inits):
-          loos_writer.writerow([init] + list(loos_list[i]))
-    return self.choose_init(inits, costs_list, loos_list, init_choice)
+          kfs_writer.writerow([init] + list(kfs_list[i]))
+    return self.choose_init(inits, costs_list, kfs_list, init_choice)
   
   def read_grid_search(self, init_choice: tuple[str]) -> tuple[list[float]]:
-    inits, costs_list, loos_list = [], [], []
+    inits, costs_list, kfs_list = [], [], []
     with open(os.path.join(self.path, "simple_grid.csv")) as f:
       costs_reader = csv.reader(f)
       next(costs_reader)
       for row in costs_reader:
         inits.append(float(row[0]))
         costs_list.append(np.array(row[1:], dtype=float))
-    with open(os.path.join(self.path, "loo_grid.csv")) as f:
-      loos_reader = csv.reader(f)
-      next(loos_reader)
-      for row in loos_reader:
-        loos_list.append(np.array(row[1:], dtype=float))
-    return self.choose_init(inits, costs_list, loos_list, init_choice)
+    with open(os.path.join(self.path, "kfold_grid.csv")) as f:
+      kfs_reader = csv.reader(f)
+      next(kfs_reader)
+      for row in kfs_reader:
+        kfs_list.append(np.array(row[1:], dtype=float))
+    return self.choose_init(inits, costs_list, kfs_list, init_choice)
   
   def __repr__(self):
     return f"{'+'.join(map(V.__repr__, self.xvars))}:{self.name}"

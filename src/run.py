@@ -12,17 +12,22 @@ from modeling.model import Model as M
 from slicing.split import Variable as V
 from trial import Trial as Tr
 
-TRIALS = pd.DataFrame(columns=["type", "vars", "model", "trial"])
+TRIALS = pd.DataFrame(columns=["expr", "splits", "vars", "model", "trial"])
 
-TRIAL_TYPES = {
-    "1A": [[V.TRAIN1_SIZE], [V.TRAIN2_SIZE], [V.TRAIN1_SIZE, V.TRAIN2_SIZE]],
-    "1B": [[V.TRAIN1_JSD], [V.TRAIN2_JSD], [V.TRAIN1_JSD, V.TRAIN2_JSD]],
-    "1C": [[V.FEA_DIST], [V.INV_DIST], [V.PHO_DIST], [V.SYN_DIST], [V.GEN_DIST], [V.GEO_DIST],
+VARS = {
+    "A": [[V.TRAIN1_SIZE], [V.TRAIN2_SIZE], [V.TRAIN1_SIZE, V.TRAIN2_SIZE]],
+    "B": [[V.TRAIN1_JSD], [V.TRAIN2_JSD], [V.TRAIN1_JSD, V.TRAIN2_JSD]],
+    "C": [[V.FEA_DIST], [V.INV_DIST], [V.PHO_DIST], [V.SYN_DIST], [V.GEN_DIST], [V.GEO_DIST],
            [V.INV_DIST, V.PHO_DIST], [V.INV_DIST, V.SYN_DIST], [V.PHO_DIST, V.SYN_DIST], [V.GEN_DIST, V.GEO_DIST], 
            [V.INV_DIST, V.PHO_DIST, V.SYN_DIST], [V.FEA_DIST, V.GEN_DIST, V.GEO_DIST], 
            [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST], 
            [V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST],
            [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST]]
+}
+
+SPLITS = {
+    "1": [None],
+    "2": [[V.LANG], [V.TEST]]
 }
 
 MODELS = {
@@ -41,7 +46,7 @@ MODELS = {
 # TODO dont use mean models for single var
 
 CONFIG_FILE = "config.txt"
-INIT_CHOICE = ("loo", "mean")
+INIT_CHOICE = ("kfold", "mean")
 
 def read_config():
     config = ConfigParser()
@@ -49,34 +54,43 @@ def read_config():
     global INIT_CHOICE
     INIT_CHOICE = (config['Grid Search']['cost type'], config['Grid Search']['best choice'])
 
-def init_trial(expr, vars, model):
+def init_trial(expr, splits, vars, model):
+    split_names = "+".join(map(V.__repr__, splits)) if splits is not None else ""
     var_names = "+".join(map(V.__repr__, vars))
-    path = os.path.join("results", expr, var_names, model)
+
+    path = os.path.join("results", expr, split_names, var_names, model)
     model_obj = M.get_instance(n=len(vars), **MODELS[model])
-    trial = Tr(vars, model_obj, path, model)
+    
+    try:
+        trial = Tr(vars, model_obj, splits, path, model)
+    except ValueError:
+        # print(f"Can't make a trial with xvars {var_names} and splits {split_names}.", file=sys.stderr)
+        return
+
     try:
         init = trial.read_grid_search(INIT_CHOICE)
         trial.model.init = np.full(trial.model.init.shape, init) # TODO make less messy
     except Exception as e:
         print(f"Failed reading init value for {trial}. Using default 0. Error: {e}.", file=sys.stderr)
-    row = {"type": expr, "vars": var_names, "model": model, "trial": trial}
+    row = {"expr": expr, "splits": split_names, "vars": var_names, "model": model, "trial": trial}
     TRIALS.loc[len(TRIALS.index)] = row    
 
 def init_all():
     read_config()
-    for expr in TRIAL_TYPES:
-        for vars in TRIAL_TYPES[expr]:
-            for model in MODELS:
-                init_trial(expr, vars, model)
+    for expr, subexpr in product(SPLITS, VARS):
+        for splits, vars, model in product(SPLITS[expr], VARS[subexpr], MODELS):
+            init_trial(expr + subexpr, splits, vars, model)
 
-def run_on_all(f, types=None, vars=None, models=None, suppress=True):
+def run_on_all(f, expr=None, splits=None, vars=None, model=None, suppress=False):
     df = TRIALS
-    if types:
-        df = df.loc[df["type"].isin(types)]
+    if expr:
+        df = df.loc[df["expr"] == expr]
+    if splits:
+        df = df.loc[df["splits"] == splits]
     if vars:
-        df = df.loc[df["vars"].isin(vars)]
-    if models:
-        df = df.loc[df["model"].isin(models)]
+        df = df.loc[df["vars"] == vars]
+    if model:
+        df = df.loc[df["model"] == model]
     for trial in df["trial"]:
         try:
             f(trial)
@@ -89,8 +103,8 @@ def run_on_all(f, types=None, vars=None, models=None, suppress=True):
         sys.stderr.flush()
 
 def get_stats_df():
-    df = TRIALS[["type", "vars", "model"]].copy()
-    costs = {"rmse": "simple", "loo rmse": "LOO"}
+    df = TRIALS[["expr", "splits", "vars", "model"]].copy()
+    costs = {"rmse": "simple", "kfold rmse": "KFold"}
     cols = {"mean": pd.Series.mean,
             "min": pd.Series.min,
             "Q1": lambda s: pd.Series.quantile(s, 0.25),
@@ -108,22 +122,30 @@ def get_stats_df():
         df[f"{col} slice size"] = [slice_cols[col]([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["trial"]]
     return df.round(decimals=4)
 
-def compare_costs(df, page, types=None, vars=None, models=None):
-    if types:
-        df = df.loc[df["type"].isin(types)]
-    if vars:
-        df = df.loc[df["vars"].isin(vars)]
-    if models:
-        df = df.loc[df["model"].isin(models)]
-    U.write_to_sheet(df, "Experiment 1 Results", page)
+def compare_costs(df, page, name):
+    U.write_to_sheet(df, "Experiment 1 Results", page, name)
 
 def compare_all_costs():
-    df = get_stats_df()
-    compare_costs(df, 0)
+    stats_df = get_stats_df()
+    compare_costs(stats_df, 0, "all")
     k = 1
-    for type in TRIAL_TYPES:
-        compare_costs(df, k, types=[type])
+
+    for expr in SPLITS:
+        df = stats_df[stats_df["expr"].isin([expr + subexpr for subexpr in VARS])]
+        compare_costs(df, k, expr)
         k += 1
+    
+    for subexpr in VARS:
+        df = stats_df[stats_df["expr"].isin([expr + subexpr for expr in SPLITS])]
+        compare_costs(df, k, subexpr)
+        k += 1
+
+    for expr, subexpr in product(SPLITS, VARS):
+        df = stats_df[stats_df["expr"] == expr + subexpr]
+        compare_costs(df, k, expr + subexpr)
+        k += 1
+    
     for model in MODELS:
-        compare_costs(df, k, models=[model])
+        df = stats_df[stats_df["model"] == model]
+        compare_costs(df, k, model)
         k += 1

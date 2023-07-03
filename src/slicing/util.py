@@ -1,11 +1,11 @@
 from __future__ import print_function
 
-import json
 import os
 import os.path
 import typing as T
 from pprint import pprint
 
+import gspread
 import matplotlib as mpl
 import numpy as np
 import pandas as pd
@@ -54,13 +54,14 @@ def get_gcreds():
     # Save the credentials for the next run
     with open('token.json', 'w') as token:
       token.write(creds.to_json())
-  return pyg.authorize(custom_credentials=creds)
+  return gspread.authorize(creds)
 
-GOOGLE_CREDS = get_gcreds()
-
-def write_to_sheet(df, sheet, page):
-  worksheet = GOOGLE_CREDS.open(sheet).worksheet("index", page)
-  worksheet.update_values("A1:Z500", [df.columns.values.tolist()] + df.values.tolist())
+def write_to_sheet(df, sheet, page, name=None):
+  gc = get_gcreds()
+  worksheet = gc.open(sheet).get_worksheet(page)
+  worksheet.update([df.columns.values.tolist()] + df.values.tolist())
+  if name is not None:
+    worksheet.update_title(name)
 
 # == Misc Helpers ==
 def verbose_helper(i, N, num=10):

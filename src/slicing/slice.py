@@ -93,33 +93,26 @@ class SliceGroup:
   N: int
   vary: list[V]
 
-  def __init__(self, xvars: list[V], df: pd.DataFrame=RECORDS, 
-               slice_by: T.Optional[list[V]]=None) -> None:
+  def __init__(self, vary: list[V], df: pd.DataFrame=RECORDS) -> None:
     """ Initializes SliceGroup. 
     
     == Arguments == # TODO update doc
-    vary_list: List of VARY vars.
+    vary: List of VARY vars.
     df: Dataframe to perform slicing on.
     set_xvar: Whether or not to give slices xvars value when initializing.
               If True, slices will be given xvars value.
-    xvars: xvars value to use when initializing slices.
-            By Default (i.e. if xvars is None and set_xvar is True), VARY vars
-            will be used as xvars.
     """
-    if slice_by is not None:
-      self.vary = slice_by
-    else:
-      self.vary = V.get_main_vars(xvars)
+    self.vary = vary
     self.ids, slices = split(self.vary, df=df)
     self.slices = [Slice(slices[i], self.ids.iloc[i], self.vary)
                    for i in range(len(slices))]
     self.N = len(self.slices)
 
   @staticmethod
-  def get_instance(xvars: list[V]):
-    flags = V.get_flags(V.get_main_vars(xvars))
+  def get_instance(vary: list[V]):
+    flags = V.get_flags(vary)
     if flags not in SliceGroup.GROUPS:
-      SliceGroup.GROUPS[flags] = SliceGroup(xvars)
+      SliceGroup.GROUPS[flags] = SliceGroup(vary)
     return SliceGroup.GROUPS[flags]
     
   def __repr__(self):

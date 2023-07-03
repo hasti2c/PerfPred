@@ -1,5 +1,5 @@
 [Grid Search]
-# Choose loo or simple.
-cost type = loo
+# Choose kfold or simple.
+cost type = kfold
 # Choose min, mean, or max.
 best choice = mean
