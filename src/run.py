@@ -71,7 +71,7 @@ def init_trial(expr, splits, vars, model):
         init = trial.read_grid_search(INIT_CHOICE)
         trial.model.init = np.full(trial.model.init.shape, init) # TODO make less messy
     except Exception as e:
-        print(f"Failed reading init value for {trial}. Using default 0. Error: {e}.", file=sys.stderr)
+        print(f"Failed reading init value for {expr}:{trial}. Using default 0.", file=sys.stderr)
     row = {"expr": expr, "splits": split_names, "vars": var_names, "model": model, "trial": trial}
     TRIALS.loc[len(TRIALS.index)] = row    
 

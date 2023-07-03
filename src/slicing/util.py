@@ -9,7 +9,6 @@ import gspread
 import matplotlib as mpl
 import numpy as np
 import pandas as pd
-import pygsheets as pyg
 from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
