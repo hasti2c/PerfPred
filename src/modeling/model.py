@@ -4,7 +4,7 @@ from itertools import product
 import numpy as np
 
 import modeling.func as F
-from slicing.util import FloatT
+from util import FloatT
 
 
 class Model:

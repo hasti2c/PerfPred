@@ -7,7 +7,7 @@ import numpy as np
 import pandas as pd
 
 import modeling.func as F
-import slicing.util as U
+import util as U
 from modeling.model import Model as M
 from slicing.split import Variable as V
 from trial import Trial as Tr
@@ -54,7 +54,7 @@ def read_config():
     global INIT_CHOICE
     INIT_CHOICE = (config['Grid Search']['cost type'], config['Grid Search']['best choice'])
 
-def init_trial(expr, splits, vars, model):
+def init_trial(expr, splits, vars, model, verbose=False):
     split_names = "+".join(map(V.__repr__, splits)) if splits is not None else ""
     var_names = "+".join(map(V.__repr__, vars))
 
@@ -70,8 +70,9 @@ def init_trial(expr, splits, vars, model):
     try:
         init = trial.read_grid_search(INIT_CHOICE)
         trial.model.init = np.full(trial.model.init.shape, init) # TODO make less messy
-    except Exception as e:
-        print(f"Failed reading init value for {expr}:{trial}. Using default 0.", file=sys.stderr)
+    except FileNotFoundError:
+        if verbose:
+            print(f"Failed reading init value for {expr}:{trial}. Using default 0.", file=sys.stderr)
     row = {"expr": expr, "splits": split_names, "vars": var_names, "model": model, "trial": trial}
     TRIALS.loc[len(TRIALS.index)] = row    
 

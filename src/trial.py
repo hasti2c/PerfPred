@@ -11,14 +11,14 @@ import sklearn.metrics as skl
 from sklearn.model_selection import LeaveOneOut as LOO
 from sklearn.model_selection import KFold as KF
 
-import slicing.util as U
+import util as U
 from modeling.model import Model as M
 from slicing.slice import Slice as S
 from slicing.slice import SliceGroup as SG
 from slicing.split import Variable as V
-from slicing.util import VERBOSE, FloatT
+from util import VERBOSE, FloatT
 
-import trial_eval.tf_eval as E
+import evaluation.eval as E
 
 class Trial:
   """ Represents a trial.
@@ -256,22 +256,22 @@ class Trial:
   def __repr__(self):
     return f"{'+'.join(map(V.__repr__, self.xvars))}:{self.name}"
 
-  def cost_vec(self, MRF = None):
+  # def cost_vec(self, MRF = None):
     
-    com_feats_combos = []
-    # Based on recommendations in slides
-    if (V.TRAIN1_SIZE in self.xvars or V.TRAIN2_SIZE in self.xvars):
-      com_feats_combos = [[V.TRAIN1, V.TRAIN2], [V.TEST], [V.LANG], [V.TEST, V.LANG]]
-    elif (V.TRAIN1_JSD in self.xvars or V.TRAIN2_JSD in self.xvars):
-      com_feats_combos = [[V.TRAIN1_SIZE, V.TRAIN2_SIZE], [V.TEST], [V.LANG], [V.TEST, V.LANG]]
-    else: # Assuming not doing dataset independent lang
-      com_feats_combos = [[V.TRAIN1, V.TRAIN2],[V.TRAIN1_SIZE, V.TRAIN2_SIZE], [V.TEST]]
+  #   com_feats_combos = []
+  #   # Based on recommendations in slides
+  #   if (V.TRAIN1_SIZE in self.xvars or V.TRAIN2_SIZE in self.xvars):
+  #     com_feats_combos = [[V.TRAIN1, V.TRAIN2], [V.TEST], [V.LANG], [V.TEST, V.LANG]]
+  #   elif (V.TRAIN1_JSD in self.xvars or V.TRAIN2_JSD in self.xvars):
+  #     com_feats_combos = [[V.TRAIN1_SIZE, V.TRAIN2_SIZE], [V.TEST], [V.LANG], [V.TEST, V.LANG]]
+  #   else: # Assuming not doing dataset independent lang
+  #     com_feats_combos = [[V.TRAIN1, V.TRAIN2],[V.TRAIN1_SIZE, V.TRAIN2_SIZE], [V.TEST]]
     
-    if MRF:
-      return E.cost_vec(self, com_feats_combos, MRF)
+  #   if MRF:
+  #     return E.cost_vec(self, com_feats_combos, MRF)
     
-    cost_I = E.cost_vec(self, com_feats_combos, E.MRF.Average)
-    cost_II = E.cost_vec(self, com_feats_combos, E.MRF.Best_set)
-    cost_III = E.cost_vec(self, com_feats_combos, E.MRF.Cross_avg)
+  #   cost_I = E.cost_vec(self, com_feats_combos, E.MRF.AVG)
+  #   cost_II = E.cost_vec(self, com_feats_combos, E.MRF.BEST)
+  #   cost_III = E.cost_vec(self, com_feats_combos, E.MRF.CROSS_AVG)
     
-    return cost_I, cost_II, cost_III
+  #   return cost_I, cost_II, cost_III

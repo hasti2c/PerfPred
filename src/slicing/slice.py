@@ -1,11 +1,9 @@
-import typing as T
-
 import numpy as np
 import pandas as pd
 
 from slicing.split import Variable as V
 from slicing.split import split
-from slicing.util import RECORDS, FloatT
+from util import RECORDS, FloatT
 
 
 class Slice: # TODO update docs
@@ -71,7 +69,7 @@ class Slice: # TODO update docs
     return self.df.loc[:, [var.title for var in xvars]].astype(float).to_numpy()
 
   def __repr__(self):
-    return "-".join(id.astype(str))
+    return "-".join(self.id.astype(str))
 
 class SliceGroup:
   GROUPS = {}

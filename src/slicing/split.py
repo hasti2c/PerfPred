@@ -8,7 +8,7 @@ from enum import Enum
 import numpy as np
 import pandas as pd
 
-from slicing.util import RECORDS
+from util import RECORDS
 
 
 class Variable (Enum):

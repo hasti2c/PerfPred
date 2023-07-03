@@ -1,4 +1,4 @@
-import trial_eval.tf_eval as E
+import evaluation.eval as E
 
 def is_pareto_dominant(vec1, vec2):
     """
