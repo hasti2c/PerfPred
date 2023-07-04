@@ -66,7 +66,8 @@ def init_trial(expr, splits, vars, model, verbose=False):
     try:
         trial = Tr(vars, model_obj, splits, path, model)
     except ValueError:
-        # print(f"Can't make a trial with xvars {var_names} and splits {split_names}.", file=sys.stderr)
+        if verbose:
+            print(f"Can't make a trial with xvars {var_names} and splits {split_names}.", file=sys.stderr)
         return
 
     try:
@@ -78,11 +79,11 @@ def init_trial(expr, splits, vars, model, verbose=False):
     row = {"expr": expr, "splits": split_names, "vars": var_names, "model": model, "trial": trial}
     TRIALS.loc[len(TRIALS.index)] = row    
 
-def init_all():
+def init_all(verbose=False):
     read_config()
     for expr, subexpr in product(SPLITS, VARS):
         for splits, vars, model in product(SPLITS[expr], VARS[subexpr], MODELS):
-            init_trial(expr + subexpr, splits, vars, model)
+            init_trial(expr + subexpr, splits, vars, model, verbose)
 
 def run_on_all(f, expr=None, splits=None, vars=None, model=None, suppress=False):
     df = TRIALS
