@@ -1,10 +1,12 @@
 import os
 import sys
+import csv
 from configparser import ConfigParser
 from itertools import product
 
 import numpy as np
 import pandas as pd
+from scipy.stats import pearsonr
 
 import modeling.func as F
 import util as U
@@ -150,3 +152,36 @@ def compare_all_costs():
         df = stats_df[stats_df["model"] == model]
         compare_costs(df, k, model)
         k += 1
+
+def p_val (data, var):
+    """
+    data = data_na_disc.csv
+    var = val to be evaluated for its correlation with sp-BLEU score
+    # Instead of this, should we directly write to another gsheet of var vs p-val?
+    """
+    col_mapping = {
+        V.TRAIN1_SIZE: 1,
+        V.TRAIN1_JSD: 2,
+        V.TRAIN2_SIZE: 4,
+        V.TRAIN2_JSD: 5,
+        V.GEO_DIST: 9,
+        V.GEN_DIST: 10,
+        V.SYN_DIST: 11,
+        V.PHO_DIST: 12,
+        V.INV_DIST: 13,
+        V.FEA_DIST: 14
+    }
+
+    x = []
+    y = []
+
+    with open('data_na_disc.csv', 'r') as file:
+        reader = csv.reader(file)
+        next(reader)
+
+        for row in reader:
+            col_index = col_mapping[var]
+            x.append(row[col_index])
+            y.append(row[15])
+
+    return pearsonr(x, y)
