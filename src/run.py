@@ -158,6 +158,7 @@ def p_val (data, var):
     """
     data = data_na_disc.csv
     var = val to be evaluated for its correlation with sp-BLEU score
+    # Instead of this, should we directly write to another gsheet of var vs p-val?
     """
     col_mapping = {
         V.TRAIN1_SIZE: 1,
