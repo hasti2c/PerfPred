@@ -61,6 +61,7 @@ def write_to_sheet(df, sheet, page, name=None):
   worksheet.update([df.columns.values.tolist()] + df.values.tolist())
   if name is not None:
     worksheet.update_title(name)
+  print(f"Wrote to {sheet}:{name}.")
 
 # == Misc Helpers ==
 def verbose_helper(i, N, num=10):

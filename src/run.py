@@ -49,6 +49,8 @@ MODELS = {
 
 CONFIG_FILE = "config.txt"
 INIT_CHOICE = ("kfold", "mean")
+COSTS_SHEET = "costs"
+FITS_SHEET = "fits"
 
 def read_config():
     config = ConfigParser()
@@ -106,7 +108,7 @@ def run_on_all(f, expr=None, splits=None, vars=None, model=None, suppress=False)
         sys.stdout.flush()
         sys.stderr.flush()
 
-def get_stats_df():
+def get_costs_df():
     df = TRIALS[["expr", "splits", "vars", "model"]].copy()
     costs = {"rmse": "simple", "kfold rmse": "KFold"}
     cols = {"mean": pd.Series.mean,
@@ -126,32 +128,97 @@ def get_stats_df():
         df[f"{col} slice size"] = [slice_cols[col]([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["trial"]]
     return df.round(decimals=4)
 
-def compare_costs(df, page, name):
-    U.write_to_sheet(df, "Experiment 1 Results", page, name)
-
 def compare_all_costs():
-    stats_df = get_stats_df()
-    compare_costs(stats_df, 0, "all")
+    stats_df = get_costs_df()
+    df = stats_df
+    dsc = df.describe()
+    dsc["expr"] = dsc.index
+    df = pd.concat([df, dsc]).replace(np.nan, "")
+    U.write_to_sheet(df, COSTS_SHEET, 0, "all")
     k = 1
 
     for expr in SPLITS:
         df = stats_df[stats_df["expr"].isin([expr + subexpr for subexpr in VARS])]
-        compare_costs(df, k, expr)
+        dsc = df.describe()
+        dsc["expr"] = dsc.index
+        df = pd.concat([df, dsc]).replace(np.nan, "")
+        U.write_to_sheet(df, COSTS_SHEET, k, expr)
         k += 1
     
     for subexpr in VARS:
         df = stats_df[stats_df["expr"].isin([expr + subexpr for expr in SPLITS])]
-        compare_costs(df, k, subexpr)
+        dsc = df.describe()
+        dsc["expr"] = dsc.index
+        df = pd.concat([df, dsc]).replace(np.nan, "")
+        U.write_to_sheet(df, COSTS_SHEET, k, subexpr)
         k += 1
 
     for expr, subexpr in product(SPLITS, VARS):
         df = stats_df[stats_df["expr"] == expr + subexpr]
-        compare_costs(df, k, expr + subexpr)
+        dsc = df.describe()
+        dsc["expr"] = dsc.index
+        df = pd.concat([df, dsc]).replace(np.nan, "")
+        U.write_to_sheet(df, COSTS_SHEET, k, expr + subexpr)
         k += 1
     
     for model in MODELS:
         df = stats_df[stats_df["model"] == model]
-        compare_costs(df, k, model)
+        dsc = df.describe()
+        dsc["expr"] = dsc.index
+        df = pd.concat([df, dsc]).replace(np.nan, "")
+        U.write_to_sheet(df, COSTS_SHEET, k, model)
+        k += 1
+
+def get_fits_df():
+    df = TRIALS[["expr", "splits", "vars", "model"]].copy()
+    cols = {"mean": lambda a: np.mean(a),
+            "min": lambda a: np.min(a),
+            "median": lambda a: np.median(a),
+            "max": lambda a: np.max(a)}
+    for col in cols:
+        df[col] = [cols[col](trial.df[trial.model.pars].values) for trial in TRIALS["trial"]]
+        df[col] = df[col].map(np.mean)
+    return df.round(decimals=4)
+
+def compare_all_fits():
+    stats_df = get_fits_df()
+    df = stats_df
+    dsc = df.describe()
+    dsc["expr"] = dsc.index
+    df = pd.concat([df, dsc]).replace(np.nan, "")
+    U.write_to_sheet(df, FITS_SHEET, 0, "all")
+    k = 1
+
+    for expr in SPLITS:
+        df = stats_df[stats_df["expr"].isin([expr + subexpr for subexpr in VARS])]
+        dsc = df.describe()
+        dsc["expr"] = dsc.index
+        df = pd.concat([df, dsc]).replace(np.nan, "")
+        U.write_to_sheet(df, FITS_SHEET, k, expr)
+        k += 1
+    
+    for subexpr in VARS:
+        df = stats_df[stats_df["expr"].isin([expr + subexpr for expr in SPLITS])]
+        dsc = df.describe()
+        dsc["expr"] = dsc.index
+        df = pd.concat([df, dsc]).replace(np.nan, "")
+        U.write_to_sheet(df, FITS_SHEET, k, subexpr)
+        k += 1
+
+    for expr, subexpr in product(SPLITS, VARS):
+        df = stats_df[stats_df["expr"] == expr + subexpr]
+        dsc = df.describe()
+        dsc["expr"] = dsc.index
+        df = pd.concat([df, dsc]).replace(np.nan, "")
+        U.write_to_sheet(df, FITS_SHEET, k, expr + subexpr)
+        k += 1
+    
+    for model in MODELS:
+        df = stats_df[stats_df["model"] == model]
+        dsc = df.describe()
+        dsc["expr"] = dsc.index
+        df = pd.concat([df, dsc]).replace(np.nan, "")
+        U.write_to_sheet(df, FITS_SHEET, k, model)
         k += 1
 
 def p_val (data, var):

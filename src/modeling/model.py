@@ -6,6 +6,7 @@ import numpy as np
 import modeling.func as F
 from util import FloatT
 
+DEFAULT_BOUNDS = (-1000, 1000)
 
 class Model:
   """ Represents a model.
@@ -66,7 +67,7 @@ class Model:
     self.init = init
     self.par_num, self.pars = len(init), pars
     if bounds is None:
-      bounds = ([-np.inf]*self.par_num, [np.inf]*self.par_num)
+      bounds = ([DEFAULT_BOUNDS[0]]*self.par_num, [DEFAULT_BOUNDS[1]]*self.par_num)
     self.bounds, self.loss = bounds, loss
 
   @staticmethod
