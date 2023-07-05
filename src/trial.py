@@ -255,23 +255,3 @@ class Trial:
   
   def __repr__(self):
     return f"{'+'.join(map(V.__repr__, self.xvars))}:{self.name}"
-
-  # def cost_vec(self, MRF = None):
-    
-  #   com_feats_combos = []
-  #   # Based on recommendations in slides
-  #   if (V.TRAIN1_SIZE in self.xvars or V.TRAIN2_SIZE in self.xvars):
-  #     com_feats_combos = [[V.TRAIN1, V.TRAIN2], [V.TEST], [V.LANG], [V.TEST, V.LANG]]
-  #   elif (V.TRAIN1_JSD in self.xvars or V.TRAIN2_JSD in self.xvars):
-  #     com_feats_combos = [[V.TRAIN1_SIZE, V.TRAIN2_SIZE], [V.TEST], [V.LANG], [V.TEST, V.LANG]]
-  #   else: # Assuming not doing dataset independent lang
-  #     com_feats_combos = [[V.TRAIN1, V.TRAIN2],[V.TRAIN1_SIZE, V.TRAIN2_SIZE], [V.TEST]]
-    
-  #   if MRF:
-  #     return E.cost_vec(self, com_feats_combos, MRF)
-    
-  #   cost_I = E.cost_vec(self, com_feats_combos, E.MRF.AVG)
-  #   cost_II = E.cost_vec(self, com_feats_combos, E.MRF.BEST)
-  #   cost_III = E.cost_vec(self, com_feats_combos, E.MRF.CROSS_AVG)
-    
-  #   return cost_I, cost_II, cost_III

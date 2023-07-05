@@ -6,6 +6,7 @@ from enum import Enum
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error as mse
+from sklearn.model_selection import LeaveOneOut as LOO
 
 from modeling.model import Model as M
 from slicing.slice import Slice as S
@@ -87,26 +88,35 @@ def partition(expr, partition_by):
   ids, dfs = split(V.rest(partition_by), df=expr.df)
   return ids, [Part(expr, df) for df in dfs]
 
-# def trial_eval(expr, most_rep, partitions, partition_ids):
-#   partition_ids = partition_ids.reset_index(drop=True)
-#   leftout_partition = random.choice(partitions)
-#   leftout_index = partitions.index(leftout_partition)
-#   leftout_id = partition_ids.iloc[leftout_index]
-#   partition_ids.drop(index=leftout_index, inplace=True)
-#   partitions.remove(leftout_partition)
+def evaluate_trial(expr, partition_by, mrf):
+  _, parts = partition(expr, partition_by)
+  mrfs = np.array([part.get_mrf(mrf) for part in parts])
+  costs = []
+  for train, test in LOO().split(parts):
+    fits = np.mean(mrfs[train], axis=0)
+    costs.append(parts[test].run_trial(fits))
+  return costs
 
-#   # Step 1: Get partition fits.
-#   partition_fits = []
-#   for partition in partitions:
-#     partition_fits.append(partition.most_rep_fits(expr.model.f, most_rep))
-  
-#   # Step 2: Use partition fits on the left out partition.
-#   test_fit = np.mean(partition_fits, axis=0)
-#   rmse = leftout_partition.run_trial(expr.model.f, test_fit)
-#   return rmse
+def cost_vector(expr, partition_by_list, mrf): 
+  return [evaluate_trial(expr, partition_by, mrf) for partition_by in partition_by_list]
 
-# def cost_vec(expr, common_features_combo, MRF):
-#   cost_vec = []
-#   for i in range(len(common_features_combo)):
-#     partitions, partitions_ids = extract_partitions(expr, common_features_combo[i])
-#     cost_vec[i] = trial_eval(expr, MRF, partitions, partitions_ids)
+
+  # def cost_vec(self, MRF = None):
+    
+  #   com_feats_combos = []
+  #   # Based on recommendations in slides
+  #   if (V.TRAIN1_SIZE in self.xvars or V.TRAIN2_SIZE in self.xvars):
+  #     com_feats_combos = [[V.TRAIN1, V.TRAIN2], [V.TEST], [V.LANG], [V.TEST, V.LANG]]
+  #   elif (V.TRAIN1_JSD in self.xvars or V.TRAIN2_JSD in self.xvars):
+  #     com_feats_combos = [[V.TRAIN1_SIZE, V.TRAIN2_SIZE], [V.TEST], [V.LANG], [V.TEST, V.LANG]]
+  #   else: # Assuming not doing dataset independent lang
+  #     com_feats_combos = [[V.TRAIN1, V.TRAIN2],[V.TRAIN1_SIZE, V.TRAIN2_SIZE], [V.TEST]]
+    
+  #   if MRF:
+  #     return E.cost_vec(self, com_feats_combos, MRF)
+    
+  #   cost_I = E.cost_vec(self, com_feats_combos, E.MRF.AVG)
+  #   cost_II = E.cost_vec(self, com_feats_combos, E.MRF.BEST)
+  #   cost_III = E.cost_vec(self, com_feats_combos, E.MRF.CROSS_AVG)
+    
+  #   return cost_I, cost_II, cost_III
