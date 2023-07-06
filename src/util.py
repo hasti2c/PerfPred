@@ -3,9 +3,11 @@ from __future__ import print_function
 import os
 import os.path
 import typing as T
+from configparser import ConfigParser
 from pprint import pprint
 
 import gspread
+import gspread_dataframe as gsdf
 import matplotlib as mpl
 import numpy as np
 import pandas as pd
@@ -22,6 +24,21 @@ VERBOSE = 0
 FloatT = (T.Any, float)
 ObjectT = (T.Any, object)
 
+CONFIG_FILE = "config.txt"
+INIT_CHOICE = ("kfold", "mean")
+WRITE_TO_SHEET = False
+COSTS_SHEET_NAME = "costs"
+FITS_SHEET_NAME = "fits"
+
+def read_config():
+    config = ConfigParser()
+    config.read(CONFIG_FILE)
+    global INIT_CHOICE, WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME
+    INIT_CHOICE = (config['Grid Search']['cost type'], config['Grid Search']['best choice'])
+    WRITE_TO_SHEET = config['API']['gsheet'] in ["True", "true", "1"]
+    COSTS_SHEET_NAME, FITS_SHEET_NAME = config['API']['costs sheet'], config['API']['fits sheet']
+
+read_config()
 
 # == File & GSheet Helpers ==
 def empty_folder(path: str) -> None:
@@ -55,13 +72,25 @@ def get_gcreds():
       token.write(creds.to_json())
   return gspread.authorize(creds)
 
-def write_to_sheet(df, sheet, page, name=None):
-  gc = get_gcreds()
-  worksheet = gc.open(sheet).get_worksheet(page)
-  worksheet.update([df.columns.values.tolist()] + df.values.tolist())
+if WRITE_TO_SHEET:
+  GSPREAD_CREDS = get_gcreds()
+  COSTS_SHEET = GSPREAD_CREDS.open(COSTS_SHEET_NAME)
+  FITS_SHEET = GSPREAD_CREDS.open(FITS_SHEET_NAME)
+
+def clear_sheet(sh):
+  for wsh in sh.worksheets()[1:]:
+    sh.del_worksheet(wsh)
+
+def write_to_sheet(df, sh, page, name=None):
+  try:
+    wsh = sh.get_worksheet(page)
+  except gspread.exceptions.WorksheetNotFound:
+    wsh = sh.get_worksheet(0).duplicate(page)
+  gsdf.set_with_dataframe(wsh, df, include_index=True, include_column_header=True, resize=True)
   if name is not None:
-    worksheet.update_title(name)
-  print(f"Wrote to {sheet}:{name}.")
+    wsh.update_title(name)
+  print(f"Wrote to {sh.title}:{name}.")
+
 
 # == Misc Helpers ==
 def verbose_helper(i, N, num=10):

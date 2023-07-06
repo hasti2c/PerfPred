@@ -1,7 +1,7 @@
+import csv
 import os
 import sys
-import csv
-from configparser import ConfigParser
+import time
 from itertools import product
 
 import numpy as np
@@ -47,21 +47,11 @@ MODELS = {
 }
 # TODO dont use mean models for single var
 
-CONFIG_FILE = "config.txt"
-INIT_CHOICE = ("kfold", "mean")
-COSTS_SHEET = "costs"
-FITS_SHEET = "fits"
-
-def read_config():
-    config = ConfigParser()
-    config.read(CONFIG_FILE)
-    global INIT_CHOICE
-    INIT_CHOICE = (config['Grid Search']['cost type'], config['Grid Search']['best choice'])
+def get_var_names(vars=None):
+    return "+".join(map(V.__repr__, vars)) if vars is not None else ""
 
 def init_trial(expr, splits, vars, model, verbose=False):
-    split_names = "+".join(map(V.__repr__, splits)) if splits is not None else ""
-    var_names = "+".join(map(V.__repr__, vars))
-
+    split_names, var_names = get_var_names(splits), get_var_names(vars)
     path = os.path.join("results", expr, split_names, var_names, model)
     model_obj = M.get_instance(n=len(vars), **MODELS[model])
     
@@ -73,7 +63,7 @@ def init_trial(expr, splits, vars, model, verbose=False):
         return
 
     try:
-        init = trial.read_grid_search(INIT_CHOICE)
+        init = trial.read_grid_search(U.INIT_CHOICE)
         trial.model.init = np.full(trial.model.init.shape, init) # TODO make less messy
     except FileNotFoundError:
         if verbose:
@@ -82,7 +72,6 @@ def init_trial(expr, splits, vars, model, verbose=False):
     TRIALS.loc[len(TRIALS.index)] = row    
 
 def init_all(verbose=False):
-    read_config()
     for expr, subexpr in product(SPLITS, VARS):
         for splits, vars, model in product(SPLITS[expr], VARS[subexpr], MODELS):
             init_trial(expr + subexpr, splits, vars, model, verbose)
@@ -128,98 +117,46 @@ def get_costs_df():
         df[f"{col} slice size"] = [slice_cols[col]([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["trial"]]
     return df.round(decimals=4)
 
-def compare_all_costs():
-    stats_df = get_costs_df()
-    df = stats_df
-    dsc = df.describe()
-    dsc["expr"] = dsc.index
-    df = pd.concat([df, dsc]).replace(np.nan, "")
-    U.write_to_sheet(df, COSTS_SHEET, 0, "all")
-    k = 1
+def describe_trials(col):
+    stats = [trial.df[col].describe().rename(i) for i, trial in TRIALS["trial"].items()]
+    return TRIALS.merge(pd.DataFrame(stats), left_index=True, right_index=True).drop(columns="count")
 
+def describe_results(df, name):
+    stats = df.describe().drop("count")
+    return pd.Series(np.diag(stats), index=stats.columns).rename(name)
+
+def compare_models(df):
+    return pd.DataFrame([describe_results(df[df["model"] == model], model) for model in MODELS])
+
+def run_comparison():
+    path = os.path.join("analysis", "kfold rmse")
+    df = describe_trials("kfold rmse")
+    df.to_csv(os.path.join(path, "results.csv"))
+    secs = {"all": slice(None)}
     for expr in SPLITS:
-        df = stats_df[stats_df["expr"].isin([expr + subexpr for subexpr in VARS])]
-        dsc = df.describe()
-        dsc["expr"] = dsc.index
-        df = pd.concat([df, dsc]).replace(np.nan, "")
-        U.write_to_sheet(df, COSTS_SHEET, k, expr)
-        k += 1
-    
+        secs[expr] = df["expr"].isin([expr + subexpr for subexpr in VARS])
     for subexpr in VARS:
-        df = stats_df[stats_df["expr"].isin([expr + subexpr for expr in SPLITS])]
-        dsc = df.describe()
-        dsc["expr"] = dsc.index
-        df = pd.concat([df, dsc]).replace(np.nan, "")
-        U.write_to_sheet(df, COSTS_SHEET, k, subexpr)
-        k += 1
-
+        secs[subexpr] = df["expr"].isin([expr + subexpr for expr in SPLITS])
     for expr, subexpr in product(SPLITS, VARS):
-        df = stats_df[stats_df["expr"] == expr + subexpr]
-        dsc = df.describe()
-        dsc["expr"] = dsc.index
-        df = pd.concat([df, dsc]).replace(np.nan, "")
-        U.write_to_sheet(df, COSTS_SHEET, k, expr + subexpr)
-        k += 1
-    
-    for model in MODELS:
-        df = stats_df[stats_df["model"] == model]
-        dsc = df.describe()
-        dsc["expr"] = dsc.index
-        df = pd.concat([df, dsc]).replace(np.nan, "")
-        U.write_to_sheet(df, COSTS_SHEET, k, model)
-        k += 1
+        expr_name = expr + subexpr
+        secs[os.path.join(expr_name, expr_name)] = df["expr"] == expr_name
+        for splits, vars in product(SPLITS[expr], VARS[subexpr]):
+            split_names, var_names = get_var_names(splits), get_var_names(vars)
+            secs[os.path.join(expr_name, split_names, var_names)] = (df["splits"] == split_names) & (df["vars"] == var_names)
+    for i, name in enumerate(secs):
+        sec_df = df[secs[name]]
+        if sec_df.empty:
+            continue
+        cmp = compare_models(sec_df)
+        cmp.to_csv(os.path.join(path, name + ".csv"))
+        if U.WRITE_TO_SHEET:
+            try:
+                U.write_to_sheet(cmp, U.COSTS_SHEET, i, name)
+            except U.gspread.exceptions.APIError:
+                print("Sleeping for 60 seconds...", file=sys.stderr)
+                time.sleep(60)
+                U.write_to_sheet(cmp, U.COSTS_SHEET, i, name)
 
-def get_fits_df():
-    df = TRIALS[["expr", "splits", "vars", "model"]].copy()
-    cols = {"mean": lambda a: np.mean(a),
-            "min": lambda a: np.min(a),
-            "median": lambda a: np.median(a),
-            "max": lambda a: np.max(a)}
-    for col in cols:
-        df[col] = [cols[col](trial.df[trial.model.pars].values) for trial in TRIALS["trial"]]
-        df[col] = df[col].map(np.mean)
-    return df.round(decimals=4)
-
-def compare_all_fits():
-    stats_df = get_fits_df()
-    df = stats_df
-    dsc = df.describe()
-    dsc["expr"] = dsc.index
-    df = pd.concat([df, dsc]).replace(np.nan, "")
-    U.write_to_sheet(df, FITS_SHEET, 0, "all")
-    k = 1
-
-    for expr in SPLITS:
-        df = stats_df[stats_df["expr"].isin([expr + subexpr for subexpr in VARS])]
-        dsc = df.describe()
-        dsc["expr"] = dsc.index
-        df = pd.concat([df, dsc]).replace(np.nan, "")
-        U.write_to_sheet(df, FITS_SHEET, k, expr)
-        k += 1
-    
-    for subexpr in VARS:
-        df = stats_df[stats_df["expr"].isin([expr + subexpr for expr in SPLITS])]
-        dsc = df.describe()
-        dsc["expr"] = dsc.index
-        df = pd.concat([df, dsc]).replace(np.nan, "")
-        U.write_to_sheet(df, FITS_SHEET, k, subexpr)
-        k += 1
-
-    for expr, subexpr in product(SPLITS, VARS):
-        df = stats_df[stats_df["expr"] == expr + subexpr]
-        dsc = df.describe()
-        dsc["expr"] = dsc.index
-        df = pd.concat([df, dsc]).replace(np.nan, "")
-        U.write_to_sheet(df, FITS_SHEET, k, expr + subexpr)
-        k += 1
-    
-    for model in MODELS:
-        df = stats_df[stats_df["model"] == model]
-        dsc = df.describe()
-        dsc["expr"] = dsc.index
-        df = pd.concat([df, dsc]).replace(np.nan, "")
-        U.write_to_sheet(df, FITS_SHEET, k, model)
-        k += 1
 
 def p_val (data, var):
     """
