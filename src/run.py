@@ -68,13 +68,13 @@ def init_trial(expr, splits, vars, model, verbose=False):
     except FileNotFoundError:
         if verbose:
             print(f"Failed reading init value for {expr}:{trial}. Using default 0.", file=sys.stderr)
-    row = {"expr": expr, "splits": split_names, "vars": var_names, "model": model, "trial": trial}
-    TRIALS.loc[len(TRIALS.index)] = row    
+    return {"expr": expr, "splits": split_names, "vars": var_names, "model": model, "trial": trial}
 
 def init_all(verbose=False):
     for expr, subexpr in product(SPLITS, VARS):
         for splits, vars, model in product(SPLITS[expr], VARS[subexpr], MODELS):
-            init_trial(expr + subexpr, splits, vars, model, verbose)
+            row = init_trial(expr + subexpr, splits, vars, model, verbose)
+            TRIALS.loc[len(TRIALS.index)] = row
 
 def run_on_all(f, expr=None, splits=None, vars=None, model=None, suppress=False):
     df = TRIALS
