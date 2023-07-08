@@ -68,6 +68,8 @@ def init_trial(expr, splits, vars, model, verbose=False):
     except FileNotFoundError:
         if verbose:
             print(f"Failed reading init value for {expr}:{trial}. Using default 0.", file=sys.stderr)
+    if verbose:
+        print(f"Initialized {expr}:{trial}", file=sys.stderr)
     return {"expr": expr, "splits": split_names, "vars": var_names, "model": model, "trial": trial}
 
 def init_all(verbose=False):
