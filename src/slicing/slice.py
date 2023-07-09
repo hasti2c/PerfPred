@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from slicing.split import Variable as V
+from slicing.variable import Variable as V
 from slicing.split import split
 from util import RECORDS, FloatT
 

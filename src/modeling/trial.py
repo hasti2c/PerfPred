@@ -15,7 +15,7 @@ import util as U
 from modeling.model import Model as M
 from slicing.slice import Slice as S
 from slicing.slice import SliceGroup as SG
-from slicing.split import Variable as V
+from slicing.variable import Variable as V
 from util import VERBOSE, FloatT
 
 # import evaluation.eval as E
