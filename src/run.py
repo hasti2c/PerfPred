@@ -57,7 +57,7 @@ def init_trial(expr, splits, vars, model, verbose=False):
     except ValueError:
         if verbose:
             print(f"Can't make a trial with xvars {var_names} and splits {split_names}.", file=sys.stderr)
-        return
+        return None
 
     try:
         init = trial.read_grid_search(U.INIT_CHOICE)
@@ -73,7 +73,8 @@ def init_all(verbose=False):
     for expr, subexpr in product(SPLITS, VARS):
         for splits, vars, model in product(SPLITS[expr], VARS[subexpr], MODELS):
             row = init_trial(expr + subexpr, splits, vars, model, verbose)
-            TRIALS.loc[len(TRIALS.index)] = row
+            if row is not None:
+                TRIALS.loc[len(TRIALS.index)] = row
 
 def run_on_all(f, expr=None, splits=None, vars=None, model=None, suppress=False):
     df = TRIALS

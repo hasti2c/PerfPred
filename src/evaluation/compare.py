@@ -6,6 +6,7 @@ from itertools import product
 import numpy as np
 import pandas as pd
 
+import evaluation.choose as C
 import run as R
 import util as U
 
@@ -41,10 +42,7 @@ def describe_results(df, name):
 def compare_models(df):
     return pd.DataFrame([describe_results(df[df["model"] == model], model) for model in R.MODELS])
 
-def run_comparison():
-    path = os.path.join("analysis", "kfold rmse")
-    df = describe_trials("kfold rmse")
-    df.to_csv(os.path.join(path, "results.csv"))
+def get_sections(df):
     secs = {"all": slice(None)}
     for expr in R.SPLITS:
         secs[expr] = df["expr"].isin([expr + subexpr for subexpr in R.VARS])
@@ -56,16 +54,36 @@ def run_comparison():
         for splits, vars in product(R.SPLITS[expr], R.VARS[subexpr]):
             split_names, var_names = R.get_var_list_name(splits), R.get_var_list_name(vars)
             secs[os.path.join(expr_name, split_names, var_names)] = (df["splits"] == split_names) & (df["vars"] == var_names)
+    return secs
+
+def save_section(df, name, path, index):
+    cmp = compare_models(df)
+    cmp.to_csv(os.path.join(path, name + ".csv"))
+    if U.WRITE_TO_SHEET:
+        try:
+            U.write_to_sheet(cmp, U.COSTS_SHEET, index, name)
+        except U.gspread.exceptions.APIError:
+            print("Sleeping for 60 seconds...", file=sys.stderr)
+            time.sleep(60)
+            U.write_to_sheet(cmp, U.COSTS_SHEET, index, name)
+
+def choose_for_section(df):
+    cols = ['mean', 'std', 'min', '25%', '50%', '75%', 'max']
+    pareto = df.iloc[C.pareto(df[cols].values)].reset_index()
+    if pareto.empty:
+        return []
+    rawlsian = pareto.iloc[C.rawlsian(pareto[cols].values)]
+    return pareto, rawlsian
+
+def run_comparison():
+    path = os.path.join("analysis", "kfold rmse")
+    df = describe_trials("kfold rmse")
+    df.to_csv(os.path.join(path, "results.csv"))
+    secs = get_sections(df)
     for i, name in enumerate(secs):
         sec_df = df[secs[name]]
-        if sec_df.empty:
-            continue
-        cmp = compare_models(sec_df)
-        cmp.to_csv(os.path.join(path, name + ".csv"))
-        if U.WRITE_TO_SHEET:
-            try:
-                U.write_to_sheet(cmp, U.COSTS_SHEET, i, name)
-            except U.gspread.exceptions.APIError:
-                print("Sleeping for 60 seconds...", file=sys.stderr)
-                time.sleep(60)
-                U.write_to_sheet(cmp, U.COSTS_SHEET, i, name)
+        print(name, choose_for_section(sec_df))
+        choose_for_section(df)
+        if not sec_df.empty:
+            save_section(sec_df, name, path, i)
+        

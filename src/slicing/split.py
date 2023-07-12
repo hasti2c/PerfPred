@@ -4,8 +4,8 @@ import typing as T
 
 import numpy as np
 import pandas as pd
-from variable import Variable as V
 
+from slicing.variable import Variable as V
 from util import RECORDS
 
 
