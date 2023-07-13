@@ -33,10 +33,10 @@ def get_costs_df():
 
 def describe_trials(col):
     stats = [trial.df[col].describe().rename(i) for i, trial in R.TRIALS["trial"].items()]
-    return R.TRIALS.merge(pd.DataFrame(stats), left_index=True, right_index=True).drop(columns="count")
+    return R.TRIALS.merge(pd.DataFrame(stats), left_index=True, right_index=True).drop(columns=["count", "std"])
 
 def describe_results(df, name):
-    stats = df.describe().drop("count")
+    stats = df.describe().drop(index=["count", "std"])
     return pd.Series(np.diag(stats), index=stats.columns).rename(name)
 
 def compare_models(df):
@@ -57,23 +57,21 @@ def get_sections(df):
     return secs
 
 def save_section(df, name, path, index):
-    cmp = compare_models(df)
-    cmp.to_csv(os.path.join(path, name + ".csv"))
+    df.to_csv(os.path.join(path, name + ".csv"))
     if U.WRITE_TO_SHEET:
         try:
-            U.write_to_sheet(cmp, U.COSTS_SHEET, index, name)
+            U.write_to_sheet(df, U.COSTS_SHEET, index, name)
         except U.gspread.exceptions.APIError:
             print("Sleeping for 60 seconds...", file=sys.stderr)
             time.sleep(60)
-            U.write_to_sheet(cmp, U.COSTS_SHEET, index, name)
+            U.write_to_sheet(df, U.COSTS_SHEET, index, name)
 
 def choose_for_section(df):
-    cols = ['mean', 'std', 'min', '25%', '50%', '75%', 'max']
-    pareto = df.iloc[C.pareto(df[cols].values)].reset_index()
-    if pareto.empty:
-        return []
-    rawlsian = pareto.iloc[C.rawlsian(pareto[cols].values)]
-    return pareto, rawlsian
+    cols = ['mean', 'min', '25%', '50%', '75%', 'max']
+    pareto = C.pareto(df[cols].values)
+    pareto_df = df.iloc[pareto]
+    rawlsian = C.rawlsian(pareto_df[cols].values) if len(pareto) else []
+    return df.index[pareto], pareto_df.index[rawlsian]
 
 def run_comparison():
     path = os.path.join("analysis", "kfold rmse")
@@ -81,9 +79,12 @@ def run_comparison():
     df.to_csv(os.path.join(path, "results.csv"))
     secs = get_sections(df)
     for i, name in enumerate(secs):
-        sec_df = df[secs[name]]
-        print(name, choose_for_section(sec_df))
-        choose_for_section(df)
-        if not sec_df.empty:
-            save_section(sec_df, name, path, i)
+        sec_df = df[secs[name]].copy()
+        if sec_df.empty:
+            continue
+        cmp_df = compare_models(sec_df)
+        pareto, rawlsian = choose_for_section(cmp_df)
+        cmp_df.loc[:, "pareto"] = [i in pareto for i in cmp_df.index]
+        cmp_df.loc[:, "rawlsian"] = [i in rawlsian for i in cmp_df.index]
+        save_section(cmp_df, name, path, i)
         
