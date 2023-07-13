@@ -49,7 +49,7 @@ MODELS = {
 
 def init_trial(expr, splits, vars, model, verbose=False):
     split_names, var_names = get_var_list_name(splits), get_var_list_name(vars)
-    path = os.path.join("results", expr, split_names, var_names, model)
+    path = os.path.join("data", "results", expr, split_names, var_names, model)
     model_obj = M.get_instance(n=len(vars), **MODELS[model])
     
     try:

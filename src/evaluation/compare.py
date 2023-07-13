@@ -81,7 +81,7 @@ def choose_for_section(df):
     return df.index[pareto], pareto_df.index[rawlsian]
 
 def run_detailed_comparison():
-    path = os.path.join("analysis", "kfold rmse", "detailed")
+    path = os.path.join("data", "analysis", "kfold rmse", "detailed")
     secs = get_sections(R.TRIALS, specific_only=True)
     for i, name in enumerate(secs):
         sec_df = R.TRIALS[secs[name]].copy()
@@ -94,7 +94,7 @@ def run_detailed_comparison():
         save_section(cost_df, name, path, i)
 
 def run_generalized_comparison():
-    path = os.path.join("analysis", "kfold rmse", "generalized")
+    path = os.path.join("data", "analysis", "kfold rmse", "generalized")
     df = describe_trial_costs(R.TRIALS, "kfold rmse")
     df.to_csv(os.path.join(path, "results.csv"))
     secs = get_sections(df)

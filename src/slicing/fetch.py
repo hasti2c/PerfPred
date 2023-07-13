@@ -1,5 +1,7 @@
-import pandas as pd
+import os
+
 import gspread
+import pandas as pd
 
 df_cols = [
   "train set 1",
@@ -204,6 +206,6 @@ def read_data(discard_na: bool=False) -> pd.DataFrame:
 
 if __name__ == "__main__":
     df = read_data(discard_na=True)
-    df.to_csv("data/data_na_disc.csv", index=False)
+    df.to_csv(os.join.path("data", "data_na_disc.csv"), index=False)
     df = read_data(discard_na=False)
-    df.to_csv("data/data_na_kept.csv", index=False)
+    df.to_csv(os.join.path("data/data_na_kept.csv"), index=False)
