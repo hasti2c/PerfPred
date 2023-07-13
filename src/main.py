@@ -8,6 +8,5 @@ from modeling.trial import Trial as Tr
 warnings.filterwarnings("error")
 run.init_all()
 run.run_on_all(Tr.read_all_fits)
-U.clear_sheet(U.COSTS_SHEET)
-compare.run_detailed_comparison()
-# compare.run_generalized_comparison()
+# compare.run_detailed_comparison()
+compare.run_generalized_comparison()

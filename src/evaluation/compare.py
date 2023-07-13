@@ -97,6 +97,8 @@ def run_generalized_comparison():
     path = os.path.join("data", "analysis", "kfold rmse", "generalized")
     df = describe_trial_costs(R.TRIALS, "kfold rmse")
     df.to_csv(os.path.join(path, "results.csv"))
+    if U.WRITE_TO_SHEET:
+        U.write_to_sheet(df, U.RESULTS_SHEET, U.RESULTS_PAGE, index=False)
     secs = get_sections(df)
     for i, name in enumerate(secs):
         sec_df = df[secs[name]].copy()

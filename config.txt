@@ -1,6 +1,8 @@
 [API]
-gsheet = True
+gsheet = False
 costs sheet = costs
+results sheet = results
+results page = 1
 fits sheet = fits
 
 [Grid Search]
