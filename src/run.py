@@ -1,7 +1,6 @@
 import csv
 import os
 import sys
-import time
 from itertools import product
 
 import numpy as np
@@ -11,8 +10,9 @@ from scipy.stats import pearsonr
 import modeling.func as F
 import util as U
 from modeling.model import Model as M
-from slicing.split import Variable as V
-from trial import Trial as Tr
+from modeling.trial import Trial as Tr
+from slicing.variable import Variable as V
+from slicing.variable import get_var_list_name
 
 TRIALS = pd.DataFrame(columns=["expr", "splits", "vars", "model", "trial"])
 
@@ -47,11 +47,8 @@ MODELS = {
 }
 # TODO dont use mean models for single var
 
-def get_var_names(vars=None):
-    return "+".join(map(V.__repr__, vars)) if vars is not None else ""
-
 def init_trial(expr, splits, vars, model, verbose=False):
-    split_names, var_names = get_var_names(splits), get_var_names(vars)
+    split_names, var_names = get_var_list_name(splits), get_var_list_name(vars)
     path = os.path.join("results", expr, split_names, var_names, model)
     model_obj = M.get_instance(n=len(vars), **MODELS[model])
     
@@ -60,7 +57,7 @@ def init_trial(expr, splits, vars, model, verbose=False):
     except ValueError:
         if verbose:
             print(f"Can't make a trial with xvars {var_names} and splits {split_names}.", file=sys.stderr)
-        return
+        return None
 
     try:
         init = trial.read_grid_search(U.INIT_CHOICE)
@@ -76,7 +73,8 @@ def init_all(verbose=False):
     for expr, subexpr in product(SPLITS, VARS):
         for splits, vars, model in product(SPLITS[expr], VARS[subexpr], MODELS):
             row = init_trial(expr + subexpr, splits, vars, model, verbose)
-            TRIALS.loc[len(TRIALS.index)] = row
+            if row is not None:
+                TRIALS.loc[len(TRIALS.index)] = row
 
 def run_on_all(f, expr=None, splits=None, vars=None, model=None, suppress=False):
     df = TRIALS
@@ -98,66 +96,6 @@ def run_on_all(f, expr=None, splits=None, vars=None, model=None, suppress=False)
                 raise e
         sys.stdout.flush()
         sys.stderr.flush()
-
-def get_costs_df():
-    df = TRIALS[["expr", "splits", "vars", "model"]].copy()
-    costs = {"rmse": "simple", "kfold rmse": "KFold"}
-    cols = {"mean": pd.Series.mean,
-            "min": pd.Series.min,
-            "Q1": lambda s: pd.Series.quantile(s, 0.25),
-            "median": lambda s: pd.Series.quantile(s, 0.5),
-            "Q3": lambda s: pd.Series.quantile(s, 0.75),
-            "max": pd.Series.max,
-            "var": pd.Series.var,
-            "SD": pd.Series.std}
-    for cost, col in product(costs, cols):
-        df[costs[cost] + " " + col] = [cols[col](trial.df[cost]) for trial in TRIALS["trial"]]
-    
-    df["# of slices"] = [trial.slices.N for trial in TRIALS["trial"]]
-    slice_cols = {"mean": np.mean, "min": np.min, "max": np.max}
-    for col in slice_cols:
-        df[f"{col} slice size"] = [slice_cols[col]([len(slice.df) for slice in trial.slices.slices]) for trial in TRIALS["trial"]]
-    return df.round(decimals=4)
-
-def describe_trials(col):
-    stats = [trial.df[col].describe().rename(i) for i, trial in TRIALS["trial"].items()]
-    return TRIALS.merge(pd.DataFrame(stats), left_index=True, right_index=True).drop(columns="count")
-
-def describe_results(df, name):
-    stats = df.describe().drop("count")
-    return pd.Series(np.diag(stats), index=stats.columns).rename(name)
-
-def compare_models(df):
-    return pd.DataFrame([describe_results(df[df["model"] == model], model) for model in MODELS])
-
-def run_comparison():
-    path = os.path.join("analysis", "kfold rmse")
-    df = describe_trials("kfold rmse")
-    df.to_csv(os.path.join(path, "results.csv"))
-    secs = {"all": slice(None)}
-    for expr in SPLITS:
-        secs[expr] = df["expr"].isin([expr + subexpr for subexpr in VARS])
-    for subexpr in VARS:
-        secs[subexpr] = df["expr"].isin([expr + subexpr for expr in SPLITS])
-    for expr, subexpr in product(SPLITS, VARS):
-        expr_name = expr + subexpr
-        secs[os.path.join(expr_name, expr_name)] = df["expr"] == expr_name
-        for splits, vars in product(SPLITS[expr], VARS[subexpr]):
-            split_names, var_names = get_var_names(splits), get_var_names(vars)
-            secs[os.path.join(expr_name, split_names, var_names)] = (df["splits"] == split_names) & (df["vars"] == var_names)
-    for i, name in enumerate(secs):
-        sec_df = df[secs[name]]
-        if sec_df.empty:
-            continue
-        cmp = compare_models(sec_df)
-        cmp.to_csv(os.path.join(path, name + ".csv"))
-        if U.WRITE_TO_SHEET:
-            try:
-                U.write_to_sheet(cmp, U.COSTS_SHEET, i, name)
-            except U.gspread.exceptions.APIError:
-                print("Sleeping for 60 seconds...", file=sys.stderr)
-                time.sleep(60)
-                U.write_to_sheet(cmp, U.COSTS_SHEET, i, name)
 
 
 def p_val (data, var):
