@@ -1,5 +1,5 @@
 [API]
-gsheet = False
+gsheet = True
 costs sheet = costs
 fits sheet = fits
 

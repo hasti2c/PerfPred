@@ -115,3 +115,6 @@ class SliceGroup:
     
   def __repr__(self):
     return '+'.join(map(V.__repr__, self.vary))
+  
+  def repr_ids(self):
+    return [slice.__repr__() for slice in self.slices]

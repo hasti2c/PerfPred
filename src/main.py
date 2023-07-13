@@ -6,7 +6,8 @@ import util as U
 from modeling.trial import Trial as Tr
 
 warnings.filterwarnings("error")
-U.clear_sheet(U.COSTS_SHEET)
 run.init_all()
 run.run_on_all(Tr.read_all_fits)
-compare.run_comparison()
+U.clear_sheet(U.COSTS_SHEET)
+compare.run_detailed_comparison()
+# compare.run_generalized_comparison()
