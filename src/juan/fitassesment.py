@@ -5,6 +5,9 @@ import os
 
 class Errors():
     def __init__(self, predictions, points):
+        self.predictions = predictions
+        self.points = points 
+
         self.no_errors = points - predictions
         self.errors = np.sort(points - predictions)
 
@@ -130,12 +133,16 @@ class Errors():
         res = sp.stats.normaltest(self.errors)
         return res.pvalue
 
-    def homocedasticityLevene(self):
-        res = sp.stats.levene(self.errors)
+    def homocedasticityLevene(self, Nsplits = 2):
+        res = sp.stats.levene(
+            * np.split(self.errors, Nsplits)
+        )
         return res.pvalue
     
-    def homocedasticityBartlett(self):
-        res = sp.stats.bartlett(self.errors)
+    def homocedasticityBartlett(self, Nsplits = 2):
+        res = sp.stats.bartlett(
+            * np.split(self.errors, Nsplits)
+        )
         return res.pvalue
 
     def varianceEvolution(self, title = "", filename = "", path = ""):
@@ -149,6 +156,7 @@ class Errors():
         ax.set_title(title, fontsize = 16)
 
         ax.plot(n, self.no_errors, 'o')
+        ax.plot([n[0], n[-1]], [0,0], '-')
 
         ax.set_xlabel("Observation number", fontsize = 14)
         ax.set_ylabel("Value", fontsize = 14)
@@ -172,6 +180,15 @@ class Errors():
     def BIC(self):
         return 2 * 2 * np.log(self.N) - 2 * self.logLik
 
+    def R2(self):
+        mn = np.mean(self.points)
+
+        ss_res = np.sum(self.errors ** 2)
+        ss_tot = np.sum((self.points - mn)**2)
+
+        return 1 - ss_res / ss_tot
+
+
 def main():
     N = 500
     pred = np.linspace(0, 3, num = N)
@@ -183,7 +200,7 @@ def main():
     # es.QQcent()
     # es.QQ()
     # es.pdf_comparison()
-    es.varianceEvolution()
+    # es.varianceEvolution()
 
     # print(es.BICcent())
     # print(es.BIC())
