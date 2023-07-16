@@ -8,8 +8,8 @@ cost type = kfold
 best choice = mean
 
 [API]
-gsheet = False
-costs sheet = costs
-results sheet = results
+gsheet = True
+costs sheet = one stage generalized costs
+results sheet = one stage results
 results page = 0
-fits sheet = fits
+fits sheet = one stage fits

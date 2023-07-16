@@ -59,9 +59,9 @@ def run_on_all(f, expr=None, splits=None, vars=None, model=None, suppress=False)
     for i, trial in df["trial"].items():
         try:
             f(trial)
-            print(f"{f.__name__} on {trial} done.")
+            print(f"{f.__name__} on {TRIALS.loc[i, 'expr']}:{trial} done.")
         except Exception as e:
-            print(f"{f.__name__} on {trial} results in error: {e}.", file=sys.stderr)
+            print(f"{f.__name__} on {TRIALS.loc[i, 'expr']}:{trial} results in error: {e}.", file=sys.stderr)
             TRIALS.drop(index=i)
             if not suppress:
                 raise e
