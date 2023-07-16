@@ -4,18 +4,23 @@ from enum import Enum
 
 import pandas as pd
 
-from util import RECORDS
+import util as U
 
 
 class Variable (Enum):
-  TRAIN1      = "train set 1",      ["TRAIN1"],         "train1", "object"
-  TRAIN1_SIZE = "train set 1 size", ["TRAIN1_SIZE"],    "size1",  "Int64"
-  TRAIN2      = "train set 2",      ["TRAIN2"],         "train2", "object"
-  TRAIN2_SIZE = "train set 2 size", ["TRAIN2_SIZE"],    "size2",  "Int64"
+  if U.EXPERIMENT_TYPE == "one stage":
+    TRAIN      = "train set",      ["TRAIN"],         "train", "object"
+    TRAIN_SIZE = "train set size", ["TRAIN_SIZE"],    "size",  "Int64"
+    TRAIN_JSD  = "train set jsd",  ["TRAIN", "TEST"], "jsd",   "Float64"
+  else:
+    TRAIN1      = "train set 1",      ["TRAIN1"],         "train1", "object"
+    TRAIN1_SIZE = "train set 1 size", ["TRAIN1_SIZE"],    "size1",  "Int64"
+    TRAIN2      = "train set 2",      ["TRAIN2"],         "train2", "object"
+    TRAIN2_SIZE = "train set 2 size", ["TRAIN2_SIZE"],    "size2",  "Int64"
+    TRAIN1_JSD  = "train set 1 jsd",  ["TRAIN1", "TEST"], "jsd1",   "Float64"
+    TRAIN2_JSD  = "train set 2 jsd",  ["TRAIN2", "TEST"], "jsd2",   "Float64"
   TEST        = "test set",         ["TEST"],           "test",   "object"
   LANG        = "language to",      ["LANG"],           "lang",   "object"
-  TRAIN1_JSD  = "train set 1 jsd",  ["TRAIN1", "TEST"], "jsd1",   "Float64"
-  TRAIN2_JSD  = "train set 2 jsd",  ["TRAIN2", "TEST"], "jsd2",   "Float64"
   GEO_DIST    = "geographic",       ["LANG"],           "geo",    "Float64"
   GEN_DIST    = "genetic",          ["LANG"],           "gen",    "Float64"
   SYN_DIST    = "syntactic",        ["LANG"],           "syn",    "Float64"
@@ -30,8 +35,10 @@ class Variable (Enum):
     self.dtype = dtype
   @staticmethod
   def main() -> list[Variable]:
-    return [Variable.TRAIN1, Variable.TRAIN1_SIZE, Variable.TRAIN2, Variable.TRAIN2_SIZE,
-            Variable.TEST, Variable.LANG]
+    if U.EXPERIMENT_TYPE == "one stage":
+      return [Variable.TRAIN, Variable.TRAIN_SIZE, Variable.TEST, Variable.LANG]
+    else:
+      return [Variable.TRAIN1, Variable.TRAIN1_SIZE, Variable.TRAIN2, Variable.TRAIN2_SIZE, Variable.TEST, Variable.LANG]
   
   @staticmethod
   def rest(vars: list[Variable]) -> list[Variable]:
@@ -46,7 +53,7 @@ class Variable (Enum):
   def get_flags(vars) -> tuple[Variable]:
     return tuple([var in vars for var in Variable.main()])
   
-  def values(self, df: pd.DataFrame=RECORDS) -> list:
+  def values(self, df: pd.DataFrame=U.RECORDS) -> list:
     return list(df[self.title].unique())
   
   def __lt__(self, other: Variable) -> bool:

@@ -1,12 +1,15 @@
-[API]
-gsheet = False
-costs sheet = costs
-results sheet = results
-results page = 0
-fits sheet = fits
+[Experiment]
+type = one stage
 
 [Grid Search]
 # Choose kfold or simple.
 cost type = kfold
 # Choose min, mean, or max.
 best choice = mean
+
+[API]
+gsheet = False
+costs sheet = costs
+results sheet = results
+results page = 0
+fits sheet = fits

@@ -55,7 +55,7 @@ class Slice: # TODO update docs
     names = [var.short for var in fix]
     vals = []
     for var in fix:
-      if var in [V.TRAIN1_SIZE, V.TRAIN2_SIZE]:
+      if "size" in var.title:
         vals.append(str(self.id[var.title]) + "k")
       else:
         vals.append(str(self.id[var.title]))

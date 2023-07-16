@@ -17,13 +17,9 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 # TODO sort when save_all_fits
 
-# === Globals ===
-RECORDS = pd.read_csv(os.path.join("data", "data_na_disc.csv")) # TODO: consider na_keep
-VERBOSE = 0
-
-FloatT = (T.Any, float)
-ObjectT = (T.Any, object)
-
+# === Config ===
+EXPERIMENT_TYPE = "all"
+DATA_PATH = "data"
 CONFIG_FILE = "config.txt"
 INIT_CHOICE = ("kfold", "mean")
 WRITE_TO_SHEET = False
@@ -34,13 +30,23 @@ COSTS_SHEET_NAME = "costs"
 def read_config():
     config = ConfigParser()
     config.read(CONFIG_FILE)
-    global INIT_CHOICE, WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME, RESULTS_SHEET_NAME, RESULTS_PAGE
+    global INIT_CHOICE, WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME, RESULTS_SHEET_NAME, RESULTS_PAGE, \
+           EXPERIMENT_TYPE, DATA_PATH
     INIT_CHOICE = (config['Grid Search']['cost type'], config['Grid Search']['best choice'])
     WRITE_TO_SHEET = config['API']['gsheet'] in ["True", "true", "1"]
     COSTS_SHEET_NAME, FITS_SHEET_NAME = config['API']['costs sheet'], config['API']['fits sheet']
     RESULTS_SHEET_NAME, RESULTS_PAGE = config['API']['results sheet'], int(config['API']['results page'])
+    EXPERIMENT_TYPE = config['Experiment']['type']
+    DATA_PATH = os.path.join(DATA_PATH, EXPERIMENT_TYPE)
 
 read_config()
+
+# === Globals ===
+RECORDS = pd.read_csv(os.path.join(DATA_PATH, "records.csv"))
+VERBOSE = 0
+
+FloatT = (T.Any, float)
+ObjectT = (T.Any, object)
 
 # == File & GSheet Helpers ==
 def empty_folder(path: str) -> None:

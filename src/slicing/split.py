@@ -32,9 +32,12 @@ def split(vary_list: list[V], df: pd.DataFrame=RECORDS) -> \
     slice = df
     for i, var in enumerate(fix_list):
       id.append(comb[i])
-      slice = slice[slice[var.title] == comb[i]]
+      if pd.isna(comb[i]):
+        slice = slice[pd.isna(slice[var.title])]
+      else:
+        slice = slice[slice[var.title] == comb[i]]
 
-    if not slice.empty:
+    if len(slice) > 1:
       ids.append(id)
       slices.append(slice)
   cols, dtypes = [var.title for var in fix_list], dict([(var.title, var.dtype) for var in fix_list])
