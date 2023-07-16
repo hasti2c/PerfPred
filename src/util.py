@@ -34,11 +34,11 @@ COSTS_SHEET_NAME = "costs"
 def read_config():
     config = ConfigParser()
     config.read(CONFIG_FILE)
-    global INIT_CHOICE, WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME
+    global INIT_CHOICE, WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME, RESULTS_SHEET_NAME, RESULTS_PAGE
     INIT_CHOICE = (config['Grid Search']['cost type'], config['Grid Search']['best choice'])
     WRITE_TO_SHEET = config['API']['gsheet'] in ["True", "true", "1"]
     COSTS_SHEET_NAME, FITS_SHEET_NAME = config['API']['costs sheet'], config['API']['fits sheet']
-    RESULTS_SHEET_NAME, RESULTS_PAGE = config['API']['results sheet'], config['API']['results page']
+    RESULTS_SHEET_NAME, RESULTS_PAGE = config['API']['results sheet'], int(config['API']['results page'])
 
 read_config()
 

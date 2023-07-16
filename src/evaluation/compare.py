@@ -37,7 +37,12 @@ def all_trial_costs(df, col):
     return df.merge(pd.DataFrame(stats), left_index=True, right_index=True).set_index("model").drop(columns=["expr", "splits", "vars", "trial"])
 
 def describe_trial_costs(df, col):
-    stats = [trial.df[col].describe().rename(i) for i, trial in df["trial"].items()]
+    stats = []
+    for i, trial in df["trial"].items():
+        try:
+            stats.append(trial.df[col].describe().rename(i))
+        except AttributeError:
+            continue
     return df.merge(pd.DataFrame(stats), left_index=True, right_index=True).drop(columns=["count", "std"])
 
 def describe_results(df, name):
@@ -93,12 +98,19 @@ def run_detailed_comparison():
         cost_df.insert(1, "rawlsian", [i in rawlsian for i in cost_df.index])
         save_section(cost_df, name, path, i)
 
-def run_generalized_comparison():
+def generalized_results(stats=False):
     path = os.path.join("data", "analysis", "kfold rmse", "generalized")
     df = describe_trial_costs(R.TRIALS, "kfold rmse")
+    if stats:
+        df = pd.concat([df, df.describe()])
     df.to_csv(os.path.join(path, "results.csv"))
     if U.WRITE_TO_SHEET:
         U.write_to_sheet(df, U.RESULTS_SHEET, U.RESULTS_PAGE, index=False)
+    return df
+
+def run_generalized_comparison():
+    path = os.path.join("data", "analysis", "kfold rmse", "generalized")
+    df = generalized_results()
     secs = get_sections(df)
     for i, name in enumerate(secs):
         sec_df = df[secs[name]].copy()

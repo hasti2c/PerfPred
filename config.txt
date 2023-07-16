@@ -2,7 +2,7 @@
 gsheet = False
 costs sheet = costs
 results sheet = results
-results page = 1
+results page = 0
 fits sheet = fits
 
 [Grid Search]
