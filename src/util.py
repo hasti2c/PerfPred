@@ -21,7 +21,6 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 EXPERIMENT_TYPE = "all"
 DATA_PATH = "data"
 CONFIG_FILE = "config.txt"
-INIT_CHOICE = ("kfold", "mean")
 WRITE_TO_SHEET = False
 FITS_SHEET_NAME = "fits"
 RESULTS_SHEET_NAME, RESULTS_PAGE = "results", 0
@@ -30,9 +29,8 @@ COSTS_SHEET_NAME = "costs"
 def read_config():
     config = ConfigParser()
     config.read(CONFIG_FILE)
-    global INIT_CHOICE, WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME, RESULTS_SHEET_NAME, RESULTS_PAGE, \
-           EXPERIMENT_TYPE, DATA_PATH
-    INIT_CHOICE = (config['Grid Search']['cost type'], config['Grid Search']['best choice'])
+    global WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME, RESULTS_SHEET_NAME, RESULTS_PAGE, EXPERIMENT_TYPE, \
+           DATA_PATH
     WRITE_TO_SHEET = config['API']['gsheet'] in ["True", "true", "1"]
     COSTS_SHEET_NAME, FITS_SHEET_NAME = config['API']['costs sheet'], config['API']['fits sheet']
     RESULTS_SHEET_NAME, RESULTS_PAGE = config['API']['results sheet'], int(config['API']['results page'])

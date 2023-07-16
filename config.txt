@@ -1,15 +1,9 @@
 [Experiment]
 type = one stage
 
-[Grid Search]
-# Choose kfold or simple.
-cost type = kfold
-# Choose min, mean, or max.
-best choice = mean
-
 [API]
-gsheet = True
-costs sheet = one stage generalized costs
+gsheet = False
+costs sheet = one stage costs
 results sheet = one stage results
-results page = 0
+results page = 2
 fits sheet = one stage fits

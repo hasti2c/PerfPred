@@ -3,7 +3,6 @@ import os
 import sys
 from itertools import product
 
-import numpy as np
 import pandas as pd
 from scipy.stats import pearsonr
 from experiment.setup import MODELS, SPLITS, VARS
@@ -28,13 +27,7 @@ def init_trial(expr, splits, vars, model, verbose=False):
         if verbose:
             print(f"Can't make a trial with xvars {var_names} and splits {split_names}.", file=sys.stderr)
         return None
-
-    try:
-        init = trial.read_grid_search(U.INIT_CHOICE)
-        trial.model.init = np.full(trial.model.init.shape, init) # TODO make less messy
-    except FileNotFoundError:
-        if verbose:
-            print(f"Failed reading init value for {expr}:{trial}. Using default 0.", file=sys.stderr)
+    
     if verbose:
         print(f"Initialized {expr}:{trial}", file=sys.stderr)
     return {"expr": expr, "splits": split_names, "vars": var_names, "model": model, "trial": trial}
