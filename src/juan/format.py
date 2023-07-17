@@ -7,9 +7,9 @@ sys.path.append(parentdir)
 
 import numpy as np
 
-import run
+import experiment.run as run
 import util as U
-from slicing.split import Variable as V
+from slicing.variable import Variable as V
 
 splits = run.SPLITS["2"][0]
 vars = run.VARS["B"][2]
