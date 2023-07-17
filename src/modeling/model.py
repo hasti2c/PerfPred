@@ -3,7 +3,7 @@ from itertools import product
 
 import numpy as np
 
-import modeling.functions as F
+import modeling.func as F
 from util import FloatT
 
 DEFAULT_BOUNDS = (-1000, 1000)

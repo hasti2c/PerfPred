@@ -17,36 +17,28 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 # TODO sort when save_all_fits
 
-# === Config ===
-EXPERIMENT_TYPE = "all"
-DATA_PATH = "data"
-CONFIG_FILE = "config.txt"
-INIT_CHOICE = ("kfold", "mean")
-WRITE_TO_SHEET = False
-FITS_SHEET_NAME = "fits"
-RESULTS_SHEET_NAME, RESULTS_PAGE = "results", 0
-COSTS_SHEET_NAME = "costs"
-
-def read_config():
-    config = ConfigParser()
-    config.read(CONFIG_FILE)
-    global INIT_CHOICE, WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME, RESULTS_SHEET_NAME, RESULTS_PAGE, \
-           EXPERIMENT_TYPE, DATA_PATH
-    INIT_CHOICE = (config['Grid Search']['cost type'], config['Grid Search']['best choice'])
-    WRITE_TO_SHEET = config['API']['gsheet'] in ["True", "true", "1"]
-    COSTS_SHEET_NAME, FITS_SHEET_NAME = config['API']['costs sheet'], config['API']['fits sheet']
-    RESULTS_SHEET_NAME, RESULTS_PAGE = config['API']['results sheet'], int(config['API']['results page'])
-    EXPERIMENT_TYPE = config['Experiment']['type']
-    DATA_PATH = os.path.join(DATA_PATH, EXPERIMENT_TYPE)
-
-read_config()
-
 # === Globals ===
-RECORDS = pd.read_csv(os.path.join(DATA_PATH, "records.csv"))
+RECORDS = pd.read_csv("data/data_na_disc.csv") # TODO: consider na_keep
 VERBOSE = 0
 
 FloatT = (T.Any, float)
 ObjectT = (T.Any, object)
+
+CONFIG_FILE = "config.txt"
+INIT_CHOICE = ("kfold", "mean")
+WRITE_TO_SHEET = False
+COSTS_SHEET_NAME = "costs"
+FITS_SHEET_NAME = "fits"
+
+def read_config():
+    config = ConfigParser()
+    config.read(CONFIG_FILE)
+    global INIT_CHOICE, WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME
+    INIT_CHOICE = (config['Grid Search']['cost type'], config['Grid Search']['best choice'])
+    WRITE_TO_SHEET = config['API']['gsheet'] in ["True", "true", "1"]
+    COSTS_SHEET_NAME, FITS_SHEET_NAME = config['API']['costs sheet'], config['API']['fits sheet']
+
+read_config()
 
 # == File & GSheet Helpers ==
 def empty_folder(path: str) -> None:
@@ -82,20 +74,19 @@ def get_gcreds():
 
 if WRITE_TO_SHEET:
   GSPREAD_CREDS = get_gcreds()
-  FITS_SHEET = GSPREAD_CREDS.open(FITS_SHEET_NAME)
-  RESULTS_SHEET = GSPREAD_CREDS.open(RESULTS_SHEET_NAME)
   COSTS_SHEET = GSPREAD_CREDS.open(COSTS_SHEET_NAME)
+  FITS_SHEET = GSPREAD_CREDS.open(FITS_SHEET_NAME)
 
 def clear_sheet(sh):
   for wsh in sh.worksheets()[1:]:
     sh.del_worksheet(wsh)
 
-def write_to_sheet(df, sh, page, name=None, index=True):
+def write_to_sheet(df, sh, page, name=None):
   try:
     wsh = sh.get_worksheet(page)
   except gspread.exceptions.WorksheetNotFound:
     wsh = sh.get_worksheet(0).duplicate(page)
-  gsdf.set_with_dataframe(wsh, df, include_index=index, include_column_header=True, resize=True)
+  gsdf.set_with_dataframe(wsh, df, include_index=True, include_column_header=True, resize=True)
   if name is not None:
     wsh.update_title(name)
   print(f"Wrote to {sh.title}:{name}.")
