@@ -1,3 +1,0 @@
-,best min inits,best min rmse,best mean inits,best mean rmse,best max inits,best max rmse
-simple,[0.0],0.15486922144303006,[-1.0],2.093857850275546,[-1.0],4.955814501337219
-kfold,[-0.5],0.29006631580389003,[-1.0],2.55869620962928,[0.0],9.282123426707624

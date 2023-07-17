@@ -25,7 +25,6 @@ FloatT = (T.Any, float)
 ObjectT = (T.Any, object)
 
 CONFIG_FILE = "config.txt"
-INIT_CHOICE = ("kfold", "mean")
 WRITE_TO_SHEET = False
 COSTS_SHEET_NAME = "costs"
 FITS_SHEET_NAME = "fits"
@@ -33,8 +32,8 @@ FITS_SHEET_NAME = "fits"
 def read_config():
     config = ConfigParser()
     config.read(CONFIG_FILE)
-    global INIT_CHOICE, WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME
-    INIT_CHOICE = (config['Grid Search']['cost type'], config['Grid Search']['best choice'])
+    global WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME, RESULTS_SHEET_NAME, RESULTS_PAGE, EXPERIMENT_TYPE, \
+           DATA_PATH
     WRITE_TO_SHEET = config['API']['gsheet'] in ["True", "true", "1"]
     COSTS_SHEET_NAME, FITS_SHEET_NAME = config['API']['costs sheet'], config['API']['fits sheet']
 
