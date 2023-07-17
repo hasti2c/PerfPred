@@ -1,0 +1,9 @@
+[Experiment]
+type = one stage
+
+[API]
+gsheet = False
+costs sheet = one stage costs
+results sheet = one stage results
+results page = 2
+fits sheet = one stage fits
