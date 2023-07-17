@@ -75,7 +75,7 @@ class Trial:
     """
     if indices is None:
       indices = np.arange(len(slice.df))
-    fit = sp.least_squares(self.model.residual, self.model.init,
+    fit = sp.least_squares(self.model.residual(), self.model.init,
                            args=(slice.x(self.xvars)[indices], slice.y[indices]),
                            bounds=self.model.bounds, loss=self.model.loss)
     fit_x = fit.x.copy()

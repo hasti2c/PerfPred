@@ -63,9 +63,7 @@ class Model:
       - The model will obey mins[i] <= c[i] <= maxes[i] for each i, i.e. mins[i]
         and maxes[i] define the bounds for the i-th coefficient.
     """
-    self.f, self.residual = f, lambda c, x, y : f(c, x) - y
-    self.init = init
-    self.par_num, self.pars = len(init), pars
+    self.f, self.init, self.par_num, self.pars = f, init, len(init), pars
     if bounds is None:
       bounds = ([DEFAULT_BOUNDS[0]]*self.par_num, [DEFAULT_BOUNDS[1]]*self.par_num)
     self.bounds, self.loss = bounds, loss
@@ -81,6 +79,9 @@ class Model:
     if bounds is not None:
       bounds = (list(np.full(n * k + 1, bounds[0])), list(np.full(n * k + 1, bounds[1])))
     return Model(f, init, bounds=bounds, pars=pars)
+  
+  def residual(self):
+    return lambda c, x, y : self.f(c, x) - y
   
   def __repr__(self):
     return self.f.__name__
