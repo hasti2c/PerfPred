@@ -191,7 +191,7 @@ def format_df(data_df: pd.DataFrame, jsd_df: pd.DataFrame, l2v_df: pd.DataFrame)
       }
       new_row.update(zip(l2v_df["distance"], find_l2v(l2v_df, lang)))
       df.loc[len(df.index)] = new_row
-  return df.astype(df_dtypes)
+  return df.astype(df_dtypes).drop_duplicates()
 
 def read_data(discard_na: bool=False) -> pd.DataFrame:
   """ Reads data into a Dataframe of the format returned by format_df. """
