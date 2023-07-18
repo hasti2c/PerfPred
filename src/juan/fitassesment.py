@@ -190,7 +190,7 @@ class Errors():
 
 
 def main():
-    N = 500
+    N = 100
     pred = np.linspace(0, 3, num = N)
     sigma = 1
     points = pred + np.random.default_rng().normal(0,sigma, N)
@@ -200,7 +200,11 @@ def main():
     # es.QQcent()
     # es.QQ()
     # es.pdf_comparison()
-    # es.varianceEvolution()
+    es.varianceEvolution(
+        f'Variance Evolution in errors expected',
+        filename = "Expected-variance",
+        path = "src/juan/"
+    )
 
     # print(es.BICcent())
     # print(es.BIC())

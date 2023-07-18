@@ -57,12 +57,12 @@ for l in langs:
             path = directory
         )
         ds.QQ(
-            f'QQ-plots for non centered model: {model}-{l}',
+            f'QQ-plot for non centered model: {model}-{l}',
             filename = f'{model}-{l}-QQ',
             path = directory
         )
         ds.QQcent(
-            f'QQ-plots for centered model: {model}-{l}',
+            f'QQ-plot for centered model: {model}-{l}',
             filename = f'{model}-{l}-QQcent',
             path = directory
         )
