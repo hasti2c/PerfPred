@@ -1,10 +1,9 @@
 import warnings
 
-import run
-from trial import Trial as Tr
-import util as U
+import evaluation.compare as C
+import experiment.run as R
+from modeling.trial import Trial as Tr
 
 warnings.filterwarnings("error")
-run.init_all()
-run.run_on_all(Tr.read_all_fits)
-run.run_comparison()
+R.run_on_all(Tr.fit_all)
+C.generalized_results()

@@ -2,11 +2,15 @@ import typing as T
 from itertools import product
 
 import numpy as np
+from numpy.linalg import norm
+from sklearn.metrics import mean_squared_error
 
-import modeling.func as F
 from util import FloatT
 
-DEFAULT_BOUNDS = (-1000, 1000)
+DEFAULT_BOUNDS = (-np.inf, np.inf)
+DEFAULT_INIT = 0
+DEFAULT_ALPHA = 1
+DEFAULT_ORD = 1
 
 class Model:
   """ Represents a model.
@@ -34,16 +38,15 @@ class Model:
     fit_slice: Fits the trial function f for a slice.
   """
   f: T.Callable[[np.ndarray[FloatT], np.ndarray[FloatT]], np.ndarray[FloatT]]
-  residual: T.Callable[[np.ndarray[FloatT], np.ndarray[FloatT]], np.ndarray[FloatT]]
   init: np.ndarray[FloatT]
   bounds: tuple[list[float]]
-  loss: str
-  par_num: int
   pars: list[str]
+  alpha: int
+  ord: int
 
   def __init__(self, f: T.Callable[[np.ndarray[FloatT], np.ndarray[FloatT]], np.ndarray[FloatT]],
-               init: np.ndarray[FloatT], bounds: T.Optional[tuple[list[float]]]=None,
-               loss: str='linear', pars: list[str]=[]):
+               init: np.ndarray[FloatT], bounds: tuple[list[float]], pars: list[str], 
+               alpha: int=DEFAULT_ALPHA, ord: int=DEFAULT_ORD):
     """ Initializes a model.
     
     == Pre-Conditions ==
@@ -63,24 +66,28 @@ class Model:
       - The model will obey mins[i] <= c[i] <= maxes[i] for each i, i.e. mins[i]
         and maxes[i] define the bounds for the i-th coefficient.
     """
-    self.f, self.residual = f, lambda c, x, y : f(c, x) - y
-    self.init = init
-    self.par_num, self.pars = len(init), pars
-    if bounds is None:
-      bounds = ([DEFAULT_BOUNDS[0]]*self.par_num, [DEFAULT_BOUNDS[1]]*self.par_num)
-    self.bounds, self.loss = bounds, loss
+    self.f, self.init, self.pars = f, init, pars
+    self.bounds, self.alpha, self.ord = bounds, alpha, ord
 
   @staticmethod
-  def get_instance(f, n, k=1, init=None, bounds=None):
+  def get_instance(f, n, k=1, init=None, bounds=None, alpha=DEFAULT_ALPHA, ord=DEFAULT_ORD):
     if k == 1:
       pars = [f"c{i}" for i in range(n + 1)]
     else:
       pars = ["c0"] + [f"c{i},{j}" for i, j in product(range(1, n + 1), range(1, k + 1))]
     if init is None:
-      init = np.zeros(n * k + 1)
-    if bounds is not None:
-      bounds = (list(np.full(n * k + 1, bounds[0])), list(np.full(n * k + 1, bounds[1])))
-    return Model(f, init, bounds=bounds, pars=pars)
+      init = np.full(len(pars), DEFAULT_INIT)
+    if bounds is None:
+      bounds = [DEFAULT_BOUNDS] * len(pars)
+    else:
+      bounds = [DEFAULT_BOUNDS] + [bounds] * (len(pars) - 1)
+    return Model(f, init, bounds=bounds, pars=pars, alpha=alpha, ord=ord)
+  
+  def residual(self, c, x, y):
+    return self.f(c, x) - y 
+
+  def loss(self, c, x, y):
+    return mean_squared_error(y, self.f(c, x)) + self.alpha * norm(c, ord=self.ord)
   
   def __repr__(self):
     return self.f.__name__
