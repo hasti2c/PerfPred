@@ -5,7 +5,7 @@ import scipy.stats as sp
 
 eps = 1e-6
 
-# === Function Getters ===
+# === General Functions ===
 def linear(c, x):
   """ Linear with n variables.
   c: Array with dim n+1, corresponding to c0, ..., cn.
@@ -94,8 +94,25 @@ def harmonic_mean_linear(c, x):
   """
   return c[0] + c[1] * sp.hmean(x, axis=1)
 
+# === Specific Functions ===
+def scaling_law(c, x):
+  """ Scaling law with 1 (size) variable.
+  c: Array with dim 3, corresponding to c0, c1, c2.
+  x: Array with dim (m, 1).
+  y: Array with dim m.
+  """
+  return c[0] * np.power((1 / x) + c[1], c[2])
+
+def anthonys_law(c, x):
+  """ Scaling law with 2 (size) variables.
+  c: Array with dim 3, corresponding to c0, c1, c2, c3.
+  x: Array with dim (m, 2).
+  y: Array with dim m.
+  """
+  return c[0] 
+
 # TODO remove
-# === Double Variable
+# === Double Variable ===
 def depend_double(c, x):
   """ f(x) = a1 * ((x1 * x2) ^ (-p1)) + a2 * (x2) ^ (-p2) + C
   c: Array with dim 5, corresponding to alpha1, alpha2, p1, p2, C.
