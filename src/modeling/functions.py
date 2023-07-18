@@ -26,7 +26,6 @@ def polynomial(c, x):
   xs = np.zeros((m, k * n))
   for i in range(k):
     xs[:, i::k] = np.power(x, i + 1)
-  # return np.dot(xs, c[:-1]) + c[-1]
   return c[0] + np.dot(xs, c[1:])
 
 def exponential(c, x):

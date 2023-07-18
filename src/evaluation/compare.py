@@ -7,12 +7,12 @@ import numpy as np
 import pandas as pd
 
 import evaluation.choose as C
-import experiment.run as R
+import experiment.setup as S
 import util as U
 
 
 def get_costs_df():
-    df = R.TRIALS[["expr", "splits", "vars", "model"]].copy()
+    df = S.TRIALS[["expr", "splits", "vars", "model"]].copy()
     costs = {"rmse": "simple", "kfold rmse": "KFold"}
     cols = {"mean": pd.Series.mean,
             "min": pd.Series.min,
@@ -23,12 +23,12 @@ def get_costs_df():
             "var": pd.Series.var,
             "SD": pd.Series.std}
     for cost, col in product(costs, cols):
-        df[costs[cost] + " " + col] = [cols[col](trial.df[cost]) for trial in R.TRIALS["trial"]]
+        df[costs[cost] + " " + col] = [cols[col](trial.df[cost]) for trial in S.TRIALS["trial"]]
     
-    df["# of slices"] = [trial.slices.N for trial in R.TRIALS["trial"]]
+    df["# of slices"] = [trial.slices.N for trial in S.TRIALS["trial"]]
     slice_cols = {"mean": np.mean, "min": np.min, "max": np.max}
     for col in slice_cols:
-        df[f"{col} slice size"] = [slice_cols[col]([len(slice.df) for slice in trial.slices.slices]) for trial in R.TRIALS["trial"]]
+        df[f"{col} slice size"] = [slice_cols[col]([len(slice.df) for slice in trial.slices.slices]) for trial in S.TRIALS["trial"]]
     return df.round(decimals=4)
 
 
@@ -50,22 +50,22 @@ def describe_results(df, name):
     return pd.Series(np.diag(stats), index=stats.columns).rename(name)
 
 def compare_models(df):
-    return pd.DataFrame([describe_results(df[df["model"] == model], model) for model in R.MODELS])
+    return pd.DataFrame([describe_results(df[df["model"] == model], model) for model in S.MODELS])
 
 def get_sections(df, specific_only=False):
     secs = {}
     if not specific_only:
         secs["all"] = slice(None)
-        for expr in R.SPLITS:
-            secs[expr] = df["expr"].isin([expr + subexpr for subexpr in R.VARS])
-        for subexpr in R.VARS:
-            secs[subexpr] = df["expr"].isin([expr + subexpr for expr in R.SPLITS])
-    for expr, subexpr in product(R.SPLITS, R.VARS):
+        for expr in S.SPLITS:
+            secs[expr] = df["expr"].isin([expr + subexpr for subexpr in S.VARS])
+        for subexpr in S.VARS:
+            secs[subexpr] = df["expr"].isin([expr + subexpr for expr in S.SPLITS])
+    for expr, subexpr in product(S.SPLITS, S.VARS):
         expr_name = expr + subexpr
         if not specific_only:
             secs[os.path.join(expr_name, expr_name)] = df["expr"] == expr_name
-        for splits, vars in product(R.SPLITS[expr], R.VARS[subexpr]):
-            split_names, var_names = R.get_var_list_name(splits), R.get_var_list_name(vars)
+        for splits, vars in product(S.SPLITS[expr], S.VARS[subexpr]):
+            split_names, var_names = S.get_var_list_name(splits), S.get_var_list_name(vars)
             secs[os.path.join(expr_name, split_names, var_names)] = (df["splits"] == split_names) & (df["vars"] == var_names)
     return secs
 
@@ -87,9 +87,9 @@ def choose_for_section(df):
 
 def run_detailed_comparison():
     path = os.path.join(U.DATA_PATH, "analysis", "kfold rmse", "detailed")
-    secs = get_sections(R.TRIALS, specific_only=True)
+    secs = get_sections(S.TRIALS, specific_only=True)
     for i, name in enumerate(secs):
-        sec_df = R.TRIALS[secs[name]].copy()
+        sec_df = S.TRIALS[secs[name]].copy()
         if sec_df.empty:
             continue
         cost_df = all_trial_costs(sec_df, "kfold rmse")
@@ -98,14 +98,12 @@ def run_detailed_comparison():
         cost_df.insert(1, "rawlsian", [i in rawlsian for i in cost_df.index])
         save_section(cost_df, name, path, i)
 
-def generalized_results(stats=False):
+def generalized_results():
     path = os.path.join(U.DATA_PATH, "analysis", "kfold rmse", "generalized")
-    df = describe_trial_costs(R.TRIALS, "kfold rmse")
-    if stats:
-        df = pd.concat([df, df.describe()])
+    df = describe_trial_costs(S.TRIALS, "kfold rmse")
     df.to_csv(os.path.join(path, "results.csv"))
     if U.WRITE_TO_SHEET:
-        U.write_to_sheet(df, U.RESULTS_SHEET, U.RESULTS_PAGE, index=False)
+        U.write_to_sheet(pd.concat([df, df.describe()]), U.RESULTS_SHEET, U.RESULTS_PAGE, index=False)
     return df
 
 def run_generalized_comparison():
@@ -121,4 +119,4 @@ def run_generalized_comparison():
         cmp_df.insert(0, "pareto", [i in pareto for i in cmp_df.index])
         cmp_df.insert(1, "rawlsian", [i in rawlsian for i in cmp_df.index])
         save_section(cmp_df, name, path, i)
-        
+    return df

@@ -75,9 +75,8 @@ class Trial:
     """
     if indices is None:
       indices = np.arange(len(slice.df))
-    fit = sp.least_squares(self.model.residual(), self.model.init,
-                           args=(slice.x(self.xvars)[indices], slice.y[indices]),
-                           bounds=self.model.bounds, loss=self.model.loss)
+    fit = sp.minimize(self.model.loss, self.model.init, args=(slice.x(self.xvars)[indices], slice.y[indices]), 
+                      bounds=self.model.bounds)
     fit_x = fit.x.copy()
     cost = self.rmse(slice, fit_x)
     return fit_x, cost
@@ -98,7 +97,7 @@ class Trial:
     If path is not None, writes fits and costs to a csv file.
     Returns fits and costs.
     """
-    fits = np.empty((self.slices.N, self.model.par_num))
+    fits = np.empty((self.slices.N, len(self.model.init)))
     costs = np.empty(self.slices.N)
     kfs = np.empty(self.slices.N)
     for i, slice in enumerate(self.slices.slices):

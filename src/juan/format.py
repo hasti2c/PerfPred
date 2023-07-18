@@ -7,35 +7,26 @@ sys.path.append(parentdir)
 
 import numpy as np
 
-import experiment.run as run
+import experiment.run as R
+import experiment.setup as S
 import util as U
+from modeling.trial import Trial as Tr
 from slicing.variable import Variable as V
 
-splits = run.SPLITS["2"][0]
-vars = run.VARS["B"][2]
-langs = V.LANG.values(U.RECORDS)
+R.run_on_all(Tr.read_all_fits)
 
-trials = {}
-for model in run.MODELS:
-  trials[model] = run.init_trial("2B", splits, vars, model)["trial"]
-  trials[model].read_all_fits()
+def get_predictions(expr, splits, vars):
+  trials = S.get_trials([expr], [splits], [vars]).reset_index()
+  slices = trials.loc[0, "trial"].slices
+  
+  dfs = {}
+  for i, slice in enumerate(slices.slices):
+    dfs[slice.__repr__()] = slice.df[[var.title for var in slice.vary] + ["sp-BLEU"]].copy().reset_index()
+    for model in S.MODELS:
+      trial = trials[trials["model"] == model].reset_index().loc[0, "trial"]
+      fit = trial.df.loc[i, trial.model.pars].to_numpy(dtype=float)
+      x = slice.x(trial.xvars)
+      dfs[slice.__repr__()][model] = trial.model.f(fit, x)
+  print(dfs)
 
-lang_slices, lang_dfs = {}, {}
-ids, slices = trials['linear'].slices.ids, trials['linear'].slices.slices
-for lang in langs:
-    slice = slices[ids.loc[ids["language to"] == lang].index[0]]
-    lang_slices[lang] = slice
-    lang_dfs[lang] = slice.df[[var.title for var in slice.vary] + ["sp-BLEU"]]
-
-for model, trial in trials.items():
-  for lang in langs:
-    row = trial.df[trial.df["language to"] == lang]
-    fit = np.array(row[trial.model.pars]).flatten()
-    x = lang_slices[lang].x(trial.xvars)
-    lang_dfs[lang][model] = trial.model.f(fit, x)
-
-for lang in langs:
-   lang_dfs[lang].reset_index(inplace=True, drop=True)
-   lang_dfs[lang].to_csv(os.path.join("src", "juan", lang + ".csv"), )
-
-PREDICTIONS = lang_dfs
+PREDICTIONS = get_predictions("2A", "test", "size")
