@@ -6,36 +6,36 @@ parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
 import numpy as np
+from itertools import product
 
-import run
+import experiment.run as R
+import experiment.setup as S
 import util as U
-from slicing.split import Variable as V
+from modeling.trial import Trial as Tr
+import slicing.variable as V
+from pprint import pprint
 
-splits = run.SPLITS["2"][0]
-vars = run.VARS["B"][2]
-langs = V.LANG.values(U.RECORDS)
+R.run_on_all(Tr.read_all_fits)
 
-trials = {}
-for model in run.MODELS:
-  trials[model] = run.init_trial("2B", splits, vars, model)["trial"]
-  trials[model].read_all_fits()
+def get_predictions(expr, splits, vars):
+  trials = S.get_trials([expr], [splits], [vars]).reset_index()
+  slices = trials.loc[0, "trial"].slices
+  
+  dfs = {}
+  for i, slice in enumerate(slices.slices):
+    dfs[slice.__repr__()] = slice.df[[var.title for var in slice.vary] + ["sp-BLEU"]].copy().reset_index(drop=True)
+    for model in S.MODELS:
+      trial = trials[trials["model"] == model].reset_index().loc[0, "trial"]
+      fit = trial.df.loc[i, trial.model.pars].to_numpy(dtype=float)
+      x = slice.x(trial.xvars)
+      dfs[slice.__repr__()][model] = trial.model.f(fit, x)
+  return dfs
 
-lang_slices, lang_dfs = {}, {}
-ids, slices = trials['linear'].slices.ids, trials['linear'].slices.slices
-for lang in langs:
-    slice = slices[ids.loc[ids["language to"] == lang].index[0]]
-    lang_slices[lang] = slice
-    lang_dfs[lang] = slice.df[[var.title for var in slice.vary] + ["sp-BLEU"]]
-
-for model, trial in trials.items():
-  for lang in langs:
-    row = trial.df[trial.df["language to"] == lang]
-    fit = np.array(row[trial.model.pars]).flatten()
-    x = lang_slices[lang].x(trial.xvars)
-    lang_dfs[lang][model] = trial.model.f(fit, x)
-
-for lang in langs:
-   lang_dfs[lang].reset_index(inplace=True, drop=True)
-   lang_dfs[lang].to_csv(os.path.join("src", "juan", lang + ".csv"), )
-
-PREDICTIONS = lang_dfs
+EXPRS = ["1A", "1B", "1C", "2A", "2B", "2C"]
+SPLITS = {}
+VARS = {}
+for expr, subexpr in product(S.SPLITS, S.VARS):
+  SPLITS[expr + subexpr] = [V.get_var_list_name(splits) for splits in S.SPLITS[expr]]
+  VARS[expr + subexpr] = [V.get_var_list_name(vars) for vars in S.VARS[subexpr]]
+PREDICTIONS = get_predictions("2A", "test", "size")
+print(PREDICTIONS['flores'])

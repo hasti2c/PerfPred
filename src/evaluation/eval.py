@@ -10,9 +10,9 @@ from sklearn.model_selection import LeaveOneOut as LOO
 
 from modeling.model import Model as M
 from slicing.slice import Slice as S
-from slicing.split import Variable as V
+from slicing.variable import Variable as V
 from slicing.split import split
-from trial import Trial as Tr
+from modeling.trial import Trial as Tr
 from util import FloatT
 
 

@@ -32,6 +32,9 @@ for l in langs:
     norm = []
     aic = []
     bic = []
+    r2 = []
+    levene = []
+    bartlett = []
     
     for model in models:
         directory = imdir + l + "/" + model + "/"
@@ -44,7 +47,7 @@ for l in langs:
         ds = fa.Errors(pred, sp_bleu)
 
         ds.varianceEvolution(
-            f'Variance of error: {model}-{l}',
+            f'Variance Evolution in errors: {model}-{l}',
             filename = f'{model}-{l}-variance',
             path = directory
         )
@@ -54,12 +57,12 @@ for l in langs:
             path = directory
         )
         ds.QQ(
-            f'QQ-plots for non centered model: {model}-{l}',
+            f'QQ-plot for non centered model: {model}-{l}',
             filename = f'{model}-{l}-QQ',
             path = directory
         )
         ds.QQcent(
-            f'QQ-plots for centered model: {model}-{l}',
+            f'QQ-plot for centered model: {model}-{l}',
             filename = f'{model}-{l}-QQcent',
             path = directory
         )
@@ -77,6 +80,22 @@ for l in langs:
             end = "\n\n"
         )
         bic.append(ds.BICcent())
+        print(
+            "R2:", ds.R2(),
+            end = "\n\n"
+        )
+        r2.append(ds.R2())
+        print(
+            "Homocedasticity Levene p-value:", ds.homocedasticityLevene(),
+            end = "\n\n"
+        )
+        levene.append(ds.homocedasticityLevene())
+        print(
+            "Homocedasticity Bartlett p-value:", ds.homocedasticityLevene(),
+            end = "\n\n"
+        )
+        bartlett.append(ds.homocedasticityBartlett())
+
         # print(
         #     "homocedasticity Levene test p-value:", ds.homocedasticityLevene(),
         #     end = "\n\n"
@@ -90,7 +109,10 @@ for l in langs:
         'models': models,
         'Normality p-value': norm,
         'AIC of centered model': aic,
-        'BIC of centered model': bic
+        'BIC of centered model': bic,
+        'R2 coefficient': r2,
+        'Homocedasticity Levene p-value': levene,
+        'Homocedasticity bartlett p-value': bartlett,
     }
 
     if not os.path.isdir(resdir):

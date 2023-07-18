@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 
-from slicing.split import Variable as V
+from slicing.variable import Variable as V
 from slicing.split import split
 from util import RECORDS, FloatT
 
@@ -55,7 +55,7 @@ class Slice: # TODO update docs
     names = [var.short for var in fix]
     vals = []
     for var in fix:
-      if var in [V.TRAIN1_SIZE, V.TRAIN2_SIZE]:
+      if "size" in var.title:
         vals.append(str(self.id[var.title]) + "k")
       else:
         vals.append(str(self.id[var.title]))
@@ -115,3 +115,6 @@ class SliceGroup:
     
   def __repr__(self):
     return '+'.join(map(V.__repr__, self.vary))
+  
+  def repr_ids(self):
+    return [slice.__repr__() for slice in self.slices]
