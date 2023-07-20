@@ -37,7 +37,7 @@ else:
 
 SPLITS = {
     "1": [None],
-    "2": [[V.LANG], [V.TEST]] # TODO splits=[]
+    "2": [[V.TEST], [V.LANG], [V.TEST, V.LANG]] # TODO splits=[]
 }
 
 MODELS = {
