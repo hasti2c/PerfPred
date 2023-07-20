@@ -25,7 +25,10 @@ def get_predictions(expr, splits, vars):
   for i, slice in enumerate(slices.slices):
     dfs[slice.__repr__()] = slice.df[[var.title for var in slice.vary] + ["sp-BLEU"]].copy().reset_index(drop=True)
     for model in S.MODELS:
-      trial = trials[trials["model"] == model].reset_index().loc[0, "trial"]
+      df = trials[trials["model"] == model]
+      if len(df) == 0:
+        continue
+      trial = df.reset_index().loc[0, "trial"]
       fit = trial.df.loc[i, trial.model.pars].to_numpy(dtype=float)
       x = slice.x(trial.xvars)
       dfs[slice.__repr__()][model] = trial.model.f(fit, x)
