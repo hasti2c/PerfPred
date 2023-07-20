@@ -2,8 +2,8 @@
 type = one stage
 
 [API]
-gsheet = True
+gsheet = False
 costs sheet = one stage costs
 results sheet = one stage results
-results page = 4
+results page = 0
 fits sheet = one stage fits

@@ -64,7 +64,6 @@ class Variable (Enum):
 
   def __str__(self) -> str:
     return self.title
-  
 
 def get_var_list_name(vars):
     return "+".join(map(Variable.__repr__, vars)) if vars is not None else ""
