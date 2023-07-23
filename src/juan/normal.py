@@ -1,122 +1,163 @@
-from format import PREDICTIONS, langs
+from format import EXPRS, SPLITS, VARS, get_predictions
 import fitassesment as fa
 import os
 import pandas as pd
 
-thisdir = 'src/juan/'
-imdir = thisdir + 'img/'
-resdir = thisdir + 'results/'
+cwd = "" # os.getcwd()
+thisdir = os.path.join(cwd, 'src/juan/')
+imdir = os.path.join(thisdir, 'img/')
+resdir = os.path.join(thisdir, 'results/')
 
-dirs = [
-    thisdir,
-    imdir,
-    resdir
-]
+def AnalysisOfResiduals(
+        experiment, split, variable
+    ):
+    PREDICTIONS = get_predictions(experiment, split, variable)
+    for key, df in PREDICTIONS.items():
+        spbleu = df['sp-BLEU']
+        models = df.columns[df.columns.get_loc('sp-BLEU')+1:]
 
-for d in dirs:
-    if not os.path.isdir(d):
-        os.mkdir(d)
+        norm = []
+        aic = []
+        bic = []
+        r2 = []
+        levene = []
+        bartlett = []
 
-# l = langs[0]
-for l in langs:
-    df = PREDICTIONS[l]
+        for model in models:
+            directory = os.path.join(
+                imdir, 
+                *[
+                    a for a in [experiment, split, variable, key,
+                    model]
+                ]
+            )
 
-    models = [
-        m for m in df.columns[6:17]
-    ]
-    sp_bleu = df['sp-BLEU'].to_numpy()
+            if not os.path.exists(directory):
+                os.makedirs(directory)
+            
 
-    if not os.path.isdir(imdir + l):
-        os.mkdir(imdir + l)
+            print(f'\n\n Assesment of {model} model in table {experiment}-{split}-{variable}-{key}-{model}\n')
 
-    norm = []
-    aic = []
-    bic = []
-    r2 = []
-    levene = []
-    bartlett = []
-    
-    for model in models:
-        directory = imdir + l + "/" + model + "/"
+            pred = df[model].to_numpy()
+            ds = fa.Errors(pred, spbleu)
+
+            ds.varianceEvolution(
+                f'Variance Evolution in errors: {experiment}-{split}-{variable}-{key}-{model}',
+                filename = f'{experiment}-{split}-{variable}-{key}-{model}-variance',
+                path = directory
+            )
+            ds.pdf_comparison(
+                f'Comparision of density functions: {experiment}-{split}-{variable}-{key}-{model}',
+                filename = f'{experiment}-{split}-{variable}-{key}-{model}-densities',
+                path = directory
+            )
+            ds.QQ(
+                f'QQ-plot for non centered model: {experiment}-{split}-{variable}-{key}-{model}',
+                filename = f'{experiment}-{split}-{variable}-{key}-{model}-QQ',
+                path = directory
+            )
+            ds.QQcent(
+                f'QQ-plot for centered model: {experiment}-{split}-{variable}-{key}-{model}',
+                filename = f'{experiment}-{split}-{variable}-{key}-{model}-QQcent',
+                path = directory
+            )
+
+            norm.append(ds.normalityTest())
+            print(
+                "Normality test p-value:", ds.normalityTest()
+            )
+                # print("ERROR in Normality test")
+
+            try:
+                aic.append(ds.AICcent())
+                print(
+                    "AIC centered model:", ds.AICcent()
+                )
+            except:
+                print("ERROR in AIC test")
+            
+            try:
+                bic.append(ds.BICcent())
+                print(
+                    "BIC centered model:", ds.BICcent()
+                )
+            except:
+                print("ERROR in BIC test")
+
+            try:
+                r2.append(ds.R2())
+                print(
+                    "R2:", ds.R2()
+                )
+            except:
+                print("ERROR in R2")
+            
+            levene.append(ds.homocedasticityLevene())
+            print(
+                "Homocedasticity Levene p-value:", ds.homocedasticityLevene()
+            )
+                # print("ERROR in Levene")
+
+            bartlett.append(ds.homocedasticityBartlett())
+            print(
+                "Homocedasticity Bartlett p-value:", ds.homocedasticityBartlett(),
+            )
+                # print("ERROR in Bartlett")
+
+        directory = os.path.join(
+            resdir, 
+            *[
+                experiment, split, variable
+            ]
+        )
         if not os.path.isdir(directory):
-            os.mkdir(directory)
+            os.makedirs(directory)
 
-        print(f'Assesment of {model} model in language {l}')
+        data = {
+            'models': models,
+            'Normality p-value': norm,
+            'AIC of centered model': aic,
+            'BIC of centered model': bic,
+            'R2 coefficient': r2,
+            'Homocedasticity Levene p-value': levene,
+            'Homocedasticity bartlett p-value': bartlett,
+        }
 
-        pred = df[model].to_numpy()
-        ds = fa.Errors(pred, sp_bleu)
+        results_df = pd.DataFrame(data = data)
+        results_df.to_csv(os.path.join(directory, key + ".csv"))
 
-        ds.varianceEvolution(
-            f'Variance Evolution in errors: {model}-{l}',
-            filename = f'{model}-{l}-variance',
-            path = directory
-        )
-        ds.pdf_comparison(
-            f'Comparision of density functions: {model}-{l}',
-            filename = f'{model}-{l}-densities',
-            path = directory
-        )
-        ds.QQ(
-            f'QQ-plot for non centered model: {model}-{l}',
-            filename = f'{model}-{l}-QQ',
-            path = directory
-        )
-        ds.QQcent(
-            f'QQ-plot for centered model: {model}-{l}',
-            filename = f'{model}-{l}-QQcent',
-            path = directory
-        )
+def main():
+    issues = []
 
-        print(
-            "Normality test p-value:", ds.normalityTest()
-        )
-        norm.append(ds.normalityTest())
-        print(
-            "AIC centered model:", ds.AICcent()
-        )
-        aic.append(ds.AICcent())
-        print(
-            "BIC centered model:", ds.BICcent(),
-            end = "\n\n"
-        )
-        bic.append(ds.BICcent())
-        print(
-            "R2:", ds.R2(),
-            end = "\n\n"
-        )
-        r2.append(ds.R2())
-        print(
-            "Homocedasticity Levene p-value:", ds.homocedasticityLevene(),
-            end = "\n\n"
-        )
-        levene.append(ds.homocedasticityLevene())
-        print(
-            "Homocedasticity Bartlett p-value:", ds.homocedasticityLevene(),
-            end = "\n\n"
-        )
-        bartlett.append(ds.homocedasticityBartlett())
+    experiment = "2C"
+    split = "lang"
+    variable = VARS[experiment][14]
 
-        # print(
-        #     "homocedasticity Levene test p-value:", ds.homocedasticityLevene(),
-        #     end = "\n\n"
-        # )
-        # print(
-        #     "homocedasticity Bartlett test p-value:", ds.homocedasticityBartlett(),
-        #     end = "\n\n"
-        # )
+    PREDS = get_predictions(experiment, split, variable)
 
-    data = {
-        'models': models,
-        'Normality p-value': norm,
-        'AIC of centered model': aic,
-        'BIC of centered model': bic,
-        'R2 coefficient': r2,
-        'Homocedasticity Levene p-value': levene,
-        'Homocedasticity bartlett p-value': bartlett,
-    }
+    # for experiment in EXPRS:
+    #     for split in SPLITS[experiment]:
+    #         for variable in VARS[experiment]:
+    #             try: 
+    #                 PREDS = get_predictions(experiment, split, variable)
+    #                 # for key in PREDS:
+    #                 #     print("Num observations in", experiment, split, variable)
+    #                 #     print(len(PREDS[key]))
+    #                 # # AnalysisOfResiduals(experiment, split, variable)
+    #             except:
+    #                print("ERROR running the analysis", experiment, split, variable)
+    #                issues.append({
+    #                    "experiment": experiment, 
+    #                    "split": split, 
+    #                    "variable": variable
+    #                })
 
-    if not os.path.isdir(resdir):
-        os.mkdir(resdir)
+    for issue in issues:
+        print("Issue with", issue["experiment"], issue["split"], issue["variable"])
 
-    results_df = pd.DataFrame(data = data)
-    results_df.to_csv(resdir + l + ".csv")
+if __name__ == '__main__':
+    main()
+
+    duration = 5  # milliseconds
+    freq = 440  # Hz
+    os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))

@@ -54,7 +54,9 @@ class Errors():
 
         filename = filename + '.png'
         plt.savefig(filename)
-        os.replace(filename, path + filename)
+        os.replace(filename, 
+            os.path.join(path, filename)
+        )
 
         plt.close( fig )
 
@@ -84,7 +86,9 @@ class Errors():
 
         filename = filename + '.png'
         plt.savefig(filename)
-        os.replace(filename, path + filename)
+        os.replace(filename, 
+            os.path.join(path, filename)
+        )
 
         plt.close( fig )
 
@@ -125,23 +129,28 @@ class Errors():
         ax.grid(True)
 
         plt.savefig(filename)
-        os.replace(filename, path + filename)
+        os.replace(filename, os.path.join(path, filename))
 
         plt.close( fig )
 
     def normalityTest(self):
+        if self.N < 8:
+            print("Error in normality Test: too few samples")
+            return float('NaN')
         res = sp.stats.normaltest(self.errors)
         return res.pvalue
 
     def homocedasticityLevene(self, Nsplits = 2):
+        splitted = np.array_split(self.errors, Nsplits)
         res = sp.stats.levene(
-            * np.split(self.errors, Nsplits)
+            * splitted
         )
         return res.pvalue
     
     def homocedasticityBartlett(self, Nsplits = 2):
+        splitted = np.array_split(self.errors, Nsplits)
         res = sp.stats.bartlett(
-            * np.split(self.errors, Nsplits)
+            * splitted
         )
         return res.pvalue
 
@@ -165,7 +174,7 @@ class Errors():
         filename = filename + ".png"
         plt.savefig(filename)
 
-        os.replace(filename, path + filename)
+        os.replace(filename, os.path.join(path, filename))
         plt.close(fig)
 
     def AICcent(self):

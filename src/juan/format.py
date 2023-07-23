@@ -20,7 +20,7 @@ R.run_on_all(Tr.read_all_fits)
 def get_predictions(expr, splits, vars):
   trials = S.get_trials([expr], [splits], [vars]).reset_index()
   slices = trials.loc[0, "trial"].slices
-  
+    
   dfs = {}
   for i, slice in enumerate(slices.slices):
     dfs[slice.__repr__()] = slice.df[[var.title for var in slice.vary] + ["sp-BLEU"]].copy().reset_index(drop=True)
@@ -34,11 +34,22 @@ def get_predictions(expr, splits, vars):
       dfs[slice.__repr__()][model] = trial.model.f(fit, x)
   return dfs
 
-EXPRS = ["1A", "1B", "1C", "2A", "2B", "2C"]
+EXPRS = [
+  "1A", 
+  "1B", 
+  "1C", 
+  "2A", 
+  "2B", 
+  "2C"
+]
 SPLITS = {}
 VARS = {}
 for expr, subexpr in product(S.SPLITS, S.VARS):
   SPLITS[expr + subexpr] = [V.get_var_list_name(splits) for splits in S.SPLITS[expr]]
   VARS[expr + subexpr] = [V.get_var_list_name(vars) for vars in S.VARS[subexpr]]
-PREDICTIONS = get_predictions("2A", "test", "size")
-print(PREDICTIONS['flores'])
+
+# print(SPLITS)
+# print(VARS)
+# 
+# PREDS = get_predictions(EXPRS[0], SPLITS[EXPRS[0]][0], VARS[EXPRS[0]][3] )
+# print(PREDS.keys())
