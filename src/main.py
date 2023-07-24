@@ -1,13 +1,11 @@
 import warnings
 
-import util as U
-import evaluation.compare as C
+import experiment.setup as S
 import experiment.run as R
+import experiment.plot as P
 from modeling.trial import Trial as Tr
+import matplotlib.pyplot as plt
 
 warnings.filterwarnings("error")
-U.clear_sheet(U.COSTS_SHEET)
 R.run_on_all(Tr.read_all_fits)
-# C.generalized_results()
-# C.detailed_comparison()
-C.generalized_comparison()
+R.run_on_all(Tr.plot_all_together, exprs=["2A", "2B"])
