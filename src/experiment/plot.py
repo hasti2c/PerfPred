@@ -9,7 +9,7 @@ import util as U
 
 def plot_compact(expr, splits, vars):
   trials = S.get_trials([expr], [splits], [vars])
-  fig, axes = plt.subplots(3, math.ceil(len(trials) / 3))
+  fig, axes = plt.subplots(math.ceil(len(trials) / 3), 3)
   fig.tight_layout()
   fig.set_size_inches((12, 9))
   for i, row in trials.reset_index().iterrows():
