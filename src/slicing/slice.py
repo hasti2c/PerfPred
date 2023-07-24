@@ -48,7 +48,7 @@ class Slice: # TODO update docs
       description: Non NA values in id with short var names ("var=val")
                    seperated by ",".
     """
-    fix = V.rest(self.vary)
+    fix = V.others(self.vary)
     if len(fix) == 0:
       return "all", "all"
     

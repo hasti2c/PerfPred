@@ -23,7 +23,7 @@ def split(vary_list: list[V], df: pd.DataFrame=RECORDS) -> \
                 In each Slice: Points have a different value of VARY vars.
     df: Dataframe to perform slicing on.
   """
-  fix_list = V.rest(vary_list)
+  fix_list = V.others(vary_list)
 
   ids, slices = [], []
   prd = list(itertools.product(*[var.values(df) for var in fix_list]))

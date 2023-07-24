@@ -51,7 +51,7 @@ class Trial:
     else:
       if not set(split_by).isdisjoint(V.get_main_vars(xvars)):
         raise ValueError
-      vary = V.rest(split_by)
+      vary = V.others(split_by)
     self.slices = SG.get_instance(vary)
     if self.path is not None and not os.path.exists(self.path):
       os.makedirs(self.path)
@@ -157,14 +157,21 @@ class Trial:
       slice = self.slices.slices[i]
       self.plot_slice(slice, self.df.loc[i, self.model.pars].to_numpy(dtype=float), horiz)
 
-  def plot_all_together(self) -> None:
+  def plot_all_together(self, premade_ax=None) -> None:
     for j in range(len(self.xvars)):
-      fig, ax = plt.subplots()
+      if premade_ax is not None:
+        ax = premade_ax
+      else:
+        fig, ax = plt.subplots()
       horiz = self.xvars[j]
       self.slices.plot(ax, self.model, self.df.loc[:, self.model.pars], horiz, self.xvars)
-      ax.legend(title=self)
-      fig.savefig(os.path.join(self.path, horiz.short + ".png"))
-      plt.close(fig)
+      ax.legend(title=V.get_var_list_name(V.others(self.slices.vary)))
+      ax.set_xlabel(horiz.title)
+      ax.set_ylabel('sp-BLEU')
+      ax.set_title(self)
+      if premade_ax is None:
+        fig.savefig(os.path.join(self.path, horiz.short + ".png"))
+        plt.close(fig)
 
   def __repr__(self):
     return f"{'+'.join(map(V.__repr__, self.xvars))}:{self.name}"

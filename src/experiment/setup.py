@@ -10,7 +10,6 @@ import util as U
 from modeling.model import Model as M
 from modeling.trial import Trial as Tr
 from slicing.variable import Variable as V
-from slicing.variable import get_var_list_name
 
 if U.EXPERIMENT_TYPE == "one stage":
     VARS = {
@@ -69,7 +68,7 @@ MODEL_CONDITIONS = {
 TRIALS = pd.DataFrame(columns=["expr", "splits", "vars", "model", "trial"])
 
 def init_trial(expr, splits, vars, model, verbose=False):
-    split_names, var_names = get_var_list_name(splits), get_var_list_name(vars)
+    split_names, var_names = V.get_var_list_name(splits), V.get_var_list_name(vars)
     path = os.path.join(U.DATA_PATH, "results", expr, split_names, var_names, model)
     
     args = MODELS[model].copy()

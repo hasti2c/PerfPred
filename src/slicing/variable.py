@@ -41,13 +41,17 @@ class Variable (Enum):
       return [Variable.TRAIN1, Variable.TRAIN1_SIZE, Variable.TRAIN2, Variable.TRAIN2_SIZE, Variable.TEST, Variable.LANG]
   
   @staticmethod
-  def rest(vars: list[Variable]) -> list[Variable]:
+  def others(vars: list[Variable]) -> list[Variable]:
     return [var for var in Variable.main() if var not in vars]
   
   @staticmethod
   def get_main_vars(vars) -> list[Variable]:
     mains = [set([Variable[v] for v in var.main_vars]) for var in vars]
     return sorted(list(set.union(*mains, set())))
+  
+  @staticmethod
+  def get_var_list_name(vars):
+      return "+".join(map(Variable.__repr__, vars)) if vars is not None else ""
   
   @staticmethod
   def get_flags(vars) -> tuple[Variable]:
@@ -64,6 +68,3 @@ class Variable (Enum):
 
   def __str__(self) -> str:
     return self.title
-
-def get_var_list_name(vars):
-    return "+".join(map(Variable.__repr__, vars)) if vars is not None else ""

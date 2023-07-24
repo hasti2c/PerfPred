@@ -8,6 +8,7 @@ import pandas as pd
 
 import evaluation.choose as C
 import experiment.setup as S
+from slicing.variable import Variable as V
 import util as U
 
 
@@ -69,7 +70,7 @@ def partition_by_vars(df):
     for expr, subexpr in product(S.SPLITS, S.VARS):
         expr_name = expr + subexpr
         for splits, vars in product(S.SPLITS[expr], S.VARS[subexpr]):
-            split_names, var_names = S.get_var_list_name(splits), S.get_var_list_name(vars)
+            split_names, var_names = V.get_var_list_name(splits), V.get_var_list_name(vars)
             secs[os.path.join(expr_name, split_names, var_names)] = (df["splits"] == split_names) & (df["vars"] == var_names)
     return secs
 

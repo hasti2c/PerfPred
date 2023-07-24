@@ -12,7 +12,7 @@ import experiment.run as R
 import experiment.setup as S
 import util as U
 from modeling.trial import Trial as Tr
-import slicing.variable as V
+from slicing.variable import Variable as V
 from pprint import pprint
 
 R.run_on_all(Tr.read_all_fits)
@@ -37,5 +37,5 @@ VARS = {}
 for expr, subexpr in product(S.SPLITS, S.VARS):
   SPLITS[expr + subexpr] = [V.get_var_list_name(splits) for splits in S.SPLITS[expr]]
   VARS[expr + subexpr] = [V.get_var_list_name(vars) for vars in S.VARS[subexpr]]
-PREDICTIONS = get_predictions("2A", "test", "size")
+PREDICTIONS = get_predictions("2B", "test", "jsd")
 print(PREDICTIONS['flores'])

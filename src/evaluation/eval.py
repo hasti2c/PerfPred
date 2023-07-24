@@ -85,7 +85,7 @@ class MRF (Enum):
 
 
 def partition(expr, partition_by):
-  ids, dfs = split(V.rest(partition_by), df=expr.df)
+  ids, dfs = split(V.others(partition_by), df=expr.df)
   return ids, [Part(expr, df) for df in dfs]
 
 def evaluate_trial(expr, partition_by, mrf):
