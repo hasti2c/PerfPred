@@ -9,7 +9,7 @@ from util import FloatT
 
 DEFAULT_BOUNDS = (-np.inf, np.inf)
 DEFAULT_INIT = 0
-DEFAULT_ALPHA = 1
+DEFAULT_ALPHA = 5
 DEFAULT_ORD = 1
 
 class Model:
@@ -79,7 +79,7 @@ class Model:
       init = np.full(len(pars), DEFAULT_INIT)
     if bounds is None:
       bounds = [DEFAULT_BOUNDS] * len(pars)
-    else:
+    elif isinstance(bounds, tuple):
       bounds = [DEFAULT_BOUNDS] + [bounds] * (len(pars) - 1)
     return Model(f, init, bounds=bounds, pars=pars, alpha=alpha, ord=ord)
   

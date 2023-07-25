@@ -16,7 +16,7 @@ from modeling.model import Model as M
 from slicing.slice import Slice as S
 from slicing.slice import SliceGroup as SG
 from slicing.variable import Variable as V
-from util import VERBOSE, FloatT
+from util import FloatT
 
 # import evaluation.eval as E
 
@@ -51,7 +51,7 @@ class Trial:
     else:
       if not set(split_by).isdisjoint(V.get_main_vars(xvars)):
         raise ValueError
-      vary = V.rest(split_by)
+      vary = V.others(split_by)
     self.slices = SG.get_instance(vary)
     if self.path is not None and not os.path.exists(self.path):
       os.makedirs(self.path)
@@ -103,13 +103,7 @@ class Trial:
     for i, slice in enumerate(self.slices.slices):
       fits[i, :], costs[i] = self.fit_slice(slice)
       kfs[i] = self.kfold_slice(slice)
-      if VERBOSE >= 3:
-        p = U.verbose_helper(i + 1, self.slices.N)
-        if p > 0:
-          print(f"[{self.__repr__()}] Have fit {p * 10}% of slices... [{i + 1}/{self.slices.N}]")
-    if VERBOSE >= 1:
-      print(f"[{self.__repr__()}] Done fitting.")
-
+    
     self.init_df(fits, costs, kfs)
     self.write_all_fits()
     return fits, costs, kfs
@@ -135,61 +129,50 @@ class Trial:
     self.df["kfold rmse"] = kfs
     self.df = self.df.astype({"rmse": "Float64", "kfold rmse": "Float64"})
 
-  def plot_slice(self, slice: S, fit: np.ndarray[FloatT], horiz: V, labels: V):
-    horiz_i = self.xvars.index(horiz)
-    x = slice.x(self.xvars)[:, horiz_i]
-    n, N = min(x), max(x)
-
-    l_all = slice.df.loc[:, [var.title for var in labels]].to_numpy(dtype=str)
-    l, indices = np.unique(l_all, axis=0, return_index=True)
-    z_all = slice.x(self.xvars)[:, [i for i in range(len(self.xvars)) if i != horiz_i]]
-    z = z_all[indices]
-    if labels:
-      c = U.get_colors(len(z))
-      c_all = [c[np.where(l == k)[0][0]] for k in l_all]
-    else:
-      c = U.get_colors(1)
-      c_all = [c[0]] * len(l_all)
-
-    plt.scatter(x, slice.y, c=c_all)
-    for i in range(len(l)):
-      m = 100
-      xs = np.linspace(n, N, m, endpoint=True)
-      xs_in = np.column_stack((np.full((m, horiz_i), z[i][:horiz_i]), xs,
-                            np.full((m, len(self.xvars) - horiz_i - 1), z[i][horiz_i:])))
-      ys = self.model.f(fit, xs_in)
-      plt.plot(xs, ys, c=c[i], label=",".join(l[i]))
-
-    plt.xlabel(horiz.title)
-    plt.ylabel('sp-BLEU')
-    if labels:
-      plt.legend(title=",".join([var.title for var in labels]))
-    plt.title(slice.description)
-    if labels:
+  def plot_slice(self, slice: S, fit: np.ndarray[FloatT], horiz: V):
+    l_vars = V.get_main_vars([var for var in self.xvars if var != horiz])
+    fig, ax = plt.subplots()
+    slice.plot(ax, self.model, fit, horiz, self.xvars)
+    ax.set_xlabel(horiz.title)
+    ax.set_ylabel('sp-BLEU')
+    if l_vars:
+      ax.legend(title=",".join([var.title for var in l_vars]))
+    ax.set_title(slice.description)
+    if l_vars:
       path = os.path.join(self.path, "plots", horiz.short)
     else:
       path = os.path.join(self.path, "plots")
     if not os.path.exists(path):
       os.makedirs(path)
-    plt.savefig(os.path.join(path, slice.title + ".png"))
-    plt.clf()
+    fig.savefig(os.path.join(path, slice.title + ".png"))
+    plt.close(fig)
 
   def plot_all(self) -> None:
     """ Plots all slices.
     Pre-Condition: At least one of fit_all and read_all_fits has been called.
     """
     prd = it.product(range(len(self.xvars)), range(self.slices.N))
-    for k, (j, i) in enumerate(prd):
+    for j, i in prd:
       horiz = self.xvars[j]
       slice = self.slices.slices[i]
-      labels = V.get_main_vars([var for var in self.xvars if var != horiz])
-      self.plot_slice(slice, self.df[self.model.pars].iloc[i].to_numpy(), horiz, labels)
-      if VERBOSE >= 2:
-        p = U.verbose_helper(k + 1, len(prd))
-        if p > 0:
-          print(f"[{self.__repr__()}] Have plotted {p * 10}% of slices... [{k + 1}/{len(prd)}]")
-    if VERBOSE >= 1:
-      print(f"[{self.__repr__()}] Done plotting.")
+      self.plot_slice(slice, self.df.loc[i, self.model.pars].to_numpy(dtype=float), horiz)
+
+  def plot_all_together(self, premade_ax=None, legend=True) -> None:
+    for j in range(len(self.xvars)):
+      if premade_ax is not None:
+        ax = premade_ax
+      else:
+        fig, ax = plt.subplots()
+      horiz = self.xvars[j]
+      self.slices.plot(ax, self.model, self.df.loc[:, self.model.pars], horiz, self.xvars)
+      if legend:
+        ax.legend(title=V.get_var_list_name(V.others(self.slices.vary)))
+      ax.set_xlabel(horiz.title)
+      ax.set_ylabel('sp-BLEU')
+      ax.set_title(self)
+      if premade_ax is None:
+        fig.savefig(os.path.join(self.path, horiz.short + ".png"))
+        plt.close(fig)
 
   def __repr__(self):
     return f"{'+'.join(map(V.__repr__, self.xvars))}:{self.name}"

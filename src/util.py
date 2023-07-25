@@ -41,10 +41,11 @@ read_config()
 
 # === Globals ===
 RECORDS = pd.read_csv(os.path.join(DATA_PATH, "records.csv"))
-VERBOSE = 0
 
 FloatT = (T.Any, float)
 ObjectT = (T.Any, object)
+
+COLOR_MAP = mpl.colormaps['rainbow']
 
 # == File & GSheet Helpers ==
 def empty_folder(path: str) -> None:
@@ -97,20 +98,3 @@ def write_to_sheet(df, sh, page, name=None, index=True):
   if name is not None:
     wsh.update_title(name)
   print(f"Wrote to {sh.title}:{name}.")
-
-
-# == Misc Helpers ==
-def verbose_helper(i, N, num=10):
-  """ Helps with verbose progress logs. """
-  mults = np.floor(np.linspace(0, N, num + 1, endpoint=True)).astype(int)
-  if i in mults:
-    return list(mults).index(i)
-  else:
-    return -1
-
-def get_colors(n):
-  if n <= 10:
-    return mpl.color_sequences['tab10']
-  elif n <= 20:
-    return mpl.color_sequences['tab20']
-  print("More than 20 colors.")

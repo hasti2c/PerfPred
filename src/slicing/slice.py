@@ -3,7 +3,7 @@ import pandas as pd
 
 from slicing.variable import Variable as V
 from slicing.split import split
-from util import RECORDS, FloatT
+import util as U
 
 
 class Slice: # TODO update docs
@@ -31,7 +31,7 @@ class Slice: # TODO update docs
   vary: list[V]
   title: str
   description: str
-  y: np.ndarray[FloatT]
+  y: np.ndarray[U.FloatT]
 
   def __init__(self, df: pd.DataFrame, id: pd.Series, vary_list: list[V]) -> None:
     """ Initializes slice. """
@@ -48,7 +48,7 @@ class Slice: # TODO update docs
       description: Non NA values in id with short var names ("var=val")
                    seperated by ",".
     """
-    fix = V.rest(self.vary)
+    fix = V.others(self.vary)
     if len(fix) == 0:
       return "all", "all"
     
@@ -67,6 +67,37 @@ class Slice: # TODO update docs
   
   def x(self, xvars: list[V]):
     return self.df.loc[:, [var.title for var in xvars]].astype(float).to_numpy()
+
+  def plot(self, ax, model, fit, horiz, xvars, xrange=None, crange=(0., 1.), label_by_slice=False):
+    x = self.x([horiz])
+    if xrange is None:
+      xrange = (min(x), max(x))
+    m = 100
+
+    l_vars = [var.title for var in V.get_main_vars([v for v in xvars if v != horiz])]
+    l_all = self.df.loc[:, l_vars].to_numpy(dtype=str)
+    l, indices = np.unique(l_all, axis=0, return_index=True)
+    z_all = self.x(xvars)[:, [i for i in range(len(xvars)) if xvars[i] != horiz]]
+    z = z_all[indices]
+    colors = U.COLOR_MAP(np.linspace(U.COLOR_MAP.N * crange[0], U.COLOR_MAP.N * crange[1], len(l), endpoint=True, dtype=int))
+
+    if len(l_vars) > 0:
+      c_all = [colors[np.where(l == k)[0][0]] for k in l_all]
+    else:
+      c_all = [colors[0]] * len(l_all)
+
+    ax.scatter(x, self.y, c=c_all)
+    for i in range(len(l)):
+      xs = np.linspace(xrange[0], xrange[1], m, endpoint=True)
+      horiz_i = xvars.index(horiz)
+      xs_in = np.column_stack((np.full((m, horiz_i), z[i][:horiz_i]), xs,
+                               np.full((m, len(xvars) - horiz_i - 1), z[i][horiz_i:])))
+      ys = model.f(fit, xs_in)
+      label = ",".join(l[i])
+      if not label_by_slice:
+        ax.plot(xs, ys, c=colors[i], label=",".join(l[i]))
+      else:
+        ax.plot(xs, ys, c=colors[i], label=" ".join([self.__repr__(), label]))
 
   def __repr__(self):
     return "-".join(self.id.astype(str))
@@ -91,7 +122,7 @@ class SliceGroup:
   N: int
   vary: list[V]
 
-  def __init__(self, vary: list[V], df: pd.DataFrame=RECORDS) -> None:
+  def __init__(self, vary: list[V], df: pd.DataFrame=U.RECORDS) -> None:
     """ Initializes SliceGroup. 
     
     == Arguments == # TODO update doc
@@ -112,6 +143,16 @@ class SliceGroup:
     if flags not in SliceGroup.GROUPS:
       SliceGroup.GROUPS[flags] = SliceGroup(vary)
     return SliceGroup.GROUPS[flags]
+  
+  def plot(self, ax, model, fits, horiz, xvars):
+    n, N = np.inf, -np.inf
+    for slice in self.slices:
+      x = slice.x([horiz])
+      n, N = min(min(x), n), max(max(x), N)
+
+    for i, slice in enumerate(self.slices):
+      slice.plot(ax, model, fits.loc[i].to_numpy(dtype=float), horiz, xvars, (n, N), (i / self.N, (i + 1) / self.N), \
+                 label_by_slice=True)
     
   def __repr__(self):
     return '+'.join(map(V.__repr__, self.vary))

@@ -5,5 +5,5 @@ type = one stage
 gsheet = False
 costs sheet = one stage costs
 results sheet = one stage results
-results page = 4
+results page = 0
 fits sheet = one stage fits

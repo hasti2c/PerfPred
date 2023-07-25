@@ -101,24 +101,20 @@ def scaling_law(c, x):
   x: Array with dim (m, 1).
   y: Array with dim m.
   """
-  return c[0] * np.power((1 / x) + c[1], c[2])
+  return c[0] * np.power(1/x + c[1], c[2])
 
 def anthonys_law(c, x):
-  """ Scaling law with 2 (size) variables.
-  c: Array with dim 3, corresponding to c0, c1, c2, c3.
+  """ Law from Anthony's paper with 2 (size) variables.
+  c: Array with dim 5, corresponding to c0, c1, c2, c3, c4.
   x: Array with dim (m, 2).
   y: Array with dim m.
   """
-  return c[0] 
+  return c[0] * np.power(np.product(x, axis=1), -c[1]) + c[2] * np.power(x[:, 1], -c[3]) + c[4]
 
-# TODO remove
-# === Double Variable ===
-def depend_double(c, x):
-  """ f(x) = a1 * ((x1 * x2) ^ (-p1)) + a2 * (x2) ^ (-p2) + C
-  c: Array with dim 5, corresponding to alpha1, alpha2, p1, p2, C.
-  x: Array with dim (n, 2).
-  y: Array with dim n.
+def linear_with_difference(c, x):
+  """ Linear with difference with 2 variables.
+  c: Array with dim 4, corresponding to c0, c1, c2, c3.
+  x: Array with dim (m, 2).
+  y: Array with dim m.
   """
-  x1 = 1 / (x[:, 0] + 1/1000)
-  x2 = 1 / (x[:, 1] + 1/1000)
-  return c[0] * np.power(x1 * x2, c[2]) + c[1] * np.power(x2, c[3]) + c[4]
+  return c[0] + np.dot(x, c[1:3]) + c[3] * np.abs(np.diff(x, axis=1)).flatten()

@@ -8,6 +8,7 @@ import pandas as pd
 
 import evaluation.choose as C
 import experiment.setup as S
+from slicing.variable import Variable as V
 import util as U
 
 
@@ -52,20 +53,24 @@ def describe_results(df, name):
 def compare_models(df):
     return pd.DataFrame([describe_results(df[df["model"] == model], model) for model in S.MODELS])
 
-def get_sections(df, specific_only=False):
-    secs = {}
-    if not specific_only:
-        secs["all"] = slice(None)
-        for expr in S.SPLITS:
-            secs[expr] = df["expr"].isin([expr + subexpr for subexpr in S.VARS])
-        for subexpr in S.VARS:
-            secs[subexpr] = df["expr"].isin([expr + subexpr for expr in S.SPLITS])
+def partition_all(df):
+    secs = {"all": slice(None)}
+    for expr in S.SPLITS:
+        secs[expr] = df["expr"].isin([expr + subexpr for subexpr in S.VARS])
+    for subexpr in S.VARS:
+        secs[subexpr] = df["expr"].isin([expr + subexpr for expr in S.SPLITS])
     for expr, subexpr in product(S.SPLITS, S.VARS):
         expr_name = expr + subexpr
-        if not specific_only:
-            secs[os.path.join(expr_name, expr_name)] = df["expr"] == expr_name
+        secs[os.path.join(expr_name, expr_name)] = df["expr"] == expr_name
+    secs.update(partition_by_vars(df))
+    return secs
+
+def partition_by_vars(df):
+    secs = {}
+    for expr, subexpr in product(S.SPLITS, S.VARS):
+        expr_name = expr + subexpr
         for splits, vars in product(S.SPLITS[expr], S.VARS[subexpr]):
-            split_names, var_names = S.get_var_list_name(splits), S.get_var_list_name(vars)
+            split_names, var_names = V.get_var_list_name(splits), V.get_var_list_name(vars)
             secs[os.path.join(expr_name, split_names, var_names)] = (df["splits"] == split_names) & (df["vars"] == var_names)
     return secs
 
@@ -85,9 +90,9 @@ def choose_for_section(df):
     rawlsian = C.rawlsian(pareto_df.values) if len(pareto) else []
     return df.index[pareto], pareto_df.index[rawlsian]
 
-def run_detailed_comparison():
+def detailed_comparison():
     path = os.path.join(U.DATA_PATH, "analysis", "kfold rmse", "detailed")
-    secs = get_sections(S.TRIALS, specific_only=True)
+    secs = partition_by_vars(S.TRIALS)
     for i, name in enumerate(secs):
         sec_df = S.TRIALS[secs[name]].copy()
         if sec_df.empty:
@@ -106,10 +111,10 @@ def generalized_results():
         U.write_to_sheet(pd.concat([df, df.describe()]), U.RESULTS_SHEET, U.RESULTS_PAGE, index=False)
     return df
 
-def run_generalized_comparison():
+def generalized_comparison():
     path = os.path.join(U.DATA_PATH, "analysis", "kfold rmse", "generalized")
     df = generalized_results()
-    secs = get_sections(df)
+    secs = partition_all(df)
     for i, name in enumerate(secs):
         sec_df = df[secs[name]].copy()
         if sec_df.empty:
