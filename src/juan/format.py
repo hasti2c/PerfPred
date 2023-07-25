@@ -35,12 +35,12 @@ def get_predictions(expr, splits, vars):
   return dfs
 
 EXPRS = [
-  "1A", 
-  "1B", 
-  "1C", 
-  "2A", 
-  "2B", 
-  "2C"
+    # "1A", 
+    # "1B", 
+    # "1C", 
+    # "2A", 
+    # "2B", 
+    # "2C"
 ]
 SPLITS = {}
 VARS = {}

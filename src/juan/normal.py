@@ -1,6 +1,7 @@
 from format import EXPRS, SPLITS, VARS, get_predictions
 import fitassesment as fa
 import os
+import time
 import pandas as pd
 
 cwd = "" # os.getcwd()
@@ -25,91 +26,34 @@ def AnalysisOfResiduals(
 
         for model in models:
             directory = os.path.join(
-                imdir, 
-                *[
-                    a for a in [experiment, split, variable, key,
-                    model]
-                ]
+                imdir, *[ a for a in [experiment, split, variable, key, model] ]
             )
 
             if not os.path.exists(directory):
                 os.makedirs(directory)
             
-
-            print(f'\n\n Assesment of {model} model in table {experiment}-{split}-{variable}-{key}-{model}\n')
+            print(f'Assesment of model\n{experiment} {split} {variable} {key} {model}')
 
             pred = df[model].to_numpy()
             ds = fa.Errors(pred, spbleu)
 
-            ds.varianceEvolution(
-                f'Variance Evolution in errors: {experiment}-{split}-{variable}-{key}-{model}',
-                filename = f'{experiment}-{split}-{variable}-{key}-{model}-variance',
-                path = directory
-            )
-            ds.pdf_comparison(
-                f'Comparision of density functions: {experiment}-{split}-{variable}-{key}-{model}',
-                filename = f'{experiment}-{split}-{variable}-{key}-{model}-densities',
-                path = directory
-            )
-            ds.QQ(
-                f'QQ-plot for non centered model: {experiment}-{split}-{variable}-{key}-{model}',
-                filename = f'{experiment}-{split}-{variable}-{key}-{model}-QQ',
-                path = directory
-            )
-            ds.QQcent(
-                f'QQ-plot for centered model: {experiment}-{split}-{variable}-{key}-{model}',
-                filename = f'{experiment}-{split}-{variable}-{key}-{model}-QQcent',
-                path = directory
-            )
+            print("Number of samples:", ds.N)
+
+            ds.Graphs(directory, experiment, split, variable, key, model)
 
             norm.append(ds.normalityTest())
-            print(
-                "Normality test p-value:", ds.normalityTest()
-            )
-                # print("ERROR in Normality test")
-
-            try:
-                aic.append(ds.AICcent())
-                print(
-                    "AIC centered model:", ds.AICcent()
-                )
-            except:
-                print("ERROR in AIC test")
-            
-            try:
-                bic.append(ds.BICcent())
-                print(
-                    "BIC centered model:", ds.BICcent()
-                )
-            except:
-                print("ERROR in BIC test")
-
-            try:
-                r2.append(ds.R2())
-                print(
-                    "R2:", ds.R2()
-                )
-            except:
-                print("ERROR in R2")
-            
+            aic.append(ds.AIC())
+            bic.append(ds.BIC())
+            r2.append(ds.R2())
             levene.append(ds.homocedasticityLevene())
-            print(
-                "Homocedasticity Levene p-value:", ds.homocedasticityLevene()
-            )
-                # print("ERROR in Levene")
-
             bartlett.append(ds.homocedasticityBartlett())
-            print(
-                "Homocedasticity Bartlett p-value:", ds.homocedasticityBartlett(),
-            )
-                # print("ERROR in Bartlett")
+
+            print("\n")
 
         directory = os.path.join(
-            resdir, 
-            *[
-                experiment, split, variable
-            ]
+            resdir, *[ experiment, split, variable ]
         )
+
         if not os.path.isdir(directory):
             os.makedirs(directory)
 
@@ -129,28 +73,20 @@ def AnalysisOfResiduals(
 def main():
     issues = []
 
-    experiment = "2C"
-    split = "lang"
-    variable = VARS[experiment][14]
+    var = 0
 
-    PREDS = get_predictions(experiment, split, variable)
-
-    # for experiment in EXPRS:
-    #     for split in SPLITS[experiment]:
-    #         for variable in VARS[experiment]:
-    #             try: 
-    #                 PREDS = get_predictions(experiment, split, variable)
-    #                 # for key in PREDS:
-    #                 #     print("Num observations in", experiment, split, variable)
-    #                 #     print(len(PREDS[key]))
-    #                 # # AnalysisOfResiduals(experiment, split, variable)
-    #             except:
-    #                print("ERROR running the analysis", experiment, split, variable)
-    #                issues.append({
-    #                    "experiment": experiment, 
-    #                    "split": split, 
-    #                    "variable": variable
-    #                })
+    for experiment in EXPRS:
+        for split in SPLITS[experiment]:
+            for variable in VARS[experiment][var:var+1]:
+                try: 
+                   AnalysisOfResiduals(experiment, split, variable)
+                except:
+                   print("ERROR running the analysis", experiment, split, variable)
+                   issues.append({
+                       "experiment": experiment, 
+                       "split": split, 
+                       "variable": variable
+                   })
 
     for issue in issues:
         print("Issue with", issue["experiment"], issue["split"], issue["variable"])
@@ -158,6 +94,10 @@ def main():
 if __name__ == '__main__':
     main()
 
-    duration = 5  # milliseconds
+    duration = 0.2  # seconds
     freq = 440  # Hz
-    os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))
+
+    for bip in range(3):
+        os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))
+        time.sleep(0.1)
+    
