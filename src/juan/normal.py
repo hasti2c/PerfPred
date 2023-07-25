@@ -24,6 +24,8 @@ def AnalysisOfResiduals(
         levene = []
         bartlett = []
 
+        evaluation = []
+
         for model in models:
             directory = os.path.join(
                 imdir, *[ a for a in [experiment, split, variable, key, model] ]
@@ -41,8 +43,15 @@ def AnalysisOfResiduals(
 
             ds.Graphs(directory, experiment, split, variable, key, model)
 
-            norm.append(ds.normalityTest())
-            aic.append(ds.AIC())
+            normT = ds.normalityTest()
+            aicT = ds.AIC()
+            bicT = ds.BIC()
+            r2T = ds.R2()
+            leveneT = ds.homocedasticityLevene()
+            bartlettT = ds.homocedasticityBartlett()
+
+            norm.append(normT)
+            aic.append(aicT)
             bic.append(ds.BIC())
             r2.append(ds.R2())
             levene.append(ds.homocedasticityLevene())
