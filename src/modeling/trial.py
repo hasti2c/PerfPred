@@ -157,7 +157,7 @@ class Trial:
       slice = self.slices.slices[i]
       self.plot_slice(slice, self.df.loc[i, self.model.pars].to_numpy(dtype=float), horiz)
 
-  def plot_all_together(self, premade_ax=None) -> None:
+  def plot_all_together(self, premade_ax=None, legend=True) -> None:
     for j in range(len(self.xvars)):
       if premade_ax is not None:
         ax = premade_ax
@@ -165,7 +165,8 @@ class Trial:
         fig, ax = plt.subplots()
       horiz = self.xvars[j]
       self.slices.plot(ax, self.model, self.df.loc[:, self.model.pars], horiz, self.xvars)
-      ax.legend(title=V.get_var_list_name(V.others(self.slices.vary)))
+      if legend:
+        ax.legend(title=V.get_var_list_name(V.others(self.slices.vary)))
       ax.set_xlabel(horiz.title)
       ax.set_ylabel('sp-BLEU')
       ax.set_title(self)
