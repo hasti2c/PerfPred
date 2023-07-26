@@ -57,6 +57,7 @@ MODELS = {
 }
 
 MODEL_CONDITIONS = {
+    "mult":      lambda _, vars: len(vars) > 1,
     "am":      lambda _, vars: len(vars) > 1,
     "gm":      lambda _, vars: len(vars) > 1,
     "hm":      lambda _, vars: len(vars) > 1,
