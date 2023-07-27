@@ -94,7 +94,7 @@ def init_all(verbose=False):
             if row is not None:
                 TRIALS.loc[len(TRIALS.index)] = row
 
-def get_trials(exprs=[], splits=[], vars=[], models=[]):
+def get_trials(exprs=[], splits=[], vars=[], models=[], nvars=[]):
     df = TRIALS
     if exprs:
         df = df.loc[df["expr"].isin(exprs)]
@@ -104,6 +104,8 @@ def get_trials(exprs=[], splits=[], vars=[], models=[]):
         df = df.loc[df["vars"].isin(vars)]
     if models:
         df = df.loc[df["model"].isin(models)]
+    if nvars:
+        df = df.loc[df["trial"].map(lambda t: len(t.xvars)).isin(nvars)]
     return df
 
 init_all()

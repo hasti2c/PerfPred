@@ -1,7 +1,9 @@
 import math
 import os
+from itertools import product
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 import experiment.setup as S
 import util as U
@@ -13,11 +15,23 @@ def plot_compact(expr, splits, vars):
   fig, axes = plt.subplots(math.ceil(len(trials) / 3), 3)
   fig.tight_layout()
   fig.set_size_inches((12, 9))
-  for i, row in trials.reset_index().iterrows():
-    trial = row["trial"]
-    trial.plot_all_together(axes[math.floor(i / 3)][i % 3], legend=False)
+  for i, j in product(range(math.ceil(len(trials) / 3)), range(3)):
+    k = 3 * i + j
+    if k < len(trials):
+      trial = trials.iloc[k].loc["trial"]
+      trial.plot_all_together(axes[i][j], legend=False)
+      axes[i][j].set_ylim((-10, 60))
+    else:
+      fig.delaxes(axes[i][j])
+
   handles, labels = axes[0][0].get_legend_handles_labels()
-  # plt.ylim([0, 5])
-  fig.legend(handles, labels, loc='center right', bbox_to_anchor=(0.5, 0.5),
+  lgnd = fig.legend(handles, labels, loc='center right', 
+                    title=V.get_var_list_name(V.others(trials.iloc[0].loc["trial"].slices.vary)))
+  fig.canvas.draw()
+  lgnd_dims = lgnd.get_window_extent().height, lgnd.get_window_extent().width
+  fig_dims = fig.get_window_extent().height, fig.get_window_extent().width
+  lgnd.remove()
+  fig.legend(handles, labels, loc='center right', bbox_to_anchor=(1 + lgnd_dims[1] / fig_dims[1], 0.5),
              title=V.get_var_list_name(V.others(trials.iloc[0].loc["trial"].slices.vary)))
-  fig.savefig(os.path.join(U.DATA_PATH, "results", expr, splits, vars, "plots.png"))
+  fig.tight_layout()
+  fig.savefig(os.path.join(U.DATA_PATH, "results", expr, splits, vars, "plots.png"), bbox_inches = "tight")
