@@ -59,7 +59,7 @@ def compare_models(df):
 
 def partition_by_vars(df):
     secs = {}
-    for splits, vars in product(S.SPLITS, S.VARS):
+    for vars, splits in product(S.VARS, S.SPLITS):
         split_names, var_names = V.list_to_str(splits), V.list_to_str(vars)
         secs[os.path.join(var_names, split_names)] = (df["splits"] == split_names) & (df["vars"] == var_names)
     return secs

@@ -40,7 +40,7 @@ MODEL_CONDITIONS = {
     "diff":    lambda vars: len(vars) == 2
 }
 
-TRIALS = pd.DataFrame(columns=["splits", "vars", "model", "trial"])
+TRIALS = pd.DataFrame(columns=["vars", "splits", "model", "trial"])
 
 def init_setup():
     global VARS, SPLITS
@@ -70,11 +70,11 @@ def init_trial(splits, vars, model, verbose=False):
         return None
     if verbose:
         print(f"Initialized {trial}", file=sys.stderr)
-    return {"splits": split_names, "vars": var_names, "model": model, "trial": trial}
+    return {"vars": var_names, "splits": split_names, "model": model, "trial": trial}
 
 def init_all(verbose=False):
     init_setup()
-    for splits, vars, model in product(SPLITS, VARS, MODELS):
+    for vars, splits, model in product(VARS, SPLITS, MODELS):
         if model in MODEL_CONDITIONS and not MODEL_CONDITIONS[model](vars):
             continue
         row = init_trial(splits, vars, model, verbose)

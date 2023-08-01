@@ -181,4 +181,4 @@ class Trial:
         plt.close(fig)
 
   def __repr__(self):
-    return f"{V.list_to_str(self.split_by)}:{V.list_to_str(self.xvars)}:{self.name}"
+    return f"{V.list_to_str(self.xvars)}:{V.list_to_str(self.split_by)}:{self.name}"

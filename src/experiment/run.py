@@ -33,12 +33,12 @@ def run_on_experiments(f, splits=S.SPLITS, vars=S.VARS, suppress=False):
         if suppress:
             try:
                 f(df)
-                print(f"{f.__name__} on {s_names}:{v_names} done.")
+                print(f"{f.__name__} on {v_names}:{s_names} done.")
             except Exception as e:
-                print(f"{f.__name__} on {s_names}:{v_names} results in error: {e}.", file=sys.stderr)
+                print(f"{f.__name__} on {v_names}:{s_names} results in error: {e}.", file=sys.stderr)
         else:
             f(df)
-            print(f"{f.__name__} on {s_names}:{v_names} done.")
+            print(f"{f.__name__} on {v_names}:{s_names} done.")
         sys.stdout.flush()
         sys.stderr.flush()
 
