@@ -19,6 +19,7 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 
 # === Config ===
 EXPERIMENT_TYPE = "all"
+MAX_NVARS, MAX_NSPLITS = 1, 0
 DATA_PATH = "data"
 CONFIG_FILE = "config.txt"
 WRITE_TO_SHEET = False
@@ -30,11 +31,12 @@ def read_config():
     config = ConfigParser()
     config.read(CONFIG_FILE)
     global WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME, RESULTS_SHEET_NAME, RESULTS_PAGE, EXPERIMENT_TYPE, \
-           DATA_PATH
+           DATA_PATH, MAX_NVARS, MAX_NSPLITS
     WRITE_TO_SHEET = config['API']['gsheet'] in ["True", "true", "1"]
     COSTS_SHEET_NAME, FITS_SHEET_NAME = config['API']['costs sheet'], config['API']['fits sheet']
     RESULTS_SHEET_NAME, RESULTS_PAGE = config['API']['results sheet'], int(config['API']['results page'])
     EXPERIMENT_TYPE = config['Experiment']['type']
+    MAX_NVARS, MAX_NSPLITS = int(config['Experiment']['max nvars']), int(config['Experiment']['max nsplits'])
     DATA_PATH = os.path.join(DATA_PATH, EXPERIMENT_TYPE)
 
 read_config()

@@ -3,18 +3,12 @@ import warnings
 import experiment.plot as P
 import experiment.run as R
 import experiment.setup as S
+import experiment.compare as C
 from modeling.trial import Trial as Tr
 
 warnings.filterwarnings("error")
-R.run_on_all(Tr.read_all_fits)
-P.plot_compact("2A", "test", "size")
-P.plot_compact("2A", "lang", "size")
-P.plot_compact("2A", "test+lang", "size")
-P.plot_compact("2B", "lang", "jsd")
-P.plot_compact("2C", "test", "fea")
-P.plot_compact("2C", "test", "inv")
-P.plot_compact("2C", "test", "pho")
-P.plot_compact("2C", "test", "syn")
-P.plot_compact("2C", "test", "gen")
-P.plot_compact("2C", "test", "geo")
-# R.run_on_all(Tr.plot_all_together, exprs=["2A", "2B"])
+R.run_on_trials(Tr.read_or_fit)
+# C.detailed_comparison()
+# C.generalized_comparison()
+# R.run_on_trials(Tr.plot)
+# R.run_on_experiments(P.plot_compact)

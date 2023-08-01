@@ -15,10 +15,10 @@ from modeling.trial import Trial as Tr
 from slicing.variable import Variable as V
 from pprint import pprint
 
-R.run_on_all(Tr.read_all_fits)
+R.run_on_trials(Tr.read_fits)
 
-def get_predictions(expr, splits, vars):
-  trials = S.get_trials([expr], [splits], [vars]).reset_index()
+def get_predictions(splits, vars):
+  trials = S.get_trials([splits], [vars]).reset_index()
   slices = trials.loc[0, "trial"].slices
     
   dfs = {}
@@ -33,19 +33,3 @@ def get_predictions(expr, splits, vars):
       x = slice.x(trial.xvars)
       dfs[slice.__repr__()][model] = trial.model.f(fit, x)
   return dfs
-
-EXPRS = [
-    # "1A", 
-    # "1B", 
-    # "1C", 
-    # "2A", 
-    # "2B", 
-    # "2C"
-]
-SPLITS = {}
-VARS = {}
-for expr, subexpr in product(S.SPLITS, S.VARS):
-  SPLITS[expr + subexpr] = [V.get_var_list_name(splits) for splits in S.SPLITS[expr]]
-  VARS[expr + subexpr] = [V.get_var_list_name(vars) for vars in S.VARS[subexpr]]
-PREDICTIONS = get_predictions("2B", "test", "jsd")
-print(PREDICTIONS['flores'])

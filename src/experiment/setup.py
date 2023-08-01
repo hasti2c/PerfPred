@@ -1,6 +1,6 @@
 import os
 import sys
-from itertools import product
+from itertools import product, combinations
 
 import numpy as np
 import pandas as pd
@@ -11,33 +11,7 @@ from modeling.model import Model as M
 from modeling.trial import Trial as Tr
 from slicing.variable import Variable as V
 
-if U.EXPERIMENT_TYPE == "one stage":
-    VARS = {
-        "A": [[V.TRAIN_SIZE]],
-        "B": [[V.TRAIN_JSD]],
-        "C": [[V.FEA_DIST], [V.INV_DIST], [V.PHO_DIST], [V.SYN_DIST], [V.GEN_DIST], [V.GEO_DIST],
-            [V.INV_DIST, V.PHO_DIST], [V.INV_DIST, V.SYN_DIST], [V.PHO_DIST, V.SYN_DIST], [V.GEN_DIST, V.GEO_DIST], 
-            [V.INV_DIST, V.PHO_DIST, V.SYN_DIST], [V.FEA_DIST, V.GEN_DIST, V.GEO_DIST], 
-            [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST], 
-            [V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST],
-            [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST]]
-    }
-else:
-    VARS = {
-        "A": [[V.TRAIN1_SIZE], [V.TRAIN2_SIZE], [V.TRAIN1_SIZE, V.TRAIN2_SIZE]],
-        "B": [[V.TRAIN1_JSD], [V.TRAIN2_JSD], [V.TRAIN1_JSD, V.TRAIN2_JSD]],
-        "C": [[V.FEA_DIST], [V.INV_DIST], [V.PHO_DIST], [V.SYN_DIST], [V.GEN_DIST], [V.GEO_DIST],
-            [V.INV_DIST, V.PHO_DIST], [V.INV_DIST, V.SYN_DIST], [V.PHO_DIST, V.SYN_DIST], [V.GEN_DIST, V.GEO_DIST], 
-            [V.INV_DIST, V.PHO_DIST, V.SYN_DIST], [V.FEA_DIST, V.GEN_DIST, V.GEO_DIST], 
-            [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST], 
-            [V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST],
-            [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST]]
-    }
-
-SPLITS = {
-    "1": [None],
-    "2": [[V.TEST], [V.LANG], [V.TEST, V.LANG]] # TODO splits=[]
-}
+VARS, SPLITS = [], []
 
 MODELS = {
     "linear":      {'f': F.linear},
@@ -57,20 +31,33 @@ MODELS = {
 }
 
 MODEL_CONDITIONS = {
-    "mult":      lambda _, vars: len(vars) > 1,
-    "am":      lambda _, vars: len(vars) > 1,
-    "gm":      lambda _, vars: len(vars) > 1,
-    "hm":      lambda _, vars: len(vars) > 1,
-    "scaling": lambda expr, vars: expr in ["1A", "2A"] and len(vars) == 1,
-    "anthony": lambda expr, vars: expr in ["1A", "2A"] and len(vars) == 2,
-    "diff":    lambda _, vars: len(vars) == 2
+    "mult":    lambda vars: len(vars) > 1,
+    "am":      lambda vars: len(vars) > 1,
+    "gm":      lambda vars: len(vars) > 1,
+    "hm":      lambda vars: len(vars) > 1,
+    "scaling": lambda vars: vars in [["size"], ["size1"], ["size2"]],
+    "anthony": lambda vars: vars == ["size1", "size2"],
+    "diff":    lambda vars: len(vars) == 2
 }
 
-TRIALS = pd.DataFrame(columns=["expr", "splits", "vars", "model", "trial"])
+TRIALS = pd.DataFrame(columns=["splits", "vars", "model", "trial"])
 
-def init_trial(expr, splits, vars, model, verbose=False):
-    split_names, var_names = V.get_var_list_name(splits), V.get_var_list_name(vars)
-    path = os.path.join(U.DATA_PATH, "results", expr, split_names, var_names, model)
+def init_setup():
+    global VARS, SPLITS
+    for k in range(U.MAX_NSPLITS + 1):
+        SPLITS += map(list, list(combinations(V.main(), k)))
+
+    size_vars = [V.TRAIN_SIZE] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_SIZE, V.TRAIN2_SIZE]
+    domain_vars = [V.TRAIN_JSD] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_JSD, V.TRAIN2_JSD]
+    lang_vars = [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST]
+    for k in range(1, U.MAX_NVARS + 1):
+        VARS += map(list, list(combinations(size_vars, k)))
+        VARS += map(list, list(combinations(domain_vars, k)))
+        VARS += map(list, list(combinations(lang_vars, k)))
+
+def init_trial(splits, vars, model, verbose=False):
+    split_names, var_names = V.list_to_str(splits), V.list_to_str(vars)
+    path = os.path.join(U.DATA_PATH, "results", "multi" if len(vars) > 1 else "", var_names, split_names, model)
     
     args = MODELS[model].copy()
     if "n" not in args:
@@ -78,34 +65,30 @@ def init_trial(expr, splits, vars, model, verbose=False):
     model_obj = M.get_instance(**args)
     
     try:
-        trial = Tr(vars, model_obj, splits, path, model)
+        trial = Tr(splits, vars, model_obj, path, model)
     except ValueError:
         return None
     if verbose:
-        print(f"Initialized {expr}:{trial}", file=sys.stderr)
-    return {"expr": expr, "splits": split_names, "vars": var_names, "model": model, "trial": trial}
+        print(f"Initialized {trial}", file=sys.stderr)
+    return {"splits": split_names, "vars": var_names, "model": model, "trial": trial}
 
 def init_all(verbose=False):
-    for expr, subexpr in product(SPLITS, VARS):
-        for splits, vars, model in product(SPLITS[expr], VARS[subexpr], MODELS):
-            if model in MODEL_CONDITIONS and not MODEL_CONDITIONS[model](expr + subexpr, vars):
-                continue
-            row = init_trial(expr + subexpr, splits, vars, model, verbose)
-            if row is not None:
-                TRIALS.loc[len(TRIALS.index)] = row
+    init_setup()
+    for splits, vars, model in product(SPLITS, VARS, MODELS):
+        if model in MODEL_CONDITIONS and not MODEL_CONDITIONS[model](vars):
+            continue
+        row = init_trial(splits, vars, model, verbose)
+        if row is not None:
+            TRIALS.loc[len(TRIALS.index)] = row
 
-def get_trials(exprs=[], splits=[], vars=[], models=[], nvars=[]):
+def get_trials(splits=SPLITS, vars=VARS, models=MODELS):
     df = TRIALS
-    if exprs:
-        df = df.loc[df["expr"].isin(exprs)]
     if splits:
-        df = df.loc[df["splits"].isin(splits)]
+        df = df.loc[df["splits"].isin(map(V.list_to_str, splits))]
     if vars:
-        df = df.loc[df["vars"].isin(vars)]
+        df = df.loc[df["vars"].isin(map(V.list_to_str, vars))]
     if models:
         df = df.loc[df["model"].isin(models)]
-    if nvars:
-        df = df.loc[df["trial"].map(lambda t: len(t.xvars)).isin(nvars)]
     return df
 
 init_all()

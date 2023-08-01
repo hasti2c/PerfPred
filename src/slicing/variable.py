@@ -50,8 +50,12 @@ class Variable (Enum):
     return sorted(list(set.union(*mains, set())))
   
   @staticmethod
-  def get_var_list_name(vars):
-      return "+".join(map(Variable.__repr__, vars)) if vars is not None else ""
+  def list_to_str(vars):
+      if vars is None:
+        return ""
+      if len(vars) == 0:
+        return "none"
+      return "+".join(map(Variable.__repr__, vars))
   
   @staticmethod
   def get_flags(vars) -> tuple[Variable]:

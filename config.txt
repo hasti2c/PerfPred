@@ -1,5 +1,7 @@
 [Experiment]
 type = one stage
+max nvars = 1
+max nsplits = 4
 
 [API]
 gsheet = False

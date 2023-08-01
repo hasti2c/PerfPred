@@ -37,21 +37,19 @@ class Trial:
   """
   slices: SG
   model: M
+  split_by: list[V]
   xvars: list[V]
   path: T.Optional[str]
   name: str
   df: pd.DataFrame
 
-  def __init__(self, xvars: list[V], model: M, split_by: T.Optional[V]=None,
-               path: T.Optional[str]=None, name: str="trial") -> None:
+  def __init__(self, split_by: list[V], xvars: list[V], model: M, path: T.Optional[str]=None, name: str="trial") \
+    -> None:
     """ Initializes a slice. """
-    self.xvars, self.model, self.path, self.name = xvars, model, path, name
-    if split_by is None:
-      vary = V.get_main_vars(xvars)
-    else:
-      if not set(split_by).isdisjoint(V.get_main_vars(xvars)):
-        raise ValueError
-      vary = V.others(split_by)
+    self.split_by, self.xvars, self.model, self.path, self.name = split_by, xvars, model, path, name
+    if not set(split_by).isdisjoint(V.get_main_vars(xvars)):
+      raise ValueError
+    vary = V.others(split_by)
     self.slices = SG.get_instance(vary)
     if self.path is not None and not os.path.exists(self.path):
       os.makedirs(self.path)
@@ -92,7 +90,7 @@ class Trial:
       costs[i] = self.rmse(slice, fit, test)
     return costs[i].mean()
   
-  def fit_all(self) -> T.Tuple[list[np.ndarray[FloatT]], list[float]]:
+  def fit(self) -> T.Tuple[list[np.ndarray[FloatT]], list[float]]:
     """ Fits all slices in self.slices. Puts result in self.df.
     If path is not None, writes fits and costs to a csv file.
     Returns fits and costs.
@@ -105,14 +103,14 @@ class Trial:
       kfs[i] = self.kfold_slice(slice)
     
     self.init_df(fits, costs, kfs)
-    self.write_all_fits()
+    self.write_fits()
     return fits, costs, kfs
 
-  def write_all_fits(self):
+  def write_fits(self):
     if self.path is not None:
       self.df.to_csv(os.path.join(self.path, "fits.csv"), index=False)
 
-  def read_all_fits(self) -> T.Tuple[list[np.ndarray[FloatT]], list[float]]:
+  def read_fits(self) -> T.Tuple[list[np.ndarray[FloatT]], list[float]]:
     """ Reads fits and costs into self.df from csv.
     Pre-Condition: fit_all has already been run for this model with the same path.
     """
@@ -121,6 +119,14 @@ class Trial:
     costs = np.array(self.df["rmse"])
     kfs = np.array(self.df["kfold rmse"])
     return fits, costs, kfs
+  
+  def read_or_fit(self) -> T.Tuple[list[np.ndarray[FloatT]], list[float]]:
+    try:
+      return self.read_fits()
+    except FileNotFoundError:
+      return self.fit()
+    
+
 
   def init_df(self, fits, costs, kfs):
     self.df = self.slices.ids.copy()
@@ -147,7 +153,7 @@ class Trial:
     fig.savefig(os.path.join(path, slice.title + ".png"))
     plt.close(fig)
 
-  def plot_all(self) -> None:
+  def plot(self) -> None:
     """ Plots all slices.
     Pre-Condition: At least one of fit_all and read_all_fits has been called.
     """
@@ -157,7 +163,7 @@ class Trial:
       slice = self.slices.slices[i]
       self.plot_slice(slice, self.df.loc[i, self.model.pars].to_numpy(dtype=float), horiz)
 
-  def plot_all_together(self, premade_ax=None, legend=True) -> None:
+  def plot_together(self, premade_ax=None, legend=True) -> None:
     for j in range(len(self.xvars)):
       if premade_ax is not None:
         ax = premade_ax
@@ -166,7 +172,7 @@ class Trial:
       horiz = self.xvars[j]
       self.slices.plot(ax, self.model, self.df.loc[:, self.model.pars], horiz, self.xvars)
       if legend:
-        ax.legend(title=V.get_var_list_name(V.others(self.slices.vary)))
+        ax.legend(title=V.list_to_str(V.others(self.slices.vary)))
       ax.set_xlabel(horiz.title)
       ax.set_ylabel('sp-BLEU')
       ax.set_title(self)
@@ -175,4 +181,4 @@ class Trial:
         plt.close(fig)
 
   def __repr__(self):
-    return f"{'+'.join(map(V.__repr__, self.xvars))}:{self.name}"
+    return f"{V.list_to_str(self.split_by)}:{V.list_to_str(self.xvars)}:{self.name}"
