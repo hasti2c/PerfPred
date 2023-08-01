@@ -2,6 +2,7 @@ from format import EXPRS, SPLITS, VARS, get_predictions
 import fitassesment as fa
 import os
 import time
+import platform
 import pandas as pd
 
 cwd = "" # os.getcwd()
@@ -23,6 +24,7 @@ def AnalysisOfResiduals(
         r2 = []
         levene = []
         bartlett = []
+        loglikelyhood = []
 
         evaluation = []
 
@@ -49,13 +51,15 @@ def AnalysisOfResiduals(
             r2T = ds.R2()
             leveneT = ds.homocedasticityLevene()
             bartlettT = ds.homocedasticityBartlett()
+            loglikelyhoodT = ds.logLik
 
             norm.append(normT)
             aic.append(aicT)
-            bic.append(ds.BIC())
-            r2.append(ds.R2())
-            levene.append(ds.homocedasticityLevene())
-            bartlett.append(ds.homocedasticityBartlett())
+            bic.append(bicT)
+            r2.append(r2T)
+            levene.append(leveneT)
+            bartlett.append(bartlettT)
+            loglikelyhood.append(loglikelyhoodT)
 
             print("\n")
 
@@ -71,9 +75,10 @@ def AnalysisOfResiduals(
             'Normality p-value': norm,
             'AIC of centered model': aic,
             'BIC of centered model': bic,
+            'LogLikelyhood': loglikelyhood,
             'R2 coefficient': r2,
             'Homocedasticity Levene p-value': levene,
-            'Homocedasticity bartlett p-value': bartlett,
+            'Homocedasticity bartlett p-value': bartlett
         }
 
         results_df = pd.DataFrame(data = data)
@@ -82,11 +87,18 @@ def AnalysisOfResiduals(
 def main():
     issues = []
 
-    var = 0
+    var = 1
+
+    EXPRS = [
+        "1A",
+        # "2A",
+        # "2B",
+        # "2C"
+    ]
 
     for experiment in EXPRS:
         for split in SPLITS[experiment]:
-            for variable in VARS[experiment][var:var+1]:
+            for variable in VARS[experiment]:
                 try: 
                    AnalysisOfResiduals(experiment, split, variable)
                 except:
@@ -103,10 +115,12 @@ def main():
 if __name__ == '__main__':
     main()
 
-    duration = 0.2  # seconds
-    freq = 440  # Hz
 
-    for bip in range(3):
-        os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))
-        time.sleep(0.1)
-    
+    if platform.system() == 'Linux':
+        duration = 0.2  # seconds
+        freq = 440  # Hz
+
+        for bip in range(4):
+            os.system('play -nq -t alsa synth {} sine {}'.format(duration, freq))
+            time.sleep(0.1)
+        

@@ -47,5 +47,7 @@ VARS = {}
 for expr, subexpr in product(S.SPLITS, S.VARS):
   SPLITS[expr + subexpr] = [V.get_var_list_name(splits) for splits in S.SPLITS[expr]]
   VARS[expr + subexpr] = [V.get_var_list_name(vars) for vars in S.VARS[subexpr]]
-PREDICTIONS = get_predictions("2B", "test", "jsd")
-print(PREDICTIONS['flores'])
+# PREDICTIONS = get_predictions("2B", "test", "jsd")
+# print(PREDICTIONS['flores'])
+print(SPLITS)
+print(VARS)
