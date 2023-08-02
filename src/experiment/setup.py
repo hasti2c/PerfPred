@@ -35,8 +35,9 @@ MODEL_CONDITIONS = {
     "am":      lambda vars: len(vars) > 1,
     "gm":      lambda vars: len(vars) > 1,
     "hm":      lambda vars: len(vars) > 1,
-    "scaling": lambda vars: vars in [["size"], ["size1"], ["size2"]],
-    "anthony": lambda vars: vars == ["size1", "size2"],
+    "scaling": lambda vars: vars == [V.TRAIN_SIZE] if U.EXPERIMENT_TYPE == "one stage" 
+                                                 else vars in [[V.TRAIN1_SIZE], [V.TRAIN2_SIZE]],
+    "anthony": lambda vars: U.EXPERIMENT_TYPE == "two stage" and vars == [V.TRAIN1_SIZE, V.TRAIN2_SIZE],
     "diff":    lambda vars: len(vars) == 2
 }
 
