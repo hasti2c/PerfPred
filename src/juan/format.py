@@ -18,7 +18,7 @@ from pprint import pprint
 R.run_on_trials(Tr.read_fits)
 
 def get_predictions(splits, vars):
-  trials = S.get_trials([splits], [vars]).reset_index()
+  trials = S.get_trials([vars], [splits]).reset_index()
   slices = trials.loc[0, "trial"].slices
     
   dfs = {}

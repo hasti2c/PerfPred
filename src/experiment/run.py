@@ -5,11 +5,12 @@ from itertools import product
 from scipy.stats import pearsonr
 
 import experiment.setup as S
+from modeling.trial import Trial as T
 from slicing.variable import Variable as V
 
 
-def run_on_trials(f, splits=S.SPLITS, vars=S.VARS, models=S.MODELS, suppress=False):
-    df = S.get_trials(splits, vars, models)
+def run_on_trials(f, vars_list=S.FULL_VARS_LIST, splits_list=S.SPLITS_LIST, models=S.MODELS, suppress=False):
+    df = S.get_trials(vars_list, splits_list, models)
     for i, trial in df["trial"].items():
         if suppress:
             try:
@@ -24,10 +25,10 @@ def run_on_trials(f, splits=S.SPLITS, vars=S.VARS, models=S.MODELS, suppress=Fal
         sys.stdout.flush()
         sys.stderr.flush()
     
-def run_on_experiments(f, splits=S.SPLITS, vars=S.VARS, suppress=False):
-    for s, v in product(splits, vars):
+def run_on_experiments(f, vars_list=S.FULL_VARS_LIST, splits_list=S.SPLITS_LIST, suppress=False):
+    for v, s in product(vars_list, splits_list):
         s_names, v_names = V.list_to_str(s), V.list_to_str(v)
-        df = S.get_trials([s], [v])
+        df = S.get_trials([v], [s])
         if not len(df):
             continue
         if suppress:
@@ -74,3 +75,5 @@ def p_val (data, var):
             y.append(row[15])
 
     return pearsonr(x, y)
+
+run_on_trials(T.read_or_fit)

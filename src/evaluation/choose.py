@@ -21,3 +21,9 @@ def rawlsian(x):
     """
     maxes = x.max(axis=1)
     return np.where(maxes == maxes.min())[0]
+
+def choose(df):
+    p = pareto(df.values)
+    p_df = df.iloc[p]
+    r = rawlsian(p_df.values) if len(p) else []
+    return df.index[p], p_df.index[r]

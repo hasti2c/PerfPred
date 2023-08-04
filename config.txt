@@ -6,6 +6,4 @@ max nsplits = 4
 [API]
 gsheet = False
 costs sheet = one stage costs
-results sheet = one stage results
-results page = 0
-fits sheet = one stage fits
+cost stats sheet = one stage cost stats

@@ -11,7 +11,11 @@ from modeling.model import Model as M
 from modeling.trial import Trial as Tr
 from slicing.variable import Variable as V
 
-VARS, SPLITS = [], []
+SIZE_VARS = [V.TRAIN_SIZE] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_SIZE, V.TRAIN2_SIZE]
+DOMAIN_VARS = [V.TRAIN_JSD] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_JSD, V.TRAIN2_JSD]
+LANG_VARS = [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST]
+
+VARS_LIST, SPLITS_LIST = [], []
 
 MODELS = {
     "linear":      {'f': F.linear},
@@ -41,55 +45,62 @@ MODEL_CONDITIONS = {
     "diff":    lambda vars: len(vars) == 2
 }
 
+def init_setup():
+    global VARS_LIST, SPLITS_LIST
+    for k in range(U.MAX_NSPLITS + 1):
+        SPLITS_LIST += map(list, list(combinations(V.main(), k)))
+    
+    for k in range(1, U.MAX_NVARS + 1):
+        VARS_LIST += map(list, list(combinations(SIZE_VARS, k)))
+        VARS_LIST += map(list, list(combinations(DOMAIN_VARS, k)))
+        VARS_LIST += map(list, list(combinations(LANG_VARS, k)))
+
+init_setup()
+
+FULL_VARS_LIST = VARS_LIST + [SIZE_VARS + DOMAIN_VARS + LANG_VARS, SIZE_VARS, DOMAIN_VARS, LANG_VARS]
+
+BASELINES = [
+    (SIZE_VARS + DOMAIN_VARS + LANG_VARS, [], 'linear'),
+    (SIZE_VARS, [], 'linear'),
+    (DOMAIN_VARS, [], 'linear'),
+    (LANG_VARS, [], 'linear')
+]
+
 TRIALS = pd.DataFrame(columns=["vars", "splits", "model", "trial"])
 
-def init_setup():
-    global VARS, SPLITS
-    for k in range(U.MAX_NSPLITS + 1):
-        SPLITS += map(list, list(combinations(V.main(), k)))
+def get_path(vars, splits, model=""):
+    return os.path.join(U.DATA_PATH, "results", "multi" if len(vars) > 1 else "", V.list_to_str(vars), V.list_to_str(splits), model)
 
-    size_vars = [V.TRAIN_SIZE] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_SIZE, V.TRAIN2_SIZE]
-    domain_vars = [V.TRAIN_JSD] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_JSD, V.TRAIN2_JSD]
-    lang_vars = [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST]
-    for k in range(1, U.MAX_NVARS + 1):
-        VARS += map(list, list(combinations(size_vars, k)))
-        VARS += map(list, list(combinations(domain_vars, k)))
-        VARS += map(list, list(combinations(lang_vars, k)))
-
-def init_trial(splits, vars, model, verbose=False):
+def init_trial(vars, splits, model, attrs={}):
     split_names, var_names = V.list_to_str(splits), V.list_to_str(vars)
-    path = os.path.join(U.DATA_PATH, "results", "multi" if len(vars) > 1 else "", var_names, split_names, model)
-    
     args = MODELS[model].copy()
     if "n" not in args:
         args["n"] = len(vars)
     model_obj = M.get_instance(**args)
     
     try:
-        trial = Tr(splits, vars, model_obj, path, model)
+        trial = Tr(vars, splits, model_obj, get_path(vars, splits, model), model)
     except ValueError:
         return None
-    if verbose:
-        print(f"Initialized {trial}", file=sys.stderr)
-    return {"vars": var_names, "splits": split_names, "model": model, "trial": trial}
+    row = {"vars": var_names, "splits": split_names, "model": model, "trial": trial}
+    row.update(attrs)
+    TRIALS.loc[len(TRIALS.index)] = row
 
-def init_all(verbose=False):
-    init_setup()
-    for vars, splits, model in product(VARS, SPLITS, MODELS):
-        if model in MODEL_CONDITIONS and not MODEL_CONDITIONS[model](vars):
+def init_trials(vars_list=VARS_LIST, splits_list=SPLITS_LIST, models=MODELS, conditions=MODEL_CONDITIONS, 
+                attrs={}):
+    for vars, splits, model in list(product(vars_list, splits_list, models)):
+        if model in conditions and not conditions[model](vars):
             continue
-        row = init_trial(splits, vars, model, verbose)
-        if row is not None:
-            TRIALS.loc[len(TRIALS.index)] = row
+        init_trial(vars, splits, model, attrs)
+    for vars, splits, model in BASELINES:
+        if (vars, splits, model) not in list(product(vars_list, splits_list, models)):
+            init_trial(vars, splits, model, attrs)
 
-def get_trials(splits=SPLITS, vars=VARS, models=MODELS):
-    df = TRIALS
-    if splits:
-        df = df.loc[df["splits"].isin(map(V.list_to_str, splits))]
-    if vars:
-        df = df.loc[df["vars"].isin(map(V.list_to_str, vars))]
-    if models:
-        df = df.loc[df["model"].isin(models)]
+
+def get_trials(vars_list=FULL_VARS_LIST, splits_list=SPLITS_LIST, models=MODELS):
+    df = TRIALS.loc[TRIALS["splits"].isin(map(V.list_to_str, splits_list))].copy()
+    df = df.loc[df["vars"].isin(map(V.list_to_str, vars_list))]
+    df = df.loc[df["model"].isin(models)]
     return df
 
-init_all()
+init_trials()

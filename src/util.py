@@ -2,6 +2,8 @@ from __future__ import print_function
 
 import os
 import os.path
+import sys
+import time
 import typing as T
 from configparser import ConfigParser
 from pprint import pprint
@@ -15,26 +17,22 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 
-# TODO sort when save_all_fits
-
 # === Config ===
 EXPERIMENT_TYPE = "all"
 MAX_NVARS, MAX_NSPLITS = 1, 0
 DATA_PATH = "data"
 CONFIG_FILE = "config.txt"
 WRITE_TO_SHEET = False
-FITS_SHEET_NAME = "fits"
-RESULTS_SHEET_NAME, RESULTS_PAGE = "results", 0
-COSTS_SHEET_NAME = "costs"
+SHEET_NAMES = {"costs": "costs",
+               "cost stats": "cost stats"}
+SHEETS = {}
 
 def read_config():
     config = ConfigParser()
     config.read(CONFIG_FILE)
-    global WRITE_TO_SHEET, COSTS_SHEET_NAME, FITS_SHEET_NAME, RESULTS_SHEET_NAME, RESULTS_PAGE, EXPERIMENT_TYPE, \
-           DATA_PATH, MAX_NVARS, MAX_NSPLITS
+    global WRITE_TO_SHEET, SHEET_NAMES, EXPERIMENT_TYPE, DATA_PATH, MAX_NVARS, MAX_NSPLITS
     WRITE_TO_SHEET = config['API']['gsheet'] in ["True", "true", "1"]
-    COSTS_SHEET_NAME, FITS_SHEET_NAME = config['API']['costs sheet'], config['API']['fits sheet']
-    RESULTS_SHEET_NAME, RESULTS_PAGE = config['API']['results sheet'], int(config['API']['results page'])
+    SHEET_NAMES["costs"], SHEET_NAMES["cost stats"] = config['API']['costs sheet'], config['API']['cost stats sheet']
     EXPERIMENT_TYPE = config['Experiment']['type']
     MAX_NVARS, MAX_NSPLITS = int(config['Experiment']['max nvars']), int(config['Experiment']['max nsplits'])
     DATA_PATH = os.path.join(DATA_PATH, EXPERIMENT_TYPE)
@@ -49,17 +47,7 @@ ObjectT = (T.Any, object)
 
 COLOR_MAP = mpl.colormaps['rainbow']
 
-# == File & GSheet Helpers ==
-def empty_folder(path: str) -> None:
-  """ Deletes (deep) all files from the folder described by the path.
-  Does not delete subdirectories.
-  """
-  for f in os.listdir(path):
-    f_path = os.path.join(path, f)
-    if os.path.isdir(f_path):
-      empty_folder(f_path)
-    else:
-      os.unlink(f_path)
+# == Google Sheets ==
 
 def get_gcreds():
   # If modifying these scopes, delete the file token.json.
@@ -81,22 +69,49 @@ def get_gcreds():
       token.write(creds.to_json())
   return gspread.authorize(creds)
 
-if WRITE_TO_SHEET:
-  GSPREAD_CREDS = get_gcreds()
-  FITS_SHEET = GSPREAD_CREDS.open(FITS_SHEET_NAME)
-  RESULTS_SHEET = GSPREAD_CREDS.open(RESULTS_SHEET_NAME)
-  COSTS_SHEET = GSPREAD_CREDS.open(COSTS_SHEET_NAME)
+def init_sheets():
+  gc = get_gcreds()
+  for sheet, name in SHEET_NAMES.items():
+    SHEETS[sheet] = gc.open(name)
 
 def clear_sheet(sh):
-  for wsh in sh.worksheets()[1:]:
-    sh.del_worksheet(wsh)
-
-def write_to_sheet(df, sh, page, name=None, index=True):
   try:
-    wsh = sh.get_worksheet(page)
-  except gspread.exceptions.WorksheetNotFound:
-    wsh = sh.get_worksheet(0).duplicate(page)
-  gsdf.set_with_dataframe(wsh, df, include_index=index, include_column_header=True, resize=True)
-  if name is not None:
-    wsh.update_title(name)
-  print(f"Wrote to {sh.title}:{name}.")
+    for wsh in sh.worksheets()[1:]:
+      sh.del_worksheet(wsh)
+  except gspread.exceptions.APIError:
+    print("Sleeping for 60 seconds...", file=sys.stderr)
+    time.sleep(60)
+    clear_sheet(sh)
+
+def write_to_sheet(df, sh, name=None, index=True):
+  try:
+    try:
+      if name is None:
+        wsh = sh.get_worksheet(0)
+      else:
+        wsh = sh.worksheet(name)
+    except gspread.exceptions.WorksheetNotFound:
+      wsh = sh.get_worksheet(0).duplicate(insert_sheet_index=len(sh.worksheets()), new_sheet_name=name)
+    gsdf.set_with_dataframe(wsh, df, include_index=index, include_column_header=True, resize=True)
+    if name is not None:
+      wsh.update_title(name)
+    print(f"Wrote to {sh.title}:{name}.")
+  except gspread.exceptions.APIError:
+    print("Sleeping for 60 seconds...", file=sys.stderr)
+    time.sleep(60)
+    write_to_sheet(df, sh, name, index)
+
+if WRITE_TO_SHEET:
+  init_sheets()
+
+# == File Helpers ==
+def empty_folder(path: str) -> None:
+  """ Deletes (deep) all files from the folder described by the path.
+  Does not delete subdirectories.
+  """
+  for f in os.listdir(path):
+    f_path = os.path.join(path, f)
+    if os.path.isdir(f_path):
+      empty_folder(f_path)
+    else:
+      os.unlink(f_path)

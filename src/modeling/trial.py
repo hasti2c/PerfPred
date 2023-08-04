@@ -18,8 +18,6 @@ from slicing.slice import SliceGroup as SG
 from slicing.variable import Variable as V
 from util import FloatT
 
-# import evaluation.eval as E
-
 class Trial:
   """ Represents a trial.
 
@@ -37,13 +35,13 @@ class Trial:
   """
   slices: SG
   model: M
-  split_by: list[V]
   xvars: list[V]
+  split_by: list[V]
   path: T.Optional[str]
   name: str
   df: pd.DataFrame
 
-  def __init__(self, split_by: list[V], xvars: list[V], model: M, path: T.Optional[str]=None, name: str="trial") \
+  def __init__(self, xvars: list[V], split_by: list[V], model: M, path: T.Optional[str]=None, name: str="trial") \
     -> None:
     """ Initializes a slice. """
     self.split_by, self.xvars, self.model, self.path, self.name = split_by, xvars, model, path, name
@@ -54,8 +52,7 @@ class Trial:
     if self.path is not None and not os.path.exists(self.path):
       os.makedirs(self.path)
 
-  def rmse(self, slice: S, fit: np.ndarray[FloatT], 
-           indices: T.Optional[np.ndarray[FloatT]]=None) -> float:
+  def rmse(self, slice: S, fit: np.ndarray[FloatT], indices: T.Optional[np.ndarray[FloatT]]=None) -> float:
     """ Calculates rmse for a slice given fitted coeffs. """
     if indices is None:
       indices = np.arange(len(slice.df))
@@ -63,9 +60,7 @@ class Trial:
     y_pred = self.model.f(fit, slice.x(self.xvars))
     return np.sqrt(skl.mean_squared_error(y_true, y_pred))
 
-  def fit_slice(self, slice: S, 
-                indices: T.Optional[np.ndarray[FloatT]]=None) -> \
-                T.Tuple[np.ndarray[FloatT], float]:
+  def fit_slice(self, slice: S, indices: T.Optional[np.ndarray[FloatT]]=None) -> T.Tuple[np.ndarray[FloatT], float]:
     """Fits the trial function f for a slice.
     == Return Values ==
       fit_x: Fitted values for coefficients of f.
@@ -125,8 +120,6 @@ class Trial:
       return self.read_fits()
     except FileNotFoundError:
       return self.fit()
-    
-
 
   def init_df(self, fits, costs, kfs):
     self.df = self.slices.ids.copy()
