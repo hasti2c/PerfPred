@@ -23,8 +23,7 @@ MAX_NVARS, MAX_NSPLITS = 1, 0
 DATA_PATH = "data"
 CONFIG_FILE = "config.txt"
 WRITE_TO_SHEET = False
-SHEET_NAMES = {"costs": "costs",
-               "cost stats": "cost stats"}
+SHEET_NAMES = {}
 SHEETS = {}
 
 def read_config():
@@ -33,6 +32,7 @@ def read_config():
     global WRITE_TO_SHEET, SHEET_NAMES, EXPERIMENT_TYPE, DATA_PATH, MAX_NVARS, MAX_NSPLITS
     WRITE_TO_SHEET = config['API']['gsheet'] in ["True", "true", "1"]
     SHEET_NAMES["costs"], SHEET_NAMES["cost stats"] = config['API']['costs sheet'], config['API']['cost stats sheet']
+    SHEET_NAMES["baselines"] = config['API']['baselines sheet']
     EXPERIMENT_TYPE = config['Experiment']['type']
     MAX_NVARS, MAX_NSPLITS = int(config['Experiment']['max nvars']), int(config['Experiment']['max nsplits'])
     DATA_PATH = os.path.join(DATA_PATH, EXPERIMENT_TYPE)

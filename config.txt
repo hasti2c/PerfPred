@@ -4,6 +4,7 @@ max nvars = 1
 max nsplits = 4
 
 [API]
-gsheet = False
+gsheet = True
 costs sheet = one stage costs
 cost stats sheet = one stage cost stats
+baselines sheet = one stage baselines

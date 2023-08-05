@@ -35,6 +35,28 @@ def compare_cost_stats(trials):
     if U.WRITE_TO_SHEET:
         U.write_to_sheet(stats, U.SHEETS["cost stats"], os.path.join(V.list_to_str(vars), V.list_to_str(splits)))
 
+def compare_to_baselines(trials):
+    vars, splits = trials.iloc[0].loc["trial"].xvars, trials.iloc[0].loc["trial"].split_by
+    cost_means = get_all_costs(trials, "kfold rmse").apply(pd.Series.mean, axis=1)
+    df = pd.DataFrame(index=cost_means.index)
+
+    baselines = {"multi variable": (S.SIZE_VARS + S.DOMAIN_VARS + S.LANG_VARS, [], "linear")}
+    if set(vars).issubset(set(S.SIZE_VARS)):
+        baselines["multi factor"] = (S.SIZE_VARS, [], "linear")
+    elif set(vars).issubset(set(S.DOMAIN_VARS)):
+        baselines["multi factor"] = (S.DOMAIN_VARS, [], "linear")
+    elif set(vars).issubset(set(S.LANG_VARS)):
+        baselines["multi factor"] = (S.LANG_VARS, [], "linear")
+    baselines["overall linear"] = (vars, [], "linear")
+    baselines["sliced linear"] = (vars, splits, "linear")
+    for name, (vars, splits, model) in baselines.items():
+        trial = S.get_trials([vars], [splits], [model]).iloc[0].loc["trial"]
+        df[name] = (cost_means / trial.df["kfold rmse"].mean() * 100).apply("{:.2f}%".format)
+        
+    df.to_csv(os.path.join(S.get_path(vars, splits), "baselines.csv"))
+    if U.WRITE_TO_SHEET:
+        U.write_to_sheet(df, U.SHEETS["baselines"], os.path.join(V.list_to_str(vars), V.list_to_str(splits)))
+    
 def plot_compact(trials):
   splits, vars = trials.iloc[0].loc["trial"].split_by, trials.iloc[0].loc["trial"].xvars
   fig, axes = plt.subplots(math.ceil(len(trials) / 3), 3)
