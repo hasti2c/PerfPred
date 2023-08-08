@@ -75,7 +75,7 @@ def read_pure_data(gc) -> pd.DataFrame:
 
 def read_pure_jsd(gc) -> pd.DataFrame:
   """Reads jsd values from GSheet to a DataFrame."""
-  worksheet = gc.open('Experiment 1 Data').get_worksheet(1)
+  worksheet = gc.open('Experiment 1 Data').get_worksheet(2)
   rows = worksheet.get_all_values()
   df = pd.DataFrame.from_records(rows[1:38], coerce_float=True)
   df.columns = [
@@ -94,7 +94,7 @@ def read_pure_jsd(gc) -> pd.DataFrame:
 
 def read_pure_l2v(gc) -> pd.DataFrame:
   """Reads lang2vec distance values from GSheet to a DataFrame."""
-  worksheet = gc.open('Experiment 1 Data').get_worksheet(2)
+  worksheet = gc.open('Experiment 1 Data').get_worksheet(3)
   rows = worksheet.get_all_values()
   df = pd.DataFrame.from_records(rows[1:7], coerce_float=True)
   df.columns = [
@@ -193,7 +193,7 @@ def format_df(data_df: pd.DataFrame, jsd_df: pd.DataFrame, l2v_df: pd.DataFrame)
       df.loc[len(df.index)] = new_row
   return df.astype(df_dtypes).drop_duplicates()
 
-def read_data(discard_na: bool=False) -> pd.DataFrame:
+def read_data() -> pd.DataFrame:
   """ Reads data into a Dataframe of the format returned by format_df. """
   gc = U.get_gcreds()
   data_df = read_pure_data(gc)

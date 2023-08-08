@@ -33,12 +33,22 @@ class Variable (Enum):
     self.main_vars = main_vars
     self.short = short
     self.dtype = dtype
+  
   @staticmethod
   def main() -> list[Variable]:
+    ret = [Variable.TEST, Variable.LANG]
     if U.EXPERIMENT_TYPE == "one stage":
-      return [Variable.TRAIN, Variable.TRAIN_SIZE, Variable.TEST, Variable.LANG]
+      return [Variable.TRAIN, Variable.TRAIN_SIZE] + ret
     else:
-      return [Variable.TRAIN1, Variable.TRAIN1_SIZE, Variable.TRAIN2, Variable.TRAIN2_SIZE, Variable.TEST, Variable.LANG]
+      return [Variable.TRAIN1, Variable.TRAIN1_SIZE, Variable.TRAIN2, Variable.TRAIN2_SIZE] + ret
+    
+  @staticmethod
+  def numeric() -> list[Variable]:
+    ret = [Variable.GEO_DIST, Variable.GEN_DIST, Variable.SYN_DIST, Variable.PHO_DIST, Variable.INV_DIST, Variable.FEA_DIST]
+    if U.EXPERIMENT_TYPE == "one stage":
+      return [Variable.TRAIN_SIZE, Variable.TRAIN_JSD] + ret
+    else:
+      return [Variable.TRAIN1_SIZE, Variable.TRAIN1_JSD, Variable.TRAIN2_SIZE, Variable.TRAIN2_JSD] + ret
   
   @staticmethod
   def others(vars: list[Variable]) -> list[Variable]:

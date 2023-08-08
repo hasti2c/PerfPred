@@ -1,13 +1,9 @@
-import csv
 import sys
 from itertools import product
-
-from scipy.stats import pearsonr
 
 import experiment.setup as S
 from modeling.trial import Trial as T
 from slicing.variable import Variable as V
-
 
 def run_on_trials(f, vars_list=S.FULL_VARS_LIST, splits_list=S.SPLITS_LIST, models=S.MODELS, suppress=False):
     df = S.get_trials(vars_list, splits_list, models)
@@ -42,38 +38,5 @@ def run_on_experiments(f, vars_list=S.FULL_VARS_LIST, splits_list=S.SPLITS_LIST,
             print(f"{f.__name__} on {v_names}:{s_names} done.")
         sys.stdout.flush()
         sys.stderr.flush()
-
-def p_val (data, var):
-    """
-    data = data_na_disc.csv
-    var = val to be evaluated for its correlation with sp-BLEU score
-    # Instead of this, should we directly write to another gsheet of var vs p-val?
-    """
-    col_mapping = {
-        V.TRAIN1_SIZE: 1,
-        V.TRAIN1_JSD: 2,
-        V.TRAIN2_SIZE: 4,
-        V.TRAIN2_JSD: 5,
-        V.GEO_DIST: 9,
-        V.GEN_DIST: 10,
-        V.SYN_DIST: 11,
-        V.PHO_DIST: 12,
-        V.INV_DIST: 13,
-        V.FEA_DIST: 14
-    }
-
-    x = []
-    y = []
-
-    with open('data_na_disc.csv', 'r') as file:
-        reader = csv.reader(file)
-        next(reader)
-
-        for row in reader:
-            col_index = col_mapping[var]
-            x.append(row[col_index])
-            y.append(row[15])
-
-    return pearsonr(x, y)
 
 run_on_trials(T.read_or_fit)
