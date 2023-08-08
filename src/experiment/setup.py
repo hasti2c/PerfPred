@@ -18,20 +18,20 @@ LANG_VARS = [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_D
 VARS_LIST, SPLITS_LIST = [], []
 
 MODELS = {
-    "linear":      {'f': F.linear},
-    "poly2":       {'f': F.polynomial, 'k': 2},
-    "poly3":       {'f': F.polynomial, 'k': 3},
-    "exp":         {'f': F.exponential, 'bounds': (-np.inf, 6)},
-    "log":         {'f': F.logarithmic},
-    "power":       {'f': F.power, 'bounds': (-140, 80)},
-    "mult":        {'f': F.multiplicative, 'bounds': (-100, 75)},
-    "hybrid_mult": {'f': F.hybrid_multiplicative, 'bounds': (-80, 90)},
-    "am":          {'f': F.arithmetic_mean_linear, 'n': 1},
-    "gm":          {'f': F.geometric_mean_linear, 'n': 1},
-    "hm":          {'f': F.harmonic_mean_linear, 'n': 1},
-    "scaling":     {'f': F.scaling_law, 'n': 2, 'bounds': [(-np.inf, np.inf), (0, np.inf), (-85, np.inf)]},
-    "anthony":     {'f': F.anthonys_law, 'n': 4},
-    "diff":        {'f': F.linear_with_difference, 'n': 3}
+    "linear":  {'f': F.linear},
+    "poly2":   {'f': F.polynomial, 'k': 2},
+    "poly3":   {'f': F.polynomial, 'k': 3},
+    "exp":     {'f': F.exponential, 'bounds': (-np.inf, 6)},
+    "log":     {'f': F.logarithmic},
+    "power":   {'f': F.power, 'bounds': (-140, 80)},
+    "mult":    {'f': F.multiplicative, 'bounds': (-100, 75)},
+    "hmult":   {'f': F.hybrid_multiplicative, 'bounds': (-80, 90)},
+    "am":      {'f': F.arithmetic_mean_linear, 'n': 1},
+    "gm":      {'f': F.geometric_mean_linear, 'n': 1},
+    "hm":      {'f': F.harmonic_mean_linear, 'n': 1},
+    "scaling": {'f': F.scaling_law, 'n': 2, 'bounds': [(-np.inf, np.inf), (0, np.inf), (-85, np.inf)]},
+    "anthony": {'f': F.anthonys_law, 'n': 4},
+    "diff":    {'f': F.linear_with_difference, 'n': 3}
 }
 
 MODEL_CONDITIONS = {

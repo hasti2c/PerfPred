@@ -5,4 +5,4 @@ poly3,True,True,13.901296321836044
 exp,False,False,13.962296246403277
 log,False,False,13.905320810627677
 power,False,False,14.077575738960611
-hybrid_mult,False,False,14.276252044778442
+hmult,False,False,14.276252044778442

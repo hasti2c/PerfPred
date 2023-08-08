@@ -1,8 +1,8 @@
-model,multi variable,multi factor,overall linear,sliced linear
+model,multi factor,multi variable,overall linear,sliced linear
 linear,22.59%,22.21%,22.32%,100.00%
 poly2,23.35%,22.95%,23.06%,103.33%
 poly3,23.72%,23.32%,23.44%,105.00%
 exp,30.14%,29.62%,29.77%,133.38%
 log,23.10%,22.71%,22.82%,102.24%
 power,28.84%,28.35%,28.49%,127.63%
-hybrid_mult,20.79%,20.44%,20.54%,92.02%
+hmult,20.79%,20.44%,20.54%,92.02%
