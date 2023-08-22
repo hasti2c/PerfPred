@@ -113,20 +113,50 @@ class Errors():
         os.replace(filename, os.path.join(path, filename))
         plt.close(fig)
 
+    def NvsN_1(self, title = "", filename = "", path = ""):
+        n = np.linspace(1, self.N, num = self.N)
+
+        fig, ax = plt.subplots(
+            figsize = (6, 4),
+            tight_layout = True
+        )
+
+        en = self.no_errors[1:]
+        en_1 = self.no_errors[:-1]
+
+        ax.set_title(title, fontsize = 16)
+
+        ax.plot(en, en_1, 'o')
+
+        ax.set_xlabel("n-th error", fontsize = 14)
+        ax.set_ylabel("(n-1)-th error", fontsize = 14)
+        ax.grid(True)
+
+        filename = filename + ".png"
+        plt.savefig(filename)
+
+        os.replace(filename, os.path.join(path, filename))
+        plt.close(fig)
+
     def Graphs(self, directory, experiment, split, variable, key, model):
         self.varianceEvolution(
-            f'Variance Evolution in errors: {experiment}-{split}-{variable}-{key}-{model}',
+            f'Variance Evolution in errors:\n{experiment}-{split}-{variable}-{key}-{model}',
             filename = f'{experiment}-{split}-{variable}-{key}-{model}-variance',
             path = directory
         )
         self.pdfPlot(
-            f'Density function: {experiment}-{split}-{variable}-{key}-{model}',
+            f'Density function:\n{experiment}-{split}-{variable}-{key}-{model}',
             filename = f'{experiment}-{split}-{variable}-{key}-{model}-density',
             path = directory
         )
         self.QQ(
-            f'QQ-plot for normal model: {experiment}-{split}-{variable}-{key}-{model}',
+            f'QQ-plot for normal model:\n{experiment}-{split}-{variable}-{key}-{model}',
             filename = f'{experiment}-{split}-{variable}-{key}-{model}-QQ',
+            path = directory
+        )
+        self.NvsN_1(
+            f'N-th vs (N-1)-th residuals:\n{experiment}-{split}-{variable}-{key}-{model}',
+            filename = f'{experiment}-{split}-{variable}-{key}-{model}-NvsN_1',
             path = directory
         )
 
