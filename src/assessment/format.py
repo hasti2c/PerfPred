@@ -32,26 +32,4 @@ def get_predictions(splits, vars):
       fit = trial.df.loc[i, trial.model.pars].to_numpy(dtype=float)
       x = slice.x(trial.xvars)
       dfs[slice.__repr__()][model] = trial.model.f(fit, x)
-<<<<<<< HEAD:src/assessment/format.py
   return dfs
-=======
-  return dfs
-
-EXPRS = [
-    # "1A", 
-    # "1B", 
-    # "1C", 
-    # "2A", 
-    # "2B", 
-    # "2C"
-]
-SPLITS = {}
-VARS = {}
-for expr, subexpr in product(S.SPLITS, S.VARS):
-  SPLITS[expr + subexpr] = [V.get_var_list_name(splits) for splits in S.SPLITS[expr]]
-  VARS[expr + subexpr] = [V.get_var_list_name(vars) for vars in S.VARS[subexpr]]
-# PREDICTIONS = get_predictions("2B", "test", "jsd")
-# print(PREDICTIONS['flores'])
-print(SPLITS)
-print(VARS)
->>>>>>> juan:src/juan/format.py
