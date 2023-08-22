@@ -137,8 +137,6 @@ def format_df(data_df: pd.DataFrame, jsd_df: pd.DataFrame, l2v_df: pd.DataFrame)
   Arguments:
     data_df: DataFrame containing records returned from read_pure_data.
     jsd_df: DataFrame containing jsds returned from read_pure_jsd.
-    discard_na: If True, rows which have pd.NA as train1, train2, or test are
-             discarded.
   Return Value:
     A dataframe containing all records.
     Each row corresponds to one record.
@@ -157,7 +155,7 @@ def format_df(data_df: pd.DataFrame, jsd_df: pd.DataFrame, l2v_df: pd.DataFrame)
                            Can be ka (Kannada), gu (Gujarati), hi (Hindi),
                            si (Sinhala), ta (Tamil).
       - sp-BLEU (Float64): sp-BLEU of experiment record.
-    NOTE: Dataset pmo is also represented as gov for simplicity.
+    NOTE: Dataset pmo is represented as gov for simplicity.
   """
   df = pd.DataFrame(columns=df_cols)
   for row in range(1, data_df.shape[0], 2):

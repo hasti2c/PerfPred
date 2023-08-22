@@ -1,30 +1,33 @@
+from __future__ import annotations
+
+import typing as T
+
+import matplotlib as mpl
 import numpy as np
 import pandas as pd
 
-from slicing.variable import Variable as V
-from slicing.split import split
 import util as U
+from modeling.model import Model as M
+from slicing.split import split
+from slicing.variable import Variable as V
 
 
-class Slice: # TODO update docs
-  """ A slice of the data, representing a subset of rows of main dataframe.
+class Slice:
+  """ A slice of the data, representing a subset of data points.
 
   == Attributes ==
     df: DataFrame containing the rows corresponding to this slice.
-    id: Values of the variables defining this slice.
-        Entries for FIX & SET vars contain their fixed value for this slice.
-        Entries for VARY vars contain pd.NA.
-    vary: List of VARY vars in the slicing.
+    id: Fixed values of the fixed variables in this slice (all variables not in self.vary).
+    vary: List of variables that differ between points in this slice.
     title: Short name for slice.
     description: Long name for slice.
-    xvars: Variables used as input of model function.
-    x: Input array of model, i.e. xvars columns of df.
-       dim: (n, k) if n df rows and k xvars.
     y: Real values of sp-BLEU.
        dim: n if n df rows.
 
   == Methods ==
     get_title: Returns title & description.
+    x: Returns values of specified xvars in this slice.
+    plot: Plots specified fitted model for this slice.
   """
   df: pd.DataFrame
   id: pd.Series
@@ -35,20 +38,18 @@ class Slice: # TODO update docs
 
   def __init__(self, df: pd.DataFrame, id: pd.Series, vary_list: list[V]) -> None:
     """ Initializes slice. """
-    self.df = df
-    self.id = id
-    self.vary = vary_list
+    self.df, self.id, self.vary = df, id, vary_list
     self.title, self.description = self.get_title()
     self.y = self.df.loc[:, "sp-BLEU"].to_numpy()
 
   def get_title(self) -> tuple[str]:
     """ Returns title and description for slice.
-    Return Values:
-      title: Non NA values in id seperated by "-".
-      description: Non NA values in id with short var names ("var=val")
-                   seperated by ",".
+    
+    == Return Values ==
+    title: Values in id seperated by "-".
+    description: Values in id with short var names ("var=val") seperated by ",".
     """
-    fix = V.others(self.vary)
+    fix = V.complement(self.vary)
     if len(fix) == 0:
       return "all", "all"
     
@@ -61,14 +62,27 @@ class Slice: # TODO update docs
         vals.append(str(self.id[var.title]))
 
     title = '-'.join(vals)
-    description = ','.join([names[i] + "=" + vals[i]
-                            for i in range(len(vals))])
+    description = ','.join([names[i] + "=" + vals[i] for i in range(len(vals))])
     return title, description
   
-  def x(self, xvars: list[V]):
+  def x(self, xvars: list[V]) -> np.ndarray[U.FloatT]:
+    """ Returns values of xvars for the points in this slice."""
     return self.df.loc[:, [var.title for var in xvars]].astype(float).to_numpy()
 
-  def plot(self, ax, model, fit, horiz, xvars, xrange=None, crange=(0., 1.), label_by_slice=False):
+  def plot(self, ax: mpl.Axes, model: M, fit: np.ndarray[U.FloatT], horiz: V, xvars: list[V], 
+           xrange: T.Optional[tuple[float]]=None, crange: tuple[float]=(0., 1.), label_by_slice=False):
+    """ Plots specified fitted model for this slice.
+
+    == Arguments ==
+    ax: Axis for plot.
+    model, fit: Model and fit of fitted model.
+    horiz: Variable to use for x-axis.
+    xvars: All variables of model.
+    xrange: Range of values on the x-axis.
+            If None, will default to the range of values of the horiz variable on this slice.
+    crange: Range of colormap to use.
+    label_by_slice: Whether or not to include slice name in legend labels.
+    """
     x = self.x([horiz])
     if xrange is None:
       xrange = (min(x), max(x))
@@ -80,7 +94,6 @@ class Slice: # TODO update docs
     z_all = self.x(xvars)[:, [i for i in range(len(xvars)) if xvars[i] != horiz]]
     z = z_all[indices]
     colors = U.COLOR_MAP(np.linspace(U.COLOR_MAP.N * crange[0], U.COLOR_MAP.N * crange[1], len(l), endpoint=True, dtype=int))
-
     if len(l_vars) > 0:
       c_all = [colors[np.where(l == k)[0][0]] for k in l_all]
     else:
@@ -95,23 +108,21 @@ class Slice: # TODO update docs
       ys = model.f(fit, xs_in)
       label = ",".join(l[i])
       if not label_by_slice:
-        ax.plot(xs, ys, c=colors[i], label=",".join(l[i]))
+        ax.plot(xs, ys, c=colors[i], label=label)
       else:
         ax.plot(xs, ys, c=colors[i], label=" ".join([self.__repr__(), label]))
 
-  def __repr__(self):
-    return "-".join(self.id.astype(str))
+  def __repr__(self) -> str:
+    return self.title
 
 class SliceGroup:
   GROUPS = {}
-  """ A group of slices as defined by vary_list.
+  """ Group of all slices when slicing by the variables not in self.vary.
 
   == Attributes ==
-    ids: DataFrame containing the id of each slice as a row.
+    ids: DataFrame containing the ids of the slices.
     slices: List of slices.
-    N: Number of slices.
-    vary: List of VARY vars in the slicing.
-    xvars: Variables used as input of model function.
+    vary: List of variables that differ between points in this slice.
 
   == Static Methods ==
     get_slices: Takes lists of variable types and returns a corresponding
@@ -119,32 +130,34 @@ class SliceGroup:
   """
   ids: pd.DataFrame
   slices: list[Slice]
-  N: int
   vary: list[V]
 
-  def __init__(self, vary: list[V], df: pd.DataFrame=U.RECORDS) -> None:
-    """ Initializes SliceGroup. 
-    
-    == Arguments == # TODO update doc
-    vary: List of VARY vars.
-    df: Dataframe to perform slicing on.
-    set_xvar: Whether or not to give slices xvars value when initializing.
-              If True, slices will be given xvars value.
-    """
+  def __init__(self, vary: list[V]) -> None:
+    """ Initializes SliceGroup."""
     self.vary = vary
-    self.ids, slices = split(self.vary, df=df)
+    self.ids, slices = split(self.vary)
     self.slices = [Slice(slices[i], self.ids.iloc[i], self.vary)
                    for i in range(len(slices))]
-    self.N = len(self.slices)
 
   @staticmethod
-  def get_instance(vary: list[V]):
+  def get_instance(vary: list[V]) -> SliceGroup:
+    """ If the same slice group has not been yet initialized, initializes it and saves it in GROUPS. 
+    Otherwise, returns the previously initialized slice group.
+    """
     flags = V.get_flags(vary)
     if flags not in SliceGroup.GROUPS:
       SliceGroup.GROUPS[flags] = SliceGroup(vary)
     return SliceGroup.GROUPS[flags]
   
-  def plot(self, ax, model, fits, horiz, xvars):
+  def plot(self, ax: mpl.Axes, model: M, fits: pd.DataFrame, horiz: V, xvars: list[V]):
+    """ Plots specified fitted model for all slices in this slice group.
+    
+    == Arguments ==
+    ax: Axis for plot.
+    model, fits: Model and fits of fitted model.
+    horiz: Variable to use for x-axis.
+    xvars: All variables of model.
+    """
     n, N = np.inf, -np.inf
     for slice in self.slices:
       x = slice.x([horiz])

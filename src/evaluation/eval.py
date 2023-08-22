@@ -15,7 +15,6 @@ from slicing.split import split
 from modeling.trial import Trial as Tr
 from util import FloatT
 
-
 class Part:
   slices: list[S]
   df: pd.DataFrame
@@ -85,7 +84,7 @@ class MRF (Enum):
 
 
 def partition(expr, partition_by):
-  ids, dfs = split(V.others(partition_by), df=expr.df)
+  ids, dfs = split(V.complement(partition_by), df=expr.df)
   return ids, [Part(expr, df) for df in dfs]
 
 def evaluate_trial(expr, partition_by, mrf):

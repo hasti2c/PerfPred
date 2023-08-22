@@ -1,6 +1,6 @@
 import os
-import sys
-from itertools import product, combinations
+import typing as T
+from itertools import combinations, product
 
 import numpy as np
 import pandas as pd
@@ -45,7 +45,8 @@ MODEL_CONDITIONS = {
     "diff":    lambda vars: len(vars) == 2
 }
 
-def init_setup():
+def init_setup() -> None:
+    """ Initialize VARS_LIST and SPLITS_LIST based on MAX_NVARS and MAX_NSPLITS. """
     global VARS_LIST, SPLITS_LIST
     for k in range(U.MAX_NSPLITS + 1):
         SPLITS_LIST += map(list, list(combinations(V.main(), k)))
@@ -68,10 +69,12 @@ BASELINES = [
 
 TRIALS = pd.DataFrame(columns=["vars", "splits", "model", "trial"])
 
-def get_path(vars, splits, model=""):
+def get_path(vars: list[V], splits: list[V], model: str="") -> str:
+    """ Returns path of experiment/trial given vars, splits, and optionally model."""
     return os.path.join(U.DATA_PATH, "results", "multi" if len(vars) > 1 else "", V.list_to_str(vars), V.list_to_str(splits), model)
 
-def init_trial(vars, splits, model, attrs={}):
+def init_trial(vars: list[V], splits: list[V], model: str) -> None:
+    """ Given vars, splits and models, creates corresponding trial and adds it to TRIALS. """
     split_names, var_names = V.list_to_str(splits), V.list_to_str(vars)
     args = MODELS[model].copy()
     if "n" not in args:
@@ -82,22 +85,22 @@ def init_trial(vars, splits, model, attrs={}):
         trial = Tr(vars, splits, model_obj, get_path(vars, splits, model), model)
     except ValueError:
         return None
-    row = {"vars": var_names, "splits": split_names, "model": model, "trial": trial}
-    row.update(attrs)
-    TRIALS.loc[len(TRIALS.index)] = row
+    TRIALS.loc[len(TRIALS.index)] = {"vars": var_names, "splits": split_names, "model": model, "trial": trial}
 
-def init_trials(vars_list=VARS_LIST, splits_list=SPLITS_LIST, models=MODELS, conditions=MODEL_CONDITIONS, 
-                attrs={}):
+def init_trials(vars_list: list[list[V]]=VARS_LIST, splits_list: list[list[V]]=SPLITS_LIST, models: list[str]=MODELS, 
+                conditions: dict[str, T.Callable[[list[V]], bool]]=MODEL_CONDITIONS) -> None:
+    """ Initializes TRIALS based on vars_list, splits_list, models, and conditions. """
     for vars, splits, model in list(product(vars_list, splits_list, models)):
         if model in conditions and not conditions[model](vars):
             continue
-        init_trial(vars, splits, model, attrs)
+        init_trial(vars, splits, model)
     for vars, splits, model in BASELINES:
         if (vars, splits, model) not in list(product(vars_list, splits_list, models)):
-            init_trial(vars, splits, model, attrs)
+            init_trial(vars, splits, model)
 
-
-def get_trials(vars_list=FULL_VARS_LIST, splits_list=SPLITS_LIST, models=MODELS):
+def get_trials(vars_list: list[list[V]]=VARS_LIST, splits_list: list[list[V]]=SPLITS_LIST, models: list[str]=MODELS) -> \
+    pd.DataFrame:
+    """ Returns subset of TRIALS with vars, splits, and model within the specified values. """
     df = TRIALS.loc[TRIALS["splits"].isin(map(V.list_to_str, splits_list))].copy()
     df = df.loc[df["vars"].isin(map(V.list_to_str, vars_list))]
     df = df.loc[df["model"].isin(models)]

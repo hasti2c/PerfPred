@@ -68,8 +68,6 @@ def hybrid_multiplicative(c, x):
   """
   return c[0] + np.prod(np.power(x, c[1:]), axis=1)
 
-# TODO linear with difference
-
 def arithmetic_mean_linear(c, x):
   """ AM linear with n variables.
   c: Array with dim 2, corresponding to c0, c1.
