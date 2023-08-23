@@ -1,0 +1,17 @@
+# Comentario
+
+# La representación de la anidación de archivos depende de la indentación con 4 espacios o con un tab
+
+# Tipos de banderas:
+# -D es un directorio
+# -F es una lista de archivos cualquiera
+# -T es una lista de la numeración de ejercicios .tex, por ejemplo:
+#   -T 1 2 3 4 5
+#   cuyo resultado será equivalente a hacer touch ej1.tex; touch ej2.tex ... touch ej5.tex en el directorio actual
+
+# Ejemplo:
+# -D Capítulo 1
+#     -F introducción.tex desarrollo.tex conclusión.tex readme.txt main.cpp
+#     -T 1 2 5 
+
+-T <++>

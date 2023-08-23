@@ -114,30 +114,28 @@ def AnalysisOfResiduals(
 def main():
     issues = []
 
-    print(SPLITS["1A"])
+    EXPRS = [
+        "2A",
+        "2B",
+        "2C"
+    ]
 
-    # EXPRS = [
-    #     "2A",
-    #     "2B",
-    #     "2C"
-    # ]
+    for experiment in EXPRS:
+        for split in SPLITS[experiment]:
+            for variable in VARS[experiment]:
+                try: 
+                    AnalysisOfResiduals(experiment, split, variable)
+                except:
+                    print("ERROR running the analysis", experiment, split, variable)
+                    issues.append({
+                        "experiment": experiment, 
+                        "split": split, 
+                        "variable": variable
+                    })
 
-#     for experiment in EXPRS:
-#         for split in SPLITS[experiment]:
-#             for variable in VARS[experiment]:
-#                 try: 
-#                     AnalysisOfResiduals(experiment, split, variable)
-#                 except:
-#                     print("ERROR running the analysis", experiment, split, variable)
-#                     issues.append({
-#                         "experiment": experiment, 
-#                         "split": split, 
-#                         "variable": variable
-#                     })
-# 
-#     for issue in issues:
-#         print("Issue with", issue["experiment"], issue["split"], issue["variable"])
-# 
+    for issue in issues:
+        print("Issue with", issue["experiment"], issue["split"], issue["variable"])
+
 if __name__ == '__main__':
     main()
 

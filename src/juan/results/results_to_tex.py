@@ -57,7 +57,12 @@ def table(experiment, slice, variable, fold, col0, col1):
     return tex
     
 tex = ""
+
+if os.path.exists("tables.tex"):
+    os.remove("tables.tex")
+
 with open("tables.tex", "w") as f:
+
     EXPRS = os.listdir(cwd)
 
     EXPRS = ["2A", "2B", "2C"]
@@ -85,6 +90,10 @@ with open("tables.tex", "w") as f:
                     tex = ""
 
 tex = ""
+
+if os.path.exists("images.tex"):
+    os.remove("images.tex")
+
 with open("images.tex", "w") as f:
     EXPRS = os.listdir(cwd)
 
@@ -113,6 +122,9 @@ with open("images.tex", "w") as f:
 
                     f.write(tex)
                     tex = ""
+
+if os.path.exists("sumarized-tables.tex"):
+    os.remove("sumarized-tables.tex")
 
 with open("sumarized-tables.tex", "w") as f:
     EXPRS = os.listdir(cwd)
