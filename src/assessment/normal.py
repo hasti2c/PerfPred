@@ -1,4 +1,4 @@
-from format import EXPRS, SPLITS, VARS, get_predictions
+from format import SPLITS, VARS, get_predictions
 import fitassesment as fa
 import os
 import time

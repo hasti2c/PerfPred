@@ -99,7 +99,7 @@ def scaling_law(c, x):
   x: Array with dim (m, 1).
   y: Array with dim m.
   """
-  return c[0] * np.power(1/x + c[1], c[2])
+  return c[0] * np.power(1/x + c[1], c[2]).flatten()
 
 def anthonys_law(c, x):
   """ Law from Anthony's paper with 2 (size) variables.

@@ -9,7 +9,7 @@ import util as U
 
 
 # == Splitting Functions ==
-def split(vary_list: list[V], df: pd.DataFrame=U.RECORDS) -> T.Tuple[pd.DataFrame, list[pd.DataFrame]]:
+def split(vary_list: list[V], df: pd.DataFrame=U.RECORDS, smallest=1) -> T.Tuple[pd.DataFrame, list[pd.DataFrame]]:
   """ Returns list of ids and dataframes corresponding to split.
 
   == Arguments ==
@@ -30,7 +30,7 @@ def split(vary_list: list[V], df: pd.DataFrame=U.RECORDS) -> T.Tuple[pd.DataFram
       else:
         slice = slice[slice[var.title] == comb[i]]
 
-    if len(slice) > 1:
+    if len(slice) > smallest:
       ids.append(id)
       slices.append(slice)
   cols, dtypes = [var.title for var in fix_list], dict([(var.title, var.dtype) for var in fix_list])

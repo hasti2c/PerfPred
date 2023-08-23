@@ -13,11 +13,11 @@ class Errors():
 
         self.N = np.size(self.errors)
 
-        self.mean = np.mean(self.errors)
+        self.mean = np.mean(self.errors) # not used
 
         self.sigma = np.sqrt(np.mean(abs(self.errors) ** 2))
 
-        self.Lik = np.prod(sp.stats.norm.pdf(self.errors, loc = 0, scale = self.sigma))
+        self.Lik = np.prod(sp.stats.norm.pdf(self.errors, loc = 0, scale = self.sigma)) # not used
         self.logLik = np.sum(
                 np.log( sp.stats.norm.pdf(self.errors, loc = 0, scale = self.sigma) )
             )

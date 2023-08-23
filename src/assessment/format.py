@@ -5,15 +5,9 @@ currentdir = os.path.dirname(os.path.realpath(__file__))
 parentdir = os.path.dirname(currentdir)
 sys.path.append(parentdir)
 
-import numpy as np
-from itertools import product
-
 import experiment.run as R
 import experiment.setup as S
-import util as U
 from modeling.trial import Trial as Tr
-from slicing.variable import Variable as V
-from pprint import pprint
 
 R.run_on_trials(Tr.read_fits)
 

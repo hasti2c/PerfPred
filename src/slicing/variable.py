@@ -105,3 +105,6 @@ class Variable (Enum):
 
   def __str__(self) -> str:
     return self.title
+
+  def __lt__(self, other: Variable) -> bool:
+    return list(Variable).index(other) - list(Variable).index(self) > 0

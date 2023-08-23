@@ -182,7 +182,7 @@ class Trial:
       slice = self.slices.slices[i]
       self.plot_slice(slice, self.df.loc[i, self.model.pars].to_numpy(dtype=float), horiz)
 
-  def plot_together(self, premade_ax: T.Optional[mpl.Axes]=None, title: bool=True, legend: bool=True) -> None:
+  def plot_together(self, premade_ax: T.Optional[mpl.axes.Axes]=None, title: bool=True, legend: bool=True) -> None:
     """ For each possible horiz value, plots all slices in the same plot. Saves each plot as a png file.
     Pre-Condition: Fits have been initalized (by calling fit, read_fits, or read_or_fit).
 

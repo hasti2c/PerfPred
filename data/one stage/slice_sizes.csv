@@ -1,0 +1,17 @@
+splits,num,min,max
+none,1,99,99
+train,2,45,54
+size,4,9,30
+test,3,33,33
+lang,5,18,21
+train+size,7,9,15
+train+test,6,15,18
+train+lang,10,9,12
+size+test,12,3,10
+size+lang,18,3,6
+test+lang,15,6,7
+train+size+test,21,3,5
+train+size+lang,33,3,3
+train+test+lang,30,3,4
+size+test+lang,54,1,2
+train+size+test+lang,99,1,1

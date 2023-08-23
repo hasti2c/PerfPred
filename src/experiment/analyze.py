@@ -5,7 +5,7 @@ from itertools import product
 import matplotlib.pyplot as plt
 import pandas as pd
 
-import evaluation.choose as C
+import experiment.choose as C
 import experiment.setup as S
 import util as U
 from slicing.variable import Variable as V

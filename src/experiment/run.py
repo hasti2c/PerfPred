@@ -32,7 +32,7 @@ def run_on_trials(f: Typ.Callable[[T], Typ.Any], vars_list: list[list[V]]=S.FULL
         sys.stderr.flush()
     
 def run_on_experiments(f: Typ.Callable[[pd.DataFrame], Typ.Any], vars_list: list[list[V]]=S.FULL_VARS_LIST, 
-                       splits_list: list[list[V]]=S.SPLITS_LIST, models: list[str]=S.MODELS, suppress: bool=False) -> None:
+                       splits_list: list[list[V]]=S.SPLITS_LIST, suppress: bool=False) -> None:
     """ For each vars, splits and model in the specified lists, runs f on the subset of TRIALS corresponding to these 
     values.
     
