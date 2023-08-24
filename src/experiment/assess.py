@@ -30,9 +30,11 @@ def r2(true, pred):
     return skl.r2_score(true, pred)
 
 def levene(true, pred, n_splits=2):
-    if len(true) < 5:
+    if len(true) < 4:
         return pd.NA
     split = np.array_split(np.sort(true - pred), n_splits)
+    # if len(true) == 4:
+    #     print("HI", true, pred, split)
     return sp.levene(*split).pvalue
 
 def bartlett(true, pred, n_splits=2):
