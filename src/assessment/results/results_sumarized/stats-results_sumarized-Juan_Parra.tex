@@ -1,0 +1,28 @@
+\documentclass[
+    12pt,
+    a4paper
+]{article}
+
+\input{lib/conf.tex}
+\input{lib/fonts.tex}
+\input{lib/cmds.tex}
+\input{lib/memb.tex}
+\input{lib/boxes.tex}
+\input{lib/mth-envs.tex}
+\input{lib/col.tex}
+
+\usepackage{lscape}
+
+\newcommand{\tema}{Stats Assessment Sumarized Analytical Results}
+
+\begin{document}
+    \begin{center}
+        \LARGE\titulo
+    \end{center}
+    \vspace{1mm}
+	\tableofcontents
+	\pagebreak
+    % ========================== EJERCICIOS ==========================
+    \input{../sumarized-tables.tex}
+	% ======================== FIN DE DOCUMENTO ======================
+\end{document}

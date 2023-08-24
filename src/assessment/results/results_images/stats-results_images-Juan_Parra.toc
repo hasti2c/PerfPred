@@ -1,0 +1,23 @@
+\babel@toc {nil}{}\relax 
+\contentsline {section}{\numberline {1}Experiment 2A}{2}{section.1}%
+\contentsline {subsection}{\numberline {1.1}slice: test+lang, variables: size}{2}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}slice: test, variables: size}{170}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}slice: lang, variables: size}{204}{subsection.1.3}%
+\contentsline {section}{\numberline {2}Experiment 2B}{260}{section.2}%
+\contentsline {subsection}{\numberline {2.1}slice: lang, variables: jsd}{260}{subsection.2.1}%
+\contentsline {section}{\numberline {3}Experiment 2C}{301}{section.3}%
+\contentsline {subsection}{\numberline {3.1}slice: test, variables: inv+pho+syn+gen+geo}{301}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}slice: test, variables: fea}{334}{subsection.3.2}%
+\contentsline {subsection}{\numberline {3.3}slice: test, variables: inv}{358}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}slice: test, variables: gen+geo}{382}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}slice: test, variables: inv+syn}{418}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}slice: test, variables: inv+pho+syn}{454}{subsection.3.6}%
+\contentsline {subsection}{\numberline {3.7}slice: test, variables: syn}{487}{subsection.3.7}%
+\contentsline {subsection}{\numberline {3.8}slice: test, variables: pho+syn}{511}{subsection.3.8}%
+\contentsline {subsection}{\numberline {3.9}slice: test, variables: pho}{547}{subsection.3.9}%
+\contentsline {subsection}{\numberline {3.10}slice: test, variables: fea+inv+pho+syn+gen+geo}{571}{subsection.3.10}%
+\contentsline {subsection}{\numberline {3.11}slice: test, variables: gen}{604}{subsection.3.11}%
+\contentsline {subsection}{\numberline {3.12}slice: test, variables: inv+pho}{628}{subsection.3.12}%
+\contentsline {subsection}{\numberline {3.13}slice: test, variables: geo}{664}{subsection.3.13}%
+\contentsline {subsection}{\numberline {3.14}slice: test, variables: fea+inv+pho+syn}{688}{subsection.3.14}%
+\contentsline {subsection}{\numberline {3.15}slice: test, variables: fea+gen+geo}{721}{subsection.3.15}%

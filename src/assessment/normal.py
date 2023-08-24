@@ -4,6 +4,7 @@ import os
 import time
 import platform
 import pandas as pd
+import math
 
 cwd = "" # os.getcwd()
 thisdir = os.path.join(cwd, 'src/juan/')
@@ -18,13 +19,17 @@ def AnalysisOfResiduals(
         spbleu = df['sp-BLEU']
         models = df.columns[df.columns.get_loc('sp-BLEU')+1:]
 
-        norm = []
+        normPearson = []
+        normShapiro = []
         aic = []
         bic = []
         r2 = []
         levene = []
         bartlett = []
         loglikelyhood = []
+
+        normalTest = []
+        homoscedasticityTest = []
 
         evaluation = []
 
@@ -43,9 +48,10 @@ def AnalysisOfResiduals(
 
             print("Number of samples:", ds.N)
 
-            ds.Graphs(directory, experiment, split, variable, key, model)
+            # ds.Graphs(directory, experiment, split, variable, key, model)
 
-            normT = ds.normalityTest()
+            normPearsonT = ds.normalityTestPearson()
+            normShapiroT = ds.normalityTestShapiro()
             aicT = ds.AIC()
             bicT = ds.BIC()
             r2T = ds.R2()
@@ -53,13 +59,31 @@ def AnalysisOfResiduals(
             bartlettT = ds.homocedasticityBartlett()
             loglikelyhoodT = ds.logLik
 
-            norm.append(normT)
+            normPearson.append(normPearsonT)
+            normShapiro.append(normShapiroT)
             aic.append(aicT)
             bic.append(bicT)
             r2.append(r2T)
             levene.append(leveneT)
             bartlett.append(bartlettT)
             loglikelyhood.append(loglikelyhoodT)
+
+            if normPearsonT < 0.05 or normShapiroT < 0.05:
+                normalTest.append("X")
+                normalFailed = True
+            elif math.isnan(normPearsonT) and math.isnan(normShapiroT):
+                normalTest.append("?")
+                normalFailed = False
+            else:
+                normalTest.append("not F")
+                normalFailed = False
+            
+            if normalFailed and leveneT < 0.05:
+                homoscedasticityTest.append("X")
+            elif not normalFailed and bartlettT < 0.05:
+                homoscedasticityTest.append("X")
+            else:
+                homoscedasticityTest.append("not F")
 
             print("\n")
 
@@ -72,13 +96,16 @@ def AnalysisOfResiduals(
 
         data = {
             'models': models,
-            'Normality p-value': norm,
-            'AIC of centered model': aic,
-            'BIC of centered model': bic,
+            'Normality Pearson p-value': normPearson,
+            'Normality Shapiro p-value': normShapiro,
+            'AIC of model': aic,
+            'BIC of model': bic,
             'LogLikelyhood': loglikelyhood,
             'R2 coefficient': r2,
             'Homocedasticity Levene p-value': levene,
-            'Homocedasticity bartlett p-value': bartlett
+            'Homocedasticity bartlett p-value': bartlett,
+            'Normal Test': normalTest,
+            'Homoscedasticity Test': homoscedasticityTest
         }
 
         results_df = pd.DataFrame(data = data)
@@ -87,27 +114,24 @@ def AnalysisOfResiduals(
 def main():
     issues = []
 
-    var = 1
-
     EXPRS = [
-        "1A",
-        # "2A",
-        # "2B",
-        # "2C"
+        "2A",
+        "2B",
+        "2C"
     ]
 
     for experiment in EXPRS:
         for split in SPLITS[experiment]:
             for variable in VARS[experiment]:
                 try: 
-                   AnalysisOfResiduals(experiment, split, variable)
+                    AnalysisOfResiduals(experiment, split, variable)
                 except:
-                   print("ERROR running the analysis", experiment, split, variable)
-                   issues.append({
-                       "experiment": experiment, 
-                       "split": split, 
-                       "variable": variable
-                   })
+                    print("ERROR running the analysis", experiment, split, variable)
+                    issues.append({
+                        "experiment": experiment, 
+                        "split": split, 
+                        "variable": variable
+                    })
 
     for issue in issues:
         print("Issue with", issue["experiment"], issue["split"], issue["variable"])

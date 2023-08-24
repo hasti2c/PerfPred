@@ -2,6 +2,7 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 import os
+import statsmodels.api as sm
 
 class Errors():
     def __init__(self, predictions, points):
@@ -25,36 +26,62 @@ class Errors():
     # Graphical Test
 
     def QQ(self, title, filename, path):
-        u = np.sort( np.random.uniform(size = self.N) )
+        # Compute theoretical normal sample q
+        u = np.sort(np.random.uniform(size = self.N))
         q = sp.stats.norm.ppf(u,loc = 0, scale = self.sigma)
-        plt.plot(q,self.errors, 'o')
 
-        min_ = min(np.min(q), np.min(self.errors))
-        max_ = max(np.max(q), np.max(self.errors))
-
+        # configuration, layout and labels
         fig, ax = plt.subplots(
             figsize = (6,4),
             tight_layout = True
         )
-
-        ax.plot(q,self.errors, '.', color = "b")
-        ax.plot(
-            [min_,max_], [min_,max_], 
-            '-', color = 'k')
-
         ax.set_xlabel("Observations", fontsize = 14)
         ax.set_ylabel("Normal quantiles", fontsize = 14)
 
         ax.set_title(title)
         ax.grid(True)
 
+        # To plot the identity line
+        min_ = min(np.min(q), np.min(self.errors))
+        max_ = max(np.max(q), np.max(self.errors))
+
+        ax.set_xlim(min_ - (max_-min_) * 0.1,max_ + (max_-min_) * 0.1)
+        ax.set_ylim(min_ - (max_-min_) * 0.1,max_ + (max_-min_) * 0.1)
+
+        ax.plot(
+            [min_,max_], [min_,max_], 
+            '-', color = 'k')
+
+        # Plot the QQ
+        ax.plot(q,self.errors, '.', color = "b")
+
+        # condifence bands
+        confidence = 0.95
+
+            ## ppoints in R
+        a = 3./8. if self.N <= 10 else 1./2.
+        P = (np.arange(self.N)+1-a) / (self.N+1-2*a)
+
+        zz = sp.stats.norm.ppf(
+            1 - (1-confidence)/2
+        )
+
+        se = (1 / sp.stats.norm.pdf(q)) * np.sqrt(P * (1-P)/self.N)
+        fitValue = q
+        
+        upper = fitValue + 2 * zz * se
+        lower = fitValue - 2 * zz * se
+
+        # ax.plot(q, upper, "--r")
+        # ax.plot(q, lower, "--r")
+
+        # save plot
         filename = filename + '.png'
         plt.savefig(filename)
         os.replace(filename, 
             os.path.join(path, filename)
         )
-
-        plt.close( fig )
+        plt.close()
 
     def pdfPlot(self, title, filename, path):
         prob = 0.01
@@ -72,7 +99,6 @@ class Errors():
         fig, ax = plt.subplots(
             figsize = (6,4), tight_layout = True
         )
-
         ax.set_title(title, fontsize = 16)
 
         ax.plot(qs, d, '-', label = "Density function")
@@ -156,19 +182,30 @@ class Errors():
         )
         self.NvsN_1(
             f'N-th vs (N-1)-th residuals:\n{experiment}-{split}-{variable}-{key}-{model}',
-            filename = f'{experiment}-{split}-{variable}-{key}-{model}-NvsN_1',
+            filename = f'{experiment}-{split}-{variable}-{key}-{model}-NvsN-1',
             path = directory
         )
 
     
     # Numerical Values
 
-    def normalityTest(self):
+    def normalityTestPearson(self):
+        '''
+        Normality test based on Pearson and D'Agostino test
+        '''
         if self.N < 8:
             print("Error in normality Test: too few samples")
             return float('NaN')
         res = sp.stats.normaltest(self.errors)
         return res.pvalue
+
+    def normalityTestShapiro(self):
+        '''
+        Normality test based on Shapiro-Wilk test
+        '''
+        res = sp.stats.shapiro(self.errors)
+        return res.pvalue
+
 
     def homocedasticityLevene(self, Nsplits = 2):
         try:

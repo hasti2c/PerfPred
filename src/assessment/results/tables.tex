@@ -1,0 +1,5420 @@
+\section{Experiment 2A}
+\subsection{slice: test+lang, variables: size}
+\textbf{Fold:} bible-ka.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.6357$\\
+\text{poly2} & $nan$ & $0.1459$\\
+\text{poly3} & $nan$ & $0.1090$\\
+\text{exp} & $nan$ & $0.6921$\\
+\text{log} & $nan$ & $0.1946$\\
+\text{power} & $nan$ & $0.3999$\\
+\text{mult} & $nan$ & $0.3999$\\
+\text{hybrid mult} & $nan$ & $0.5659$\\
+\text{scaling} & $nan$ & $0.2732$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $48.1628$ & $49.7463$\\
+\text{poly2} & $47.7391$ & $49.3226$\\
+\text{poly3} & $47.9793$ & $49.5629$\\
+\text{exp} & $47.9420$ & $49.5255$\\
+\text{log} & $47.7992$ & $49.3827$\\
+\text{power} & $47.7552$ & $49.3387$\\
+\text{mult} & $47.7552$ & $49.3387$\\
+\text{hybrid mult} & $48.0494$ & $49.6329$\\
+\text{scaling} & $47.7407$ & $49.3242$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-23.0814$ & $-0.0229$\\
+\text{poly2} & $-22.8695$ & $0.0468$\\
+\text{poly3} & $-22.9897$ & $0.0079$\\
+\text{exp} & $-22.9710$ & $0.0140$\\
+\text{log} & $-22.8996$ & $0.0372$\\
+\text{power} & $-22.8776$ & $0.0443$\\
+\text{mult} & $-22.8776$ & $0.0443$\\
+\text{hybrid mult} & $-23.0247$ & $-0.0038$\\
+\text{scaling} & $-22.8703$ & $0.0466$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.4725$ & $0.3760$\\
+\text{poly2} & $0.3233$ & $0.0734$\\
+\text{poly3} & $0.3391$ & $0.0386$\\
+\text{exp} & $0.9147$ & $0.8172$\\
+\text{log} & $0.3504$ & $0.1939$\\
+\text{power} & $0.3250$ & $0.2709$\\
+\text{mult} & $0.3250$ & $0.2709$\\
+\text{hybrid mult} & $0.4156$ & $0.3406$\\
+\text{scaling} & $0.2557$ & $0.1548$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{X}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{not F} & \text{not F}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores-hi.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.8426$\\
+\text{poly2} & $nan$ & $0.8449$\\
+\text{poly3} & $nan$ & $0.4041$\\
+\text{exp} & $nan$ & $0.2154$\\
+\text{log} & $nan$ & $0.0345$\\
+\text{power} & $nan$ & $0.7704$\\
+\text{mult} & $nan$ & $0.7704$\\
+\text{hybrid mult} & $nan$ & $0.7875$\\
+\text{scaling} & $nan$ & $0.7704$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $46.9945$ & $48.8863$\\
+\text{poly2} & $46.5508$ & $48.4426$\\
+\text{poly3} & $45.6180$ & $47.5098$\\
+\text{exp} & $46.3998$ & $48.2916$\\
+\text{log} & $46.9811$ & $48.8729$\\
+\text{power} & $46.0695$ & $47.9613$\\
+\text{mult} & $46.0695$ & $47.9613$\\
+\text{hybrid mult} & $46.1355$ & $48.0273$\\
+\text{scaling} & $46.0695$ & $47.9613$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-22.4973$ & $0.2471$\\
+\text{poly2} & $-22.2754$ & $0.2933$\\
+\text{poly3} & $-21.8090$ & $0.3815$\\
+\text{exp} & $-22.1999$ & $0.3084$\\
+\text{log} & $-22.4905$ & $0.2485$\\
+\text{power} & $-22.0347$ & $0.3403$\\
+\text{mult} & $-22.0347$ & $0.3403$\\
+\text{hybrid mult} & $-22.0677$ & $0.3340$\\
+\text{scaling} & $-22.0347$ & $0.3403$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.7007$ & $0.5438$\\
+\text{poly2} & $0.3629$ & $0.3210$\\
+\text{poly3} & $0.0280$ & $0.0886$\\
+\text{exp} & $0.5186$ & $0.2963$\\
+\text{log} & $0.0101$ & $0.0070$\\
+\text{power} & $0.2802$ & $0.2784$\\
+\text{mult} & $0.2802$ & $0.2784$\\
+\text{hybrid mult} & $0.3065$ & $0.2968$\\
+\text{scaling} & $0.2802$ & $0.2784$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{not F}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} gov-ka.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.9029$\\
+\text{poly2} & $nan$ & $0.2331$\\
+\text{poly3} & $nan$ & $0.1630$\\
+\text{exp} & $nan$ & $0.8423$\\
+\text{log} & $nan$ & $0.3297$\\
+\text{power} & $nan$ & $0.6771$\\
+\text{mult} & $nan$ & $0.6771$\\
+\text{hybrid mult} & $nan$ & $0.8569$\\
+\text{scaling} & $nan$ & $0.4813$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $50.7680$ & $52.3515$\\
+\text{poly2} & $50.3278$ & $51.9113$\\
+\text{poly3} & $50.5054$ & $52.0889$\\
+\text{exp} & $50.6614$ & $52.2450$\\
+\text{log} & $50.4257$ & $52.0092$\\
+\text{power} & $50.4211$ & $52.0046$\\
+\text{mult} & $50.4211$ & $52.0046$\\
+\text{hybrid mult} & $50.6688$ & $52.2523$\\
+\text{scaling} & $50.3819$ & $51.9654$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-24.3840$ & $0.0259$\\
+\text{poly2} & $-24.1639$ & $0.0948$\\
+\text{poly3} & $-24.2527$ & $0.0677$\\
+\text{exp} & $-24.3307$ & $0.0431$\\
+\text{log} & $-24.2129$ & $0.0800$\\
+\text{power} & $-24.2105$ & $0.0807$\\
+\text{mult} & $-24.2105$ & $0.0807$\\
+\text{hybrid mult} & $-24.3344$ & $0.0419$\\
+\text{scaling} & $-24.1910$ & $0.0866$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.7108$ & $0.6880$\\
+\text{poly2} & $0.5289$ & $0.3176$\\
+\text{poly3} & $0.4631$ & $0.1398$\\
+\text{exp} & $0.8246$ & $0.8445$\\
+\text{log} & $0.5521$ & $0.4521$\\
+\text{power} & $0.6317$ & $0.6357$\\
+\text{mult} & $0.6317$ & $0.6357$\\
+\text{hybrid mult} & $0.7274$ & $0.7184$\\
+\text{scaling} & $0.4946$ & $0.4397$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{not F}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{not F} & \text{not F}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores-gu.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.8140$\\
+\text{poly2} & $nan$ & $0.1497$\\
+\text{poly3} & $nan$ & $0.1015$\\
+\text{exp} & $nan$ & $0.9139$\\
+\text{log} & $nan$ & $0.1653$\\
+\text{power} & $nan$ & $0.5953$\\
+\text{mult} & $nan$ & $0.5953$\\
+\text{hybrid mult} & $nan$ & $0.6661$\\
+\text{scaling} & $nan$ & $0.4238$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $42.6895$ & $44.2730$\\
+\text{poly2} & $41.4063$ & $42.9899$\\
+\text{poly3} & $41.8020$ & $43.3856$\\
+\text{exp} & $42.0915$ & $43.6750$\\
+\text{log} & $41.9549$ & $43.5385$\\
+\text{power} & $41.5865$ & $43.1700$\\
+\text{mult} & $41.5865$ & $43.1700$\\
+\text{hybrid mult} & $42.1906$ & $43.7741$\\
+\text{scaling} & $41.5229$ & $43.1065$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-20.3448$ & $-0.1176$\\
+\text{poly2} & $-19.7032$ & $0.0976$\\
+\text{poly3} & $-19.9010$ & $0.0361$\\
+\text{exp} & $-20.0457$ & $-0.0116$\\
+\text{log} & $-19.9775$ & $0.0112$\\
+\text{power} & $-19.7932$ & $0.0701$\\
+\text{mult} & $-19.7932$ & $0.0701$\\
+\text{hybrid mult} & $-20.0953$ & $-0.0284$\\
+\text{scaling} & $-19.7615$ & $0.0799$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.4730$ & $0.3460$\\
+\text{poly2} & $0.2528$ & $0.0347$\\
+\text{poly3} & $0.3379$ & $0.0445$\\
+\text{exp} & $0.9058$ & $0.7575$\\
+\text{log} & $0.2295$ & $0.0453$\\
+\text{power} & $0.3148$ & $0.2349$\\
+\text{mult} & $0.3148$ & $0.2349$\\
+\text{hybrid mult} & $0.3826$ & $0.2758$\\
+\text{scaling} & $0.2315$ & $0.1367$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{X}\\
+\text{poly3} & \text{not F} & \text{X}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{not F} & \text{X}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} gov-gu.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.2987$\\
+\text{poly2} & $nan$ & $0.0761$\\
+\text{poly3} & $nan$ & $0.0919$\\
+\text{exp} & $nan$ & $0.3200$\\
+\text{log} & $nan$ & $0.0803$\\
+\text{power} & $nan$ & $0.1362$\\
+\text{mult} & $nan$ & $0.1362$\\
+\text{hybrid mult} & $nan$ & $0.2512$\\
+\text{scaling} & $nan$ & $0.0950$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $51.9293$ & $53.5128$\\
+\text{poly2} & $51.9838$ & $53.5673$\\
+\text{poly3} & $52.0628$ & $53.6464$\\
+\text{exp} & $51.8590$ & $53.4425$\\
+\text{log} & $51.7385$ & $53.3221$\\
+\text{power} & $51.8360$ & $53.4196$\\
+\text{mult} & $51.8360$ & $53.4196$\\
+\text{hybrid mult} & $51.8693$ & $53.4528$\\
+\text{scaling} & $51.8515$ & $53.4350$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-24.9647$ & $-0.0132$\\
+\text{poly2} & $-24.9919$ & $-0.0225$\\
+\text{poly3} & $-25.0314$ & $-0.0360$\\
+\text{exp} & $-24.9295$ & $-0.0014$\\
+\text{log} & $-24.8693$ & $0.0185$\\
+\text{power} & $-24.9180$ & $0.0024$\\
+\text{mult} & $-24.9180$ & $0.0024$\\
+\text{hybrid mult} & $-24.9346$ & $-0.0031$\\
+\text{scaling} & $-24.9257$ & $-0.0002$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.4918$ & $0.4061$\\
+\text{poly2} & $0.3616$ & $0.0415$\\
+\text{poly3} & $0.4062$ & $0.0682$\\
+\text{exp} & $0.7755$ & $0.6828$\\
+\text{log} & $0.3506$ & $0.1770$\\
+\text{power} & $0.2189$ & $0.1007$\\
+\text{mult} & $0.2189$ & $0.1007$\\
+\text{hybrid mult} & $0.4320$ & $0.3647$\\
+\text{scaling} & $0.1981$ & $0.0341$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{X}\\
+\text{poly3} & \text{not F} & \text{not F}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{not F} & \text{not F}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} gov-si.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.8709$\\
+\text{poly2} & $nan$ & $0.8644$\\
+\text{poly3} & $nan$ & $0.2262$\\
+\text{exp} & $nan$ & $0.5706$\\
+\text{log} & $nan$ & $0.0607$\\
+\text{power} & $nan$ & $0.6467$\\
+\text{mult} & $nan$ & $0.6467$\\
+\text{hybrid mult} & $nan$ & $0.8681$\\
+\text{scaling} & $nan$ & $0.6467$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $62.3988$ & $64.2907$\\
+\text{poly2} & $62.4546$ & $64.3465$\\
+\text{poly3} & $62.2760$ & $64.1678$\\
+\text{exp} & $62.1912$ & $64.0831$\\
+\text{log} & $63.0584$ & $64.9502$\\
+\text{power} & $62.5792$ & $64.4710$\\
+\text{mult} & $62.5792$ & $64.4710$\\
+\text{hybrid mult} & $62.3908$ & $64.2826$\\
+\text{scaling} & $62.5792$ & $64.4710$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-30.1994$ & $0.2663$\\
+\text{poly2} & $-30.2273$ & $0.2604$\\
+\text{poly3} & $-30.1380$ & $0.2790$\\
+\text{exp} & $-30.0956$ & $0.2877$\\
+\text{log} & $-30.5292$ & $0.1938$\\
+\text{power} & $-30.2896$ & $0.2471$\\
+\text{mult} & $-30.2896$ & $0.2471$\\
+\text{hybrid mult} & $-30.1954$ & $0.2671$\\
+\text{scaling} & $-30.2896$ & $0.2471$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.3224$ & $0.4095$\\
+\text{poly2} & $0.2632$ & $0.3371$\\
+\text{poly3} & $0.0008$ & $0.0590$\\
+\text{exp} & $0.9072$ & $0.9969$\\
+\text{log} & $0.0297$ & $0.0065$\\
+\text{power} & $0.0957$ & $0.1504$\\
+\text{mult} & $0.0957$ & $0.1504$\\
+\text{hybrid mult} & $0.2852$ & $0.3740$\\
+\text{scaling} & $0.0957$ & $0.1504$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{not F}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{not F} & \text{X}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} gov-hi.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.6820$\\
+\text{poly2} & $nan$ & $0.7748$\\
+\text{poly3} & $nan$ & $0.1264$\\
+\text{exp} & $nan$ & $0.4967$\\
+\text{log} & $nan$ & $0.1205$\\
+\text{power} & $nan$ & $0.6415$\\
+\text{mult} & $nan$ & $0.6415$\\
+\text{hybrid mult} & $nan$ & $0.6946$\\
+\text{scaling} & $nan$ & $0.6415$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $58.6478$ & $60.5396$\\
+\text{poly2} & $58.7795$ & $60.6714$\\
+\text{poly3} & $58.5520$ & $60.4438$\\
+\text{exp} & $58.3507$ & $60.2426$\\
+\text{log} & $59.1689$ & $61.0607$\\
+\text{power} & $58.8173$ & $60.7091$\\
+\text{mult} & $58.8173$ & $60.7091$\\
+\text{hybrid mult} & $58.6627$ & $60.5546$\\
+\text{scaling} & $58.8173$ & $60.7092$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-28.3239$ & $0.2017$\\
+\text{poly2} & $-28.3898$ & $0.1866$\\
+\text{poly3} & $-28.2760$ & $0.2126$\\
+\text{exp} & $-28.1754$ & $0.2349$\\
+\text{log} & $-28.5844$ & $0.1400$\\
+\text{power} & $-28.4087$ & $0.1822$\\
+\text{mult} & $-28.4087$ & $0.1822$\\
+\text{hybrid mult} & $-28.3314$ & $0.2000$\\
+\text{scaling} & $-28.4087$ & $0.1822$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.3094$ & $0.3404$\\
+\text{poly2} & $0.2265$ & $0.2643$\\
+\text{poly3} & $0.0002$ & $0.0074$\\
+\text{exp} & $0.7625$ & $0.7925$\\
+\text{log} & $0.0400$ & $0.0270$\\
+\text{power} & $0.0834$ & $0.1464$\\
+\text{mult} & $0.0834$ & $0.1464$\\
+\text{hybrid mult} & $0.2252$ & $0.2643$\\
+\text{scaling} & $0.0834$ & $0.1464$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{X}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{not F} & \text{X}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible-hi.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.0358$\\
+\text{poly2} & $nan$ & $0.3783$\\
+\text{poly3} & $nan$ & $0.2554$\\
+\text{exp} & $nan$ & $0.0325$\\
+\text{log} & $nan$ & $0.0546$\\
+\text{power} & $nan$ & $0.0685$\\
+\text{mult} & $nan$ & $0.0685$\\
+\text{hybrid mult} & $nan$ & $0.0416$\\
+\text{scaling} & $nan$ & $0.0581$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $57.4602$ & $59.3520$\\
+\text{poly2} & $56.6876$ & $58.5794$\\
+\text{poly3} & $56.5562$ & $58.4480$\\
+\text{exp} & $57.3971$ & $59.2889$\\
+\text{log} & $57.4184$ & $59.3102$\\
+\text{power} & $57.5023$ & $59.3941$\\
+\text{mult} & $57.5023$ & $59.3941$\\
+\text{hybrid mult} & $57.4647$ & $59.3565$\\
+\text{scaling} & $57.4631$ & $59.3550$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-27.7301$ & $-0.0690$\\
+\text{poly2} & $-27.3438$ & $0.0427$\\
+\text{poly3} & $-27.2781$ & $0.0605$\\
+\text{exp} & $-27.6986$ & $-0.0594$\\
+\text{log} & $-27.7092$ & $-0.0626$\\
+\text{power} & $-27.7511$ & $-0.0754$\\
+\text{mult} & $-27.7511$ & $-0.0754$\\
+\text{hybrid mult} & $-27.7324$ & $-0.0697$\\
+\text{scaling} & $-27.7316$ & $-0.0694$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.1952$ & $0.0174$\\
+\text{poly2} & $0.0432$ & $0.0897$\\
+\text{poly3} & $0.0019$ & $0.0767$\\
+\text{exp} & $0.1749$ & $0.0108$\\
+\text{log} & $0.5329$ & $0.4023$\\
+\text{power} & $0.6968$ & $0.5159$\\
+\text{mult} & $0.6968$ & $0.5159$\\
+\text{hybrid mult} & $0.2700$ & $0.0700$\\
+\text{scaling} & $0.6570$ & $0.6705$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{not F}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{not F} & \text{not F}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{X} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} gov-ta.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.7844$\\
+\text{poly2} & $nan$ & $0.7776$\\
+\text{poly3} & $nan$ & $0.1555$\\
+\text{exp} & $nan$ & $0.5645$\\
+\text{log} & $nan$ & $0.0774$\\
+\text{power} & $nan$ & $0.6968$\\
+\text{mult} & $nan$ & $0.6968$\\
+\text{hybrid mult} & $nan$ & $0.7634$\\
+\text{scaling} & $nan$ & $0.6968$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $59.9527$ & $61.8446$\\
+\text{poly2} & $60.0320$ & $61.9238$\\
+\text{poly3} & $59.7456$ & $61.6374$\\
+\text{exp} & $59.6578$ & $61.5496$\\
+\text{log} & $60.5835$ & $62.4753$\\
+\text{power} & $60.1194$ & $62.0113$\\
+\text{mult} & $60.1194$ & $62.0113$\\
+\text{hybrid mult} & $59.9650$ & $61.8568$\\
+\text{scaling} & $60.1194$ & $62.0113$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-28.9764$ & $0.2343$\\
+\text{poly2} & $-29.0160$ & $0.2256$\\
+\text{poly3} & $-28.8728$ & $0.2567$\\
+\text{exp} & $-28.8289$ & $0.2659$\\
+\text{log} & $-29.2918$ & $0.1621$\\
+\text{power} & $-29.0597$ & $0.2159$\\
+\text{mult} & $-29.0597$ & $0.2159$\\
+\text{hybrid mult} & $-28.9825$ & $0.2330$\\
+\text{scaling} & $-29.0597$ & $0.2159$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.3009$ & $0.3591$\\
+\text{poly2} & $0.2490$ & $0.2993$\\
+\text{poly3} & $0.0005$ & $0.0167$\\
+\text{exp} & $0.8083$ & $0.8686$\\
+\text{log} & $0.0370$ & $0.0197$\\
+\text{power} & $0.0932$ & $0.1610$\\
+\text{mult} & $0.0932$ & $0.1610$\\
+\text{hybrid mult} & $0.2391$ & $0.2974$\\
+\text{scaling} & $0.0932$ & $0.1610$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{X}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{not F} & \text{X}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible-ta.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.0314$\\
+\text{poly2} & $nan$ & $0.2811$\\
+\text{poly3} & $nan$ & $0.1586$\\
+\text{exp} & $nan$ & $0.0229$\\
+\text{log} & $nan$ & $0.0739$\\
+\text{power} & $nan$ & $0.0862$\\
+\text{mult} & $nan$ & $0.0862$\\
+\text{hybrid mult} & $nan$ & $0.0567$\\
+\text{scaling} & $nan$ & $0.0785$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $57.6922$ & $59.5841$\\
+\text{poly2} & $56.8410$ & $58.7328$\\
+\text{poly3} & $56.6107$ & $58.5025$\\
+\text{exp} & $57.6264$ & $59.5182$\\
+\text{log} & $57.6651$ & $59.5569$\\
+\text{power} & $57.7057$ & $59.5976$\\
+\text{mult} & $57.7057$ & $59.5976$\\
+\text{hybrid mult} & $57.7049$ & $59.5967$\\
+\text{scaling} & $57.6513$ & $59.5431$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-27.8461$ & $-0.0652$\\
+\text{poly2} & $-27.4205$ & $0.0568$\\
+\text{poly3} & $-27.3053$ & $0.0873$\\
+\text{exp} & $-27.8132$ & $-0.0552$\\
+\text{log} & $-27.8325$ & $-0.0610$\\
+\text{power} & $-27.8529$ & $-0.0672$\\
+\text{mult} & $-27.8529$ & $-0.0672$\\
+\text{hybrid mult} & $-27.8525$ & $-0.0671$\\
+\text{scaling} & $-27.8257$ & $-0.0589$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.1641$ & $0.0066$\\
+\text{poly2} & $0.0184$ & $0.0303$\\
+\text{poly3} & $0.0009$ & $0.0084$\\
+\text{exp} & $0.1315$ & $0.0007$\\
+\text{log} & $0.5316$ & $0.4074$\\
+\text{power} & $0.5580$ & $0.3827$\\
+\text{mult} & $0.5580$ & $0.3827$\\
+\text{hybrid mult} & $0.2781$ & $0.0757$\\
+\text{scaling} & $0.9767$ & $0.9855$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{X}\\
+\text{poly3} & \text{not F} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{not F} & \text{not F}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible-gu.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.4876$\\
+\text{poly2} & $nan$ & $0.1897$\\
+\text{poly3} & $nan$ & $0.1917$\\
+\text{exp} & $nan$ & $0.4416$\\
+\text{log} & $nan$ & $0.0802$\\
+\text{power} & $nan$ & $0.2039$\\
+\text{mult} & $nan$ & $0.2039$\\
+\text{hybrid mult} & $nan$ & $0.3672$\\
+\text{scaling} & $nan$ & $0.1388$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $47.5051$ & $49.0886$\\
+\text{poly2} & $47.6587$ & $49.2423$\\
+\text{poly3} & $47.6752$ & $49.2587$\\
+\text{exp} & $47.3103$ & $48.8938$\\
+\text{log} & $47.1505$ & $48.7340$\\
+\text{power} & $47.2683$ & $48.8518$\\
+\text{mult} & $47.2683$ & $48.8518$\\
+\text{hybrid mult} & $47.3977$ & $48.9812$\\
+\text{scaling} & $47.2924$ & $48.8760$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-22.7525$ & $-0.0525$\\
+\text{poly2} & $-22.8294$ & $-0.0798$\\
+\text{poly3} & $-22.8376$ & $-0.0828$\\
+\text{exp} & $-22.6551$ & $-0.0189$\\
+\text{log} & $-22.5752$ & $0.0079$\\
+\text{power} & $-22.6341$ & $-0.0118$\\
+\text{mult} & $-22.6341$ & $-0.0118$\\
+\text{hybrid mult} & $-22.6988$ & $-0.0338$\\
+\text{scaling} & $-22.6462$ & $-0.0159$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.4545$ & $0.3396$\\
+\text{poly2} & $0.4577$ & $0.1557$\\
+\text{poly3} & $0.4738$ & $0.1649$\\
+\text{exp} & $0.7294$ & $0.5887$\\
+\text{log} & $0.2494$ & $0.0403$\\
+\text{power} & $0.2030$ & $0.0924$\\
+\text{mult} & $0.2030$ & $0.0924$\\
+\text{hybrid mult} & $0.3586$ & $0.2612$\\
+\text{scaling} & $0.1957$ & $0.0506$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{not F}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{not F} & \text{X}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible-si.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.0199$\\
+\text{poly2} & $nan$ & $0.2830$\\
+\text{poly3} & $nan$ & $0.1479$\\
+\text{exp} & $nan$ & $0.0196$\\
+\text{log} & $nan$ & $0.0432$\\
+\text{power} & $nan$ & $0.0529$\\
+\text{mult} & $nan$ & $0.0529$\\
+\text{hybrid mult} & $nan$ & $0.0283$\\
+\text{scaling} & $nan$ & $0.0524$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $60.7026$ & $62.5944$\\
+\text{poly2} & $59.9203$ & $61.8121$\\
+\text{poly3} & $59.9307$ & $61.8225$\\
+\text{exp} & $60.7051$ & $62.5969$\\
+\text{log} & $60.7793$ & $62.6711$\\
+\text{power} & $60.8475$ & $62.7393$\\
+\text{mult} & $60.8475$ & $62.7393$\\
+\text{hybrid mult} & $60.7785$ & $62.6704$\\
+\text{scaling} & $60.8228$ & $62.7146$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-29.3513$ & $-0.0282$\\
+\text{poly2} & $-28.9601$ & $0.0806$\\
+\text{poly3} & $-28.9654$ & $0.0792$\\
+\text{exp} & $-29.3526$ & $-0.0285$\\
+\text{log} & $-29.3897$ & $-0.0395$\\
+\text{power} & $-29.4237$ & $-0.0497$\\
+\text{mult} & $-29.4237$ & $-0.0497$\\
+\text{hybrid mult} & $-29.3893$ & $-0.0394$\\
+\text{scaling} & $-29.4114$ & $-0.0460$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.1455$ & $0.0006$\\
+\text{poly2} & $0.0159$ & $0.0328$\\
+\text{poly3} & $0.0005$ & $0.0184$\\
+\text{exp} & $0.1448$ & $0.0005$\\
+\text{log} & $0.3913$ & $0.1862$\\
+\text{power} & $0.5006$ & $0.2702$\\
+\text{mult} & $0.5006$ & $0.2702$\\
+\text{hybrid mult} & $0.2195$ & $0.0160$\\
+\text{scaling} & $0.9482$ & $0.9088$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{X}\\
+\text{poly3} & \text{not F} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{not F}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{X} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores-si.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.8593$\\
+\text{poly2} & $nan$ & $0.8545$\\
+\text{poly3} & $nan$ & $0.7709$\\
+\text{exp} & $nan$ & $0.0827$\\
+\text{log} & $nan$ & $0.0451$\\
+\text{power} & $nan$ & $0.8474$\\
+\text{mult} & $nan$ & $0.8474$\\
+\text{hybrid mult} & $nan$ & $0.8181$\\
+\text{scaling} & $nan$ & $0.8474$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $40.5990$ & $42.4909$\\
+\text{poly2} & $40.1346$ & $42.0264$\\
+\text{poly3} & $39.6771$ & $41.5689$\\
+\text{exp} & $41.2475$ & $43.1394$\\
+\text{log} & $40.8001$ & $42.6919$\\
+\text{power} & $39.7669$ & $41.6587$\\
+\text{mult} & $39.7669$ & $41.6587$\\
+\text{hybrid mult} & $39.3724$ & $41.2642$\\
+\text{scaling} & $39.7669$ & $41.6587$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-19.2995$ & $0.2988$\\
+\text{poly2} & $-19.0673$ & $0.3438$\\
+\text{poly3} & $-18.8386$ & $0.3853$\\
+\text{exp} & $-19.6238$ & $0.2307$\\
+\text{log} & $-19.4001$ & $0.2784$\\
+\text{power} & $-18.8835$ & $0.3774$\\
+\text{mult} & $-18.8835$ & $0.3774$\\
+\text{hybrid mult} & $-18.6862$ & $0.4115$\\
+\text{scaling} & $-18.8835$ & $0.3774$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.7957$ & $0.6039$\\
+\text{poly2} & $0.4151$ & $0.3411$\\
+\text{poly3} & $0.2359$ & $0.2524$\\
+\text{exp} & $0.4937$ & $0.1184$\\
+\text{log} & $0.0180$ & $0.0072$\\
+\text{power} & $0.3678$ & $0.3468$\\
+\text{mult} & $0.3678$ & $0.3468$\\
+\text{hybrid mult} & $0.1732$ & $0.2338$\\
+\text{scaling} & $0.3678$ & $0.3468$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{not F}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores-ka.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.9935$\\
+\text{poly2} & $nan$ & $0.6025$\\
+\text{poly3} & $nan$ & $0.4267$\\
+\text{exp} & $nan$ & $0.8680$\\
+\text{log} & $nan$ & $0.5040$\\
+\text{power} & $nan$ & $0.9499$\\
+\text{mult} & $nan$ & $0.9499$\\
+\text{hybrid mult} & $nan$ & $0.9005$\\
+\text{scaling} & $nan$ & $0.9338$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $38.2134$ & $39.7969$\\
+\text{poly2} & $37.3533$ & $38.9368$\\
+\text{poly3} & $37.3228$ & $38.9063$\\
+\text{exp} & $38.9476$ & $40.5311$\\
+\text{log} & $37.7223$ & $39.3058$\\
+\text{power} & $37.7684$ & $39.3519$\\
+\text{mult} & $37.7684$ & $39.3519$\\
+\text{hybrid mult} & $37.6174$ & $39.2009$\\
+\text{scaling} & $37.7029$ & $39.2864$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-18.1067$ & $0.1648$\\
+\text{poly2} & $-17.6767$ & $0.2763$\\
+\text{poly3} & $-17.6614$ & $0.2800$\\
+\text{exp} & $-18.4738$ & $0.0561$\\
+\text{log} & $-17.8612$ & $0.2304$\\
+\text{power} & $-17.8842$ & $0.2245$\\
+\text{mult} & $-17.8842$ & $0.2245$\\
+\text{hybrid mult} & $-17.8087$ & $0.2438$\\
+\text{scaling} & $-17.8514$ & $0.2329$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.8865$ & $0.8452$\\
+\text{poly2} & $0.8121$ & $0.8486$\\
+\text{poly3} & $0.6724$ & $0.5216$\\
+\text{exp} & $0.7625$ & $0.8097$\\
+\text{log} & $0.9277$ & $0.9788$\\
+\text{power} & $0.9464$ & $0.9491$\\
+\text{mult} & $0.9464$ & $0.9491$\\
+\text{hybrid mult} & $0.9767$ & $0.9999$\\
+\text{scaling} & $0.9171$ & $0.9270$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{not F}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{not F} & \text{not F}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores-ta.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $nan$ & $0.9587$\\
+\text{poly2} & $nan$ & $0.9323$\\
+\text{poly3} & $nan$ & $0.9343$\\
+\text{exp} & $nan$ & $0.1804$\\
+\text{log} & $nan$ & $0.2192$\\
+\text{power} & $nan$ & $0.1804$\\
+\text{mult} & $nan$ & $0.1804$\\
+\text{hybrid mult} & $nan$ & $0.4581$\\
+\text{scaling} & $nan$ & $0.8760$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $36.1794$ & $38.0712$\\
+\text{poly2} & $35.9835$ & $37.8753$\\
+\text{poly3} & $35.7870$ & $37.6788$\\
+\text{exp} & $47.5116$ & $49.4034$\\
+\text{log} & $37.6364$ & $39.5283$\\
+\text{power} & $47.5116$ & $49.4034$\\
+\text{mult} & $47.5116$ & $49.4034$\\
+\text{hybrid mult} & $35.2078$ & $37.0996$\\
+\text{scaling} & $35.5852$ & $37.4770$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-17.0897$ & $0.4799$\\
+\text{poly2} & $-16.9917$ & $0.4942$\\
+\text{poly3} & $-16.8935$ & $0.5082$\\
+\text{exp} & $-22.7558$ & $-1.6254$\\
+\text{log} & $-17.8182$ & $0.3595$\\
+\text{power} & $-22.7558$ & $-1.6254$\\
+\text{mult} & $-22.7558$ & $-1.6254$\\
+\text{hybrid mult} & $-16.6039$ & $0.5473$\\
+\text{scaling} & $-16.7926$ & $0.5222$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.6915$ & $0.5568$\\
+\text{poly2} & $0.5198$ & $0.4336$\\
+\text{poly3} & $0.4581$ & $0.4047$\\
+\text{exp} & $0.2426$ & $0.1550$\\
+\text{log} & $0.0233$ & $0.1030$\\
+\text{power} & $0.2426$ & $0.1550$\\
+\text{mult} & $0.2426$ & $0.1550$\\
+\text{hybrid mult} & $0.1026$ & $0.1625$\\
+\text{scaling} & $0.3574$ & $0.3443$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{not F}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{not F} & \text{not F}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: size}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0202$ & $0.0380$\\
+\text{poly2} & $0.0305$ & $0.0414$\\
+\text{poly3} & $0.0001$ & $0.0018$\\
+\text{exp} & $0.0008$ & $0.0069$\\
+\text{log} & $0.0003$ & $0.0010$\\
+\text{power} & $0.0196$ & $0.0193$\\
+\text{mult} & $0.0196$ & $0.0193$\\
+\text{hybrid mult} & $0.0199$ & $0.0368$\\
+\text{scaling} & $0.0196$ & $0.0193$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $277.3137$ & $282.3067$\\
+\text{poly2} & $277.6135$ & $282.6065$\\
+\text{poly3} & $276.4056$ & $281.3986$\\
+\text{exp} & $276.0516$ & $281.0446$\\
+\text{log} & $279.2924$ & $284.2854$\\
+\text{power} & $277.9578$ & $282.9508$\\
+\text{mult} & $277.9578$ & $282.9508$\\
+\text{hybrid mult} & $277.3228$ & $282.3158$\\
+\text{scaling} & $277.9578$ & $282.9508$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-137.6568$ & $0.1801$\\
+\text{poly2} & $-137.8068$ & $0.1726$\\
+\text{poly3} & $-137.2028$ & $0.2024$\\
+\text{exp} & $-137.0258$ & $0.2109$\\
+\text{log} & $-138.6462$ & $0.1295$\\
+\text{power} & $-137.9789$ & $0.1640$\\
+\text{mult} & $-137.9789$ & $0.1640$\\
+\text{hybrid mult} & $-137.6614$ & $0.1799$\\
+\text{scaling} & $-137.9789$ & $0.1640$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.3338$ & $0.3994$\\
+\text{poly2} & $0.1740$ & $0.2079$\\
+\text{poly3} & $0.0643$ & $0.0826$\\
+\text{exp} & $0.1321$ & $0.1083$\\
+\text{log} & $0.0080$ & $0.0003$\\
+\text{power} & $0.0113$ & $0.0209$\\
+\text{mult} & $0.0113$ & $0.0209$\\
+\text{hybrid mult} & $0.1865$ & $0.2429$\\
+\text{scaling} & $0.0113$ & $0.0209$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{not F}\\
+\text{poly2} & \text{X} & \text{not F}\\
+\text{poly3} & \text{X} & \text{not F}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{not F}\\
+\text{scaling} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0003$ & $0.0004$\\
+\text{poly2} & $0.0070$ & $0.0240$\\
+\text{poly3} & $0.0006$ & $0.0060$\\
+\text{exp} & $0.0007$ & $0.0001$\\
+\text{log} & $0.0000$ & $0.0006$\\
+\text{power} & $0.0000$ & $0.0009$\\
+\text{mult} & $0.0000$ & $0.0009$\\
+\text{hybrid mult} & $0.0001$ & $0.0005$\\
+\text{scaling} & $0.0000$ & $0.0007$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $266.0077$ & $271.0007$\\
+\text{poly2} & $262.6917$ & $267.6847$\\
+\text{poly3} & $261.8767$ & $266.8697$\\
+\text{exp} & $265.4684$ & $270.4615$\\
+\text{log} & $264.9810$ & $269.9740$\\
+\text{power} & $265.2913$ & $270.2844$\\
+\text{mult} & $265.2913$ & $270.2844$\\
+\text{hybrid mult} & $265.5598$ & $270.5528$\\
+\text{scaling} & $265.0313$ & $270.0243$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-132.0038$ & $-0.0756$\\
+\text{poly2} & $-130.3458$ & $0.0273$\\
+\text{poly3} & $-129.9383$ & $0.0510$\\
+\text{exp} & $-131.7342$ & $-0.0581$\\
+\text{log} & $-131.4905$ & $-0.0426$\\
+\text{power} & $-131.6457$ & $-0.0525$\\
+\text{mult} & $-131.6457$ & $-0.0525$\\
+\text{hybrid mult} & $-131.7799$ & $-0.0611$\\
+\text{scaling} & $-131.5156$ & $-0.0442$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0063$ & $0.0000$\\
+\text{poly2} & $0.0337$ & $0.1662$\\
+\text{poly3} & $0.0963$ & $0.2491$\\
+\text{exp} & $0.0009$ & $0.0000$\\
+\text{log} & $0.1229$ & $0.0031$\\
+\text{power} & $0.1463$ & $0.0051$\\
+\text{mult} & $0.1463$ & $0.0051$\\
+\text{hybrid mult} & $0.0209$ & $0.0001$\\
+\text{scaling} & $0.4577$ & $0.0791$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{not F}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{not F}\\
+\text{power} & \text{X} & \text{not F}\\
+\text{mult} & \text{X} & \text{not F}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{scaling} & \text{X} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.5731$ & $0.2923$\\
+\text{poly2} & $0.7812$ & $0.6056$\\
+\text{poly3} & $0.4568$ & $0.3730$\\
+\text{exp} & $0.1114$ & $0.0052$\\
+\text{log} & $0.3537$ & $0.1593$\\
+\text{power} & $0.5620$ & $0.4555$\\
+\text{mult} & $0.5620$ & $0.4555$\\
+\text{hybrid mult} & $0.5602$ & $0.4548$\\
+\text{scaling} & $0.5955$ & $0.5010$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $208.9745$ & $213.9675$\\
+\text{poly2} & $206.0813$ & $211.0743$\\
+\text{poly3} & $203.5481$ & $208.5412$\\
+\text{exp} & $208.6416$ & $213.6346$\\
+\text{log} & $206.5070$ & $211.5000$\\
+\text{power} & $204.6238$ & $209.6168$\\
+\text{mult} & $204.6238$ & $209.6168$\\
+\text{hybrid mult} & $204.3834$ & $209.3764$\\
+\text{scaling} & $204.5954$ & $209.5884$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-103.4872$ & $0.1096$\\
+\text{poly2} & $-102.0407$ & $0.1844$\\
+\text{poly3} & $-100.7741$ & $0.2446$\\
+\text{exp} & $-103.3208$ & $0.1186$\\
+\text{log} & $-102.2535$ & $0.1738$\\
+\text{power} & $-101.3119$ & $0.2196$\\
+\text{mult} & $-101.3119$ & $0.2196$\\
+\text{hybrid mult} & $-101.1917$ & $0.2253$\\
+\text{scaling} & $-101.2977$ & $0.2203$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.3230$ & $0.2756$\\
+\text{poly2} & $0.5834$ & $0.6777$\\
+\text{poly3} & $0.3497$ & $0.3842$\\
+\text{exp} & $0.0016$ & $0.0001$\\
+\text{log} & $0.9066$ & $0.7998$\\
+\text{power} & $0.2330$ & $0.2633$\\
+\text{mult} & $0.2330$ & $0.2633$\\
+\text{hybrid mult} & $0.2343$ & $0.2630$\\
+\text{scaling} & $0.2993$ & $0.3268$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{not F}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{not F} & \text{not F}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\subsection{slice: lang, variables: size}
+\textbf{Fold:} si.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.1984$ & $0.0209$\\
+\text{poly2} & $0.0922$ & $0.0180$\\
+\text{poly3} & $0.0538$ & $0.0101$\\
+\text{exp} & $0.1792$ & $0.0057$\\
+\text{log} & $0.0689$ & $0.0078$\\
+\text{power} & $0.0996$ & $0.0142$\\
+\text{mult} & $0.0996$ & $0.0142$\\
+\text{hybrid mult} & $0.1522$ & $0.0182$\\
+\text{scaling} & $0.0692$ & $0.0115$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $180.2999$ & $184.3890$\\
+\text{poly2} & $180.5838$ & $184.6729$\\
+\text{poly3} & $179.8566$ & $183.9456$\\
+\text{exp} & $180.0406$ & $184.1296$\\
+\text{log} & $179.9063$ & $183.9953$\\
+\text{power} & $179.7810$ & $183.8701$\\
+\text{mult} & $179.7810$ & $183.8701$\\
+\text{hybrid mult} & $180.1117$ & $184.2008$\\
+\text{scaling} & $179.8661$ & $183.9551$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-89.1500$ & $0.0125$\\
+\text{poly2} & $-89.2919$ & $-0.0009$\\
+\text{poly3} & $-88.9283$ & $0.0332$\\
+\text{exp} & $-89.0203$ & $0.0247$\\
+\text{log} & $-88.9531$ & $0.0309$\\
+\text{power} & $-88.8905$ & $0.0366$\\
+\text{mult} & $-88.8905$ & $0.0366$\\
+\text{hybrid mult} & $-89.0559$ & $0.0213$\\
+\text{scaling} & $-88.9330$ & $0.0327$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0289$ & $0.0130$\\
+\text{poly2} & $0.1464$ & $0.0568$\\
+\text{poly3} & $0.1030$ & $0.0179$\\
+\text{exp} & $0.0019$ & $0.0012$\\
+\text{log} & $0.0655$ & $0.0108$\\
+\text{power} & $0.0429$ & $0.0131$\\
+\text{mult} & $0.0429$ & $0.0131$\\
+\text{hybrid mult} & $0.0312$ & $0.0118$\\
+\text{scaling} & $0.0848$ & $0.0199$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{not F}\\
+\text{poly3} & \text{X} & \text{not F}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{not F}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{scaling} & \text{X} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} gu.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.4665$ & $0.5181$\\
+\text{poly2} & $0.1952$ & $0.0845$\\
+\text{poly3} & $0.1945$ & $0.0756$\\
+\text{exp} & $0.4204$ & $0.2885$\\
+\text{log} & $0.2107$ & $0.1046$\\
+\text{power} & $0.2954$ & $0.3195$\\
+\text{mult} & $0.2954$ & $0.3195$\\
+\text{hybrid mult} & $0.3908$ & $0.4539$\\
+\text{scaling} & $0.2577$ & $0.2264$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $142.8372$ & $146.6179$\\
+\text{poly2} & $142.8324$ & $146.6132$\\
+\text{poly3} & $143.1978$ & $146.9786$\\
+\text{exp} & $142.3608$ & $146.1416$\\
+\text{log} & $141.9604$ & $145.7412$\\
+\text{power} & $142.1679$ & $145.9486$\\
+\text{mult} & $142.1679$ & $145.9486$\\
+\text{hybrid mult} & $142.5667$ & $146.3475$\\
+\text{scaling} & $142.2116$ & $145.9923$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-70.4186$ & $-0.0361$\\
+\text{poly2} & $-70.4162$ & $-0.0359$\\
+\text{poly3} & $-70.5989$ & $-0.0571$\\
+\text{exp} & $-70.1804$ & $-0.0091$\\
+\text{log} & $-69.9802$ & $0.0131$\\
+\text{power} & $-70.0839$ & $0.0017$\\
+\text{mult} & $-70.0839$ & $0.0017$\\
+\text{hybrid mult} & $-70.2834$ & $-0.0207$\\
+\text{scaling} & $-70.1058$ & $-0.0007$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.2724$ & $0.3066$\\
+\text{poly2} & $0.4100$ & $0.5288$\\
+\text{poly3} & $0.4628$ & $0.6154$\\
+\text{exp} & $0.1491$ & $0.1120$\\
+\text{log} & $0.1589$ & $0.1316$\\
+\text{power} & $0.2506$ & $0.2818$\\
+\text{mult} & $0.2506$ & $0.2818$\\
+\text{hybrid mult} & $0.2295$ & $0.2565$\\
+\text{scaling} & $0.3149$ & $0.3306$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{not F}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{not F} & \text{not F}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} ka.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.6824$ & $0.4602$\\
+\text{poly2} & $0.2823$ & $0.0787$\\
+\text{poly3} & $0.2209$ & $0.0520$\\
+\text{exp} & $0.4938$ & $0.1803$\\
+\text{log} & $0.2973$ & $0.0982$\\
+\text{power} & $0.4456$ & $0.2778$\\
+\text{mult} & $0.4456$ & $0.2778$\\
+\text{hybrid mult} & $0.5719$ & $0.3884$\\
+\text{scaling} & $0.3821$ & $0.2108$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $140.9911$ & $144.7718$\\
+\text{poly2} & $139.0897$ & $142.8705$\\
+\text{poly3} & $139.5268$ & $143.3076$\\
+\text{exp} & $140.3109$ & $144.0917$\\
+\text{log} & $139.8635$ & $143.6443$\\
+\text{power} & $139.4975$ & $143.2782$\\
+\text{mult} & $139.4975$ & $143.2782$\\
+\text{hybrid mult} & $140.4319$ & $144.2127$\\
+\text{scaling} & $139.3516$ & $143.1324$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-69.4955$ & $-0.0135$\\
+\text{poly2} & $-68.5449$ & $0.0881$\\
+\text{poly3} & $-68.7634$ & $0.0657$\\
+\text{exp} & $-69.1555$ & $0.0241$\\
+\text{log} & $-68.9318$ & $0.0481$\\
+\text{power} & $-68.7487$ & $0.0672$\\
+\text{mult} & $-68.7487$ & $0.0672$\\
+\text{hybrid mult} & $-69.2160$ & $0.0175$\\
+\text{scaling} & $-68.6758$ & $0.0748$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.4687$ & $0.3890$\\
+\text{poly2} & $0.2451$ & $0.2252$\\
+\text{poly3} & $0.4893$ & $0.4089$\\
+\text{exp} & $0.1132$ & $0.0759$\\
+\text{log} & $0.2804$ & $0.2608$\\
+\text{power} & $0.1758$ & $0.1812$\\
+\text{mult} & $0.1758$ & $0.1812$\\
+\text{hybrid mult} & $0.3269$ & $0.2888$\\
+\text{scaling} & $0.2199$ & $0.2218$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{not F} & \text{not F}\\
+\text{exp} & \text{not F} & \text{not F}\\
+\text{log} & \text{not F} & \text{not F}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} hi.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.3041$ & $0.1965$\\
+\text{poly2} & $0.1137$ & $0.0627$\\
+\text{poly3} & $0.0272$ & $0.0194$\\
+\text{exp} & $0.2279$ & $0.0583$\\
+\text{log} & $0.0278$ & $0.0217$\\
+\text{power} & $0.0902$ & $0.0937$\\
+\text{mult} & $0.0902$ & $0.0937$\\
+\text{hybrid mult} & $0.1930$ & $0.1697$\\
+\text{scaling} & $0.0497$ & $0.0412$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $168.2621$ & $172.3511$\\
+\text{poly2} & $168.8534$ & $172.9425$\\
+\text{poly3} & $167.6760$ & $171.7650$\\
+\text{exp} & $167.7445$ & $171.8335$\\
+\text{log} & $167.7150$ & $171.8041$\\
+\text{power} & $167.4936$ & $171.5827$\\
+\text{mult} & $167.4936$ & $171.5827$\\
+\text{hybrid mult} & $168.0031$ & $172.0921$\\
+\text{scaling} & $167.6468$ & $171.7359$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-83.1310$ & $0.0016$\\
+\text{poly2} & $-83.4267$ & $-0.0269$\\
+\text{poly3} & $-82.8380$ & $0.0291$\\
+\text{exp} & $-82.8723$ & $0.0259$\\
+\text{log} & $-82.8575$ & $0.0273$\\
+\text{power} & $-82.7468$ & $0.0375$\\
+\text{mult} & $-82.7468$ & $0.0375$\\
+\text{hybrid mult} & $-83.0015$ & $0.0139$\\
+\text{scaling} & $-82.8234$ & $0.0305$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.2033$ & $0.2164$\\
+\text{poly2} & $0.9417$ & $0.7254$\\
+\text{poly3} & $0.8939$ & $0.5462$\\
+\text{exp} & $0.0296$ & $0.0446$\\
+\text{log} & $0.7642$ & $0.4156$\\
+\text{power} & $0.6059$ & $0.3426$\\
+\text{mult} & $0.6059$ & $0.3426$\\
+\text{hybrid mult} & $0.3232$ & $0.2561$\\
+\text{scaling} & $0.8878$ & $0.4907$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{not F} & \text{not F}\\
+\text{poly2} & \text{not F} & \text{not F}\\
+\text{poly3} & \text{X} & \text{not F}\\
+\text{exp} & \text{not F} & \text{X}\\
+\text{log} & \text{X} & \text{not F}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}\\
+\text{scaling} & \text{X} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} ta.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.2515$ & $0.0349$\\
+\text{poly2} & $0.1085$ & $0.0263$\\
+\text{poly3} & $0.0630$ & $0.0118$\\
+\text{exp} & $0.2041$ & $0.0065$\\
+\text{log} & $0.0675$ & $0.0094$\\
+\text{power} & $0.1171$ & $0.0189$\\
+\text{mult} & $0.1171$ & $0.0189$\\
+\text{hybrid mult} & $0.1809$ & $0.0325$\\
+\text{scaling} & $0.0837$ & $0.0168$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $172.1109$ & $176.2000$\\
+\text{poly2} & $172.1753$ & $176.2644$\\
+\text{poly3} & $171.3175$ & $175.4066$\\
+\text{exp} & $171.6275$ & $175.7166$\\
+\text{log} & $171.6889$ & $175.7779$\\
+\text{power} & $171.3326$ & $175.4216$\\
+\text{mult} & $171.3326$ & $175.4216$\\
+\text{hybrid mult} & $171.9117$ & $176.0007$\\
+\text{scaling} & $171.3904$ & $175.4794$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-85.0555$ & $-0.0028$\\
+\text{poly2} & $-85.0877$ & $-0.0058$\\
+\text{poly3} & $-84.6588$ & $0.0344$\\
+\text{exp} & $-84.8138$ & $0.0201$\\
+\text{log} & $-84.8444$ & $0.0172$\\
+\text{power} & $-84.6663$ & $0.0337$\\
+\text{mult} & $-84.6663$ & $0.0337$\\
+\text{hybrid mult} & $-84.9559$ & $0.0067$\\
+\text{scaling} & $-84.6952$ & $0.0311$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0856$ & $0.0253$\\
+\text{poly2} & $0.1274$ & $0.0626$\\
+\text{poly3} & $0.0808$ & $0.0179$\\
+\text{exp} & $0.0055$ & $0.0020$\\
+\text{log} & $0.0796$ & $0.0155$\\
+\text{power} & $0.0801$ & $0.0162$\\
+\text{mult} & $0.0801$ & $0.0162$\\
+\text{hybrid mult} & $0.0938$ & $0.0235$\\
+\text{scaling} & $0.1055$ & $0.0217$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{not F}\\
+\text{poly2} & \text{X} & \text{not F}\\
+\text{poly3} & \text{X} & \text{not F}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{not F}\\
+\text{power} & \text{X} & \text{not F}\\
+\text{mult} & \text{X} & \text{not F}\\
+\text{hybrid mult} & \text{X} & \text{not F}\\
+\text{scaling} & \text{X} & \text{not F}
+\end{tabular}
+\end{center}
+\section{Experiment 2B}
+\subsection{slice: lang, variables: jsd}
+\textbf{Fold:} si.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.1264$ & $0.0003$\\
+\text{poly2} & $0.1261$ & $0.0003$\\
+\text{poly3} & $0.1254$ & $0.0003$\\
+\text{exp} & $0.0551$ & $0.0003$\\
+\text{log} & $0.0444$ & $0.0007$\\
+\text{power} & $0.0427$ & $0.0005$\\
+\text{mult} & $0.0427$ & $0.0005$\\
+\text{hybrid mult} & $0.0525$ & $0.0003$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $181.0148$ & $185.1038$\\
+\text{poly2} & $180.8649$ & $184.9540$\\
+\text{poly3} & $180.6884$ & $184.7775$\\
+\text{exp} & $159.4342$ & $163.5233$\\
+\text{log} & $148.6393$ & $152.7284$\\
+\text{power} & $107.9652$ & $112.0542$\\
+\text{mult} & $107.9652$ & $112.0542$\\
+\text{hybrid mult} & $109.4749$ & $113.5640$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-89.5074$ & $-0.0217$\\
+\text{poly2} & $-89.4325$ & $-0.0144$\\
+\text{poly3} & $-89.3442$ & $-0.0059$\\
+\text{exp} & $-78.7171$ & $0.6344$\\
+\text{log} & $-73.3197$ & $0.7813$\\
+\text{power} & $-52.9826$ & $0.9685$\\
+\text{mult} & $-52.9826$ & $0.9685$\\
+\text{hybrid mult} & $-53.7375$ & $0.9661$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0000$\\
+\text{poly2} & $0.0000$ & $0.0000$\\
+\text{poly3} & $0.0000$ & $0.0000$\\
+\text{exp} & $0.0000$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0005$ & $0.0000$\\
+\text{mult} & $0.0005$ & $0.0000$\\
+\text{hybrid mult} & $0.0002$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} gu.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.2543$ & $0.0078$\\
+\text{poly2} & $0.2543$ & $0.0078$\\
+\text{poly3} & $0.2543$ & $0.0078$\\
+\text{exp} & $0.2174$ & $0.0068$\\
+\text{log} & $0.0224$ & $0.0030$\\
+\text{power} & $0.0567$ & $0.0038$\\
+\text{mult} & $0.0567$ & $0.0038$\\
+\text{hybrid mult} & $0.0785$ & $0.0060$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $142.9771$ & $146.7579$\\
+\text{poly2} & $142.9771$ & $146.7579$\\
+\text{poly3} & $142.9772$ & $146.7580$\\
+\text{exp} & $136.5231$ & $140.3038$\\
+\text{log} & $124.1344$ & $127.9152$\\
+\text{power} & $127.6848$ & $131.4655$\\
+\text{mult} & $127.6848$ & $131.4655$\\
+\text{hybrid mult} & $132.2989$ & $136.0797$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-70.4886$ & $-0.0442$\\
+\text{poly2} & $-70.4886$ & $-0.0442$\\
+\text{poly3} & $-70.4886$ & $-0.0442$\\
+\text{exp} & $-67.2615$ & $0.2704$\\
+\text{log} & $-61.0672$ & $0.6334$\\
+\text{power} & $-62.8424$ & $0.5535$\\
+\text{mult} & $-62.8424$ & $0.5535$\\
+\text{hybrid mult} & $-65.1495$ & $0.4230$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0000$\\
+\text{poly2} & $0.0038$ & $0.0000$\\
+\text{poly3} & $0.0038$ & $0.0000$\\
+\text{exp} & $0.0108$ & $0.0000$\\
+\text{log} & $0.0070$ & $0.0000$\\
+\text{power} & $0.0026$ & $0.0007$\\
+\text{mult} & $0.0026$ & $0.0007$\\
+\text{hybrid mult} & $0.0030$ & $0.0009$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} ka.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.1619$ & $0.0010$\\
+\text{poly2} & $0.1619$ & $0.0010$\\
+\text{poly3} & $0.1619$ & $0.0010$\\
+\text{exp} & $0.1093$ & $0.0008$\\
+\text{log} & $0.0186$ & $0.0005$\\
+\text{power} & $0.0155$ & $0.0011$\\
+\text{mult} & $0.0155$ & $0.0011$\\
+\text{hybrid mult} & $0.0257$ & $0.0030$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $141.5813$ & $145.3620$\\
+\text{poly2} & $141.5932$ & $145.3739$\\
+\text{poly3} & $141.5699$ & $145.3507$\\
+\text{exp} & $136.2269$ & $140.0076$\\
+\text{log} & $123.5373$ & $127.3180$\\
+\text{power} & $120.5942$ & $124.3749$\\
+\text{mult} & $120.5942$ & $124.3749$\\
+\text{hybrid mult} & $122.0178$ & $125.7986$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-69.7907$ & $-0.0472$\\
+\text{poly2} & $-69.7966$ & $-0.0479$\\
+\text{poly3} & $-69.7850$ & $-0.0466$\\
+\text{exp} & $-67.1134$ & $0.2222$\\
+\text{log} & $-60.7686$ & $0.6157$\\
+\text{power} & $-59.2971$ & $0.6736$\\
+\text{mult} & $-59.2971$ & $0.6736$\\
+\text{hybrid mult} & $-60.0089$ & $0.6468$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0043$ & $0.0000$\\
+\text{poly2} & $0.0043$ & $0.0000$\\
+\text{poly3} & $0.0043$ & $0.0000$\\
+\text{exp} & $0.0016$ & $0.0000$\\
+\text{log} & $0.0039$ & $0.0000$\\
+\text{power} & $0.0450$ & $0.0058$\\
+\text{mult} & $0.0450$ & $0.0058$\\
+\text{hybrid mult} & $0.0483$ & $0.0087$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} hi.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.1088$ & $0.0019$\\
+\text{poly2} & $0.1089$ & $0.0019$\\
+\text{poly3} & $0.1088$ & $0.0019$\\
+\text{exp} & $0.1820$ & $0.0027$\\
+\text{log} & $0.1587$ & $0.0019$\\
+\text{power} & $0.2515$ & $0.0147$\\
+\text{mult} & $0.2515$ & $0.0147$\\
+\text{hybrid mult} & $0.3887$ & $0.0413$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $169.0965$ & $173.1855$\\
+\text{poly2} & $169.4110$ & $173.5001$\\
+\text{poly3} & $169.0959$ & $173.1849$\\
+\text{exp} & $157.7714$ & $161.8604$\\
+\text{log} & $141.7913$ & $145.8803$\\
+\text{power} & $141.9192$ & $146.0083$\\
+\text{mult} & $141.9192$ & $146.0083$\\
+\text{hybrid mult} & $148.6048$ & $152.6938$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-83.5482$ & $-0.0388$\\
+\text{poly2} & $-83.7055$ & $-0.0545$\\
+\text{poly3} & $-83.5479$ & $-0.0388$\\
+\text{exp} & $-77.8857$ & $0.3942$\\
+\text{log} & $-69.8956$ & $0.7170$\\
+\text{power} & $-69.9596$ & $0.7152$\\
+\text{mult} & $-69.9596$ & $0.7152$\\
+\text{hybrid mult} & $-73.3024$ & $0.6085$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0000$\\
+\text{poly2} & $0.0000$ & $0.0000$\\
+\text{poly3} & $0.0000$ & $0.0000$\\
+\text{exp} & $0.0001$ & $0.0000$\\
+\text{log} & $0.0022$ & $0.0000$\\
+\text{power} & $0.0028$ & $0.0051$\\
+\text{mult} & $0.0028$ & $0.0051$\\
+\text{hybrid mult} & $0.0529$ & $0.0915$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} ta.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.1268$ & $0.0004$\\
+\text{poly2} & $0.1261$ & $0.0003$\\
+\text{poly3} & $0.1268$ & $0.0004$\\
+\text{exp} & $0.0514$ & $0.0003$\\
+\text{log} & $0.0190$ & $0.0005$\\
+\text{power} & $0.8976$ & $0.0757$\\
+\text{mult} & $0.8976$ & $0.0757$\\
+\text{hybrid mult} & $0.8974$ & $0.0666$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $172.5659$ & $176.6549$\\
+\text{poly2} & $172.7384$ & $176.8274$\\
+\text{poly3} & $172.7901$ & $176.8792$\\
+\text{exp} & $156.0985$ & $160.1876$\\
+\text{log} & $141.7158$ & $145.8049$\\
+\text{power} & $122.5082$ & $126.5972$\\
+\text{mult} & $122.5082$ & $126.5972$\\
+\text{hybrid mult} & $122.2431$ & $126.3322$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-85.2829$ & $-0.0247$\\
+\text{poly2} & $-85.3692$ & $-0.0332$\\
+\text{poly3} & $-85.3951$ & $-0.0357$\\
+\text{exp} & $-77.0493$ & $0.5322$\\
+\text{log} & $-69.8579$ & $0.7642$\\
+\text{power} & $-60.2541$ & $0.9055$\\
+\text{mult} & $-60.2541$ & $0.9055$\\
+\text{hybrid mult} & $-60.1216$ & $0.9067$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0000$\\
+\text{poly2} & $0.0000$ & $0.0000$\\
+\text{poly3} & $0.0000$ & $0.0000$\\
+\text{exp} & $0.0000$ & $0.0000$\\
+\text{log} & $0.0055$ & $0.0000$\\
+\text{power} & $0.4696$ & $0.5570$\\
+\text{mult} & $0.4696$ & $0.5570$\\
+\text{hybrid mult} & $0.4333$ & $0.4900$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{not F} & \text{not F}\\
+\text{mult} & \text{not F} & \text{not F}\\
+\text{hybrid mult} & \text{not F} & \text{not F}
+\end{tabular}
+\end{center}
+\section{Experiment 2C}
+\subsection{slice: test, variables: inv+pho+syn+gen+geo}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0002$\\
+\text{poly3} & $0.0000$ & $0.0003$\\
+\text{exp} & $0.0000$ & $0.0005$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0000$ & $0.0001$\\
+\text{mult} & $0.0001$ & $0.0004$\\
+\text{hybrid mult} & $0.0000$ & $0.0002$\\
+\text{am} & $0.0000$ & $0.0001$\\
+\text{gm} & $0.0000$ & $0.0001$\\
+\text{hm} & $0.0000$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.7180$ & $289.7110$\\
+\text{poly2} & $284.8197$ & $289.8127$\\
+\text{poly3} & $285.0503$ & $290.0433$\\
+\text{exp} & $283.5342$ & $288.5272$\\
+\text{log} & $284.7497$ & $289.7427$\\
+\text{power} & $283.8948$ & $288.8878$\\
+\text{mult} & $284.9604$ & $289.9535$\\
+\text{hybrid mult} & $284.5037$ & $289.4967$\\
+\text{am} & $284.4503$ & $289.4433$\\
+\text{gm} & $284.4537$ & $289.4467$\\
+\text{hm} & $284.4627$ & $289.4557$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.3590$ & $-0.0261$\\
+\text{poly2} & $-141.4099$ & $-0.0293$\\
+\text{poly3} & $-141.5251$ & $-0.0365$\\
+\text{exp} & $-140.7671$ & $0.0100$\\
+\text{log} & $-141.3748$ & $-0.0271$\\
+\text{power} & $-140.9474$ & $-0.0008$\\
+\text{mult} & $-141.4802$ & $-0.0337$\\
+\text{hybrid mult} & $-141.2519$ & $-0.0195$\\
+\text{am} & $-141.2251$ & $-0.0178$\\
+\text{gm} & $-141.2269$ & $-0.0179$\\
+\text{hm} & $-141.2314$ & $-0.0182$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0521$ & $0.0604$\\
+\text{poly2} & $0.0502$ & $0.0531$\\
+\text{poly3} & $0.0500$ & $0.0486$\\
+\text{exp} & $0.3533$ & $0.2385$\\
+\text{log} & $0.0339$ & $0.0530$\\
+\text{power} & $0.0444$ & $0.0620$\\
+\text{mult} & $0.0307$ & $0.0325$\\
+\text{hybrid mult} & $0.0225$ & $0.0394$\\
+\text{am} & $0.0444$ & $0.0620$\\
+\text{gm} & $0.0444$ & $0.0620$\\
+\text{hm} & $0.0444$ & $0.0620$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{not F}\\
+\text{poly2} & \text{X} & \text{not F}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0001$\\
+\text{poly2} & $0.0049$ & $0.0001$\\
+\text{poly3} & $0.0060$ & $0.0002$\\
+\text{exp} & $0.0043$ & $0.0004$\\
+\text{log} & $0.0052$ & $0.0001$\\
+\text{power} & $0.0039$ & $0.0001$\\
+\text{mult} & $0.0146$ & $0.0001$\\
+\text{hybrid mult} & $0.0182$ & $0.0002$\\
+\text{am} & $0.0038$ & $0.0001$\\
+\text{gm} & $0.0038$ & $0.0001$\\
+\text{hm} & $0.0038$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $265.1103$ & $270.1033$\\
+\text{poly2} & $265.2708$ & $270.2638$\\
+\text{poly3} & $265.4526$ & $270.4456$\\
+\text{exp} & $264.2232$ & $269.2162$\\
+\text{log} & $264.8398$ & $269.8328$\\
+\text{power} & $263.6521$ & $268.6451$\\
+\text{mult} & $263.9405$ & $268.9335$\\
+\text{hybrid mult} & $264.0912$ & $269.0842$\\
+\text{am} & $264.8662$ & $269.8593$\\
+\text{gm} & $264.8856$ & $269.8786$\\
+\text{hm} & $264.9002$ & $269.8932$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.5552$ & $-0.0467$\\
+\text{poly2} & $-131.6354$ & $-0.0518$\\
+\text{poly3} & $-131.7263$ & $-0.0576$\\
+\text{exp} & $-131.1116$ & $-0.0189$\\
+\text{log} & $-131.4199$ & $-0.0382$\\
+\text{power} & $-130.8260$ & $-0.0015$\\
+\text{mult} & $-130.9702$ & $-0.0102$\\
+\text{hybrid mult} & $-131.0456$ & $-0.0149$\\
+\text{am} & $-131.4331$ & $-0.0390$\\
+\text{gm} & $-131.4428$ & $-0.0396$\\
+\text{hm} & $-131.4501$ & $-0.0401$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0002$ & $0.0000$\\
+\text{poly2} & $0.0002$ & $0.0000$\\
+\text{poly3} & $0.0003$ & $0.0000$\\
+\text{exp} & $0.0009$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0994$ & $0.0006$\\
+\text{poly2} & $0.1044$ & $0.0007$\\
+\text{poly3} & $0.1064$ & $0.0008$\\
+\text{exp} & $0.0994$ & $0.0006$\\
+\text{log} & $0.0975$ & $0.0006$\\
+\text{power} & $0.0994$ & $0.0006$\\
+\text{mult} & $0.0534$ & $0.0006$\\
+\text{hybrid mult} & $0.0587$ & $0.0007$\\
+\text{am} & $0.0994$ & $0.0006$\\
+\text{gm} & $0.0994$ & $0.0006$\\
+\text{hm} & $0.0994$ & $0.0006$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $217.8534$ & $222.8464$\\
+\text{poly2} & $220.2406$ & $225.2336$\\
+\text{poly3} & $220.6719$ & $225.6649$\\
+\text{exp} & $241.0100$ & $246.0031$\\
+\text{log} & $218.4232$ & $223.4162$\\
+\text{power} & $213.0151$ & $218.0081$\\
+\text{mult} & $211.2209$ & $216.2139$\\
+\text{hybrid mult} & $211.6585$ & $216.6515$\\
+\text{am} & $218.2095$ & $223.2025$\\
+\text{gm} & $219.0159$ & $224.0089$\\
+\text{hm} & $219.2611$ & $224.2541$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-107.9267$ & $-0.1652$\\
+\text{poly2} & $-109.1203$ & $-0.2527$\\
+\text{poly3} & $-109.3360$ & $-0.2691$\\
+\text{exp} & $-119.5050$ & $-1.3505$\\
+\text{log} & $-108.2116$ & $-0.1855$\\
+\text{power} & $-105.5076$ & $-0.0063$\\
+\text{mult} & $-104.6104$ & $0.0469$\\
+\text{hybrid mult} & $-104.8292$ & $0.0342$\\
+\text{am} & $-108.1047$ & $-0.1779$\\
+\text{gm} & $-108.5080$ & $-0.2070$\\
+\text{hm} & $-108.6305$ & $-0.2160$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0001$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0002$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: fea}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0001$\\
+\text{poly3} & $0.0000$ & $0.0001$\\
+\text{exp} & $0.0000$ & $0.0005$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0006$ & $0.0016$\\
+\text{mult} & $0.0006$ & $0.0016$\\
+\text{hybrid mult} & $0.0004$ & $0.0013$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.5478$ & $289.5408$\\
+\text{poly2} & $285.6405$ & $290.6335$\\
+\text{poly3} & $284.9640$ & $289.9570$\\
+\text{exp} & $283.6166$ & $288.6096$\\
+\text{log} & $284.5482$ & $289.5413$\\
+\text{power} & $285.8657$ & $290.8587$\\
+\text{mult} & $285.8657$ & $290.8587$\\
+\text{hybrid mult} & $286.0373$ & $291.0303$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.2739$ & $-0.0208$\\
+\text{poly2} & $-141.8203$ & $-0.0552$\\
+\text{poly3} & $-141.4820$ & $-0.0338$\\
+\text{exp} & $-140.8083$ & $0.0076$\\
+\text{log} & $-141.2741$ & $-0.0209$\\
+\text{power} & $-141.9328$ & $-0.0624$\\
+\text{mult} & $-141.9328$ & $-0.0624$\\
+\text{hybrid mult} & $-142.0187$ & $-0.0680$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0444$ & $0.0620$\\
+\text{poly2} & $0.0445$ & $0.0621$\\
+\text{poly3} & $0.0495$ & $0.0662$\\
+\text{exp} & $0.4648$ & $0.2540$\\
+\text{log} & $0.0444$ & $0.0620$\\
+\text{power} & $0.0086$ & $0.0209$\\
+\text{mult} & $0.0086$ & $0.0209$\\
+\text{hybrid mult} & $0.0102$ & $0.0213$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0001$\\
+\text{poly2} & $0.0035$ & $0.0001$\\
+\text{poly3} & $0.0038$ & $0.0001$\\
+\text{exp} & $0.0024$ & $0.0003$\\
+\text{log} & $0.0038$ & $0.0001$\\
+\text{power} & $0.0242$ & $0.0008$\\
+\text{mult} & $0.0242$ & $0.0008$\\
+\text{hybrid mult} & $0.0788$ & $0.0056$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $264.8754$ & $269.8684$\\
+\text{poly2} & $265.4417$ & $270.4347$\\
+\text{poly3} & $265.0474$ & $270.0404$\\
+\text{exp} & $264.0037$ & $268.9967$\\
+\text{log} & $264.6047$ & $269.5977$\\
+\text{power} & $265.0937$ & $270.0867$\\
+\text{mult} & $265.0937$ & $270.0867$\\
+\text{hybrid mult} & $267.7439$ & $272.7370$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.4377$ & $-0.0393$\\
+\text{poly2} & $-131.7208$ & $-0.0573$\\
+\text{poly3} & $-131.5237$ & $-0.0447$\\
+\text{exp} & $-131.0018$ & $-0.0122$\\
+\text{log} & $-131.3023$ & $-0.0308$\\
+\text{power} & $-131.5468$ & $-0.0462$\\
+\text{mult} & $-131.5468$ & $-0.0462$\\
+\text{hybrid mult} & $-132.8720$ & $-0.1337$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0009$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0009$ & $0.0000$\\
+\text{mult} & $0.0009$ & $0.0000$\\
+\text{hybrid mult} & $0.0066$ & $0.0004$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0994$ & $0.0006$\\
+\text{poly2} & $0.0994$ & $0.0006$\\
+\text{poly3} & $0.0994$ & $0.0006$\\
+\text{exp} & $0.0979$ & $0.0006$\\
+\text{log} & $0.0994$ & $0.0006$\\
+\text{power} & $0.1555$ & $0.0069$\\
+\text{mult} & $0.1555$ & $0.0069$\\
+\text{hybrid mult} & $0.2190$ & $0.0285$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $218.9156$ & $223.9086$\\
+\text{poly2} & $218.2931$ & $223.2861$\\
+\text{poly3} & $218.2398$ & $223.2328$\\
+\text{exp} & $214.3577$ & $219.3508$\\
+\text{log} & $218.2498$ & $223.2428$\\
+\text{power} & $213.6986$ & $218.6917$\\
+\text{mult} & $213.6986$ & $218.6917$\\
+\text{hybrid mult} & $214.9250$ & $219.9180$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.4578$ & $-0.2034$\\
+\text{poly2} & $-108.1466$ & $-0.1809$\\
+\text{poly3} & $-108.1199$ & $-0.1790$\\
+\text{exp} & $-106.1789$ & $-0.0481$\\
+\text{log} & $-108.1249$ & $-0.1793$\\
+\text{power} & $-105.8493$ & $-0.0274$\\
+\text{mult} & $-105.8493$ & $-0.0274$\\
+\text{hybrid mult} & $-106.4625$ & $-0.0663$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0000$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0041$ & $0.0001$\\
+\text{mult} & $0.0041$ & $0.0001$\\
+\text{hybrid mult} & $0.0266$ & $0.0020$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: inv}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0001$\\
+\text{poly3} & $0.0000$ & $0.0001$\\
+\text{exp} & $0.0000$ & $0.0002$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0001$ & $0.0003$\\
+\text{mult} & $0.0001$ & $0.0003$\\
+\text{hybrid mult} & $0.0007$ & $0.0007$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.4756$ & $289.4686$\\
+\text{poly2} & $284.5553$ & $289.5483$\\
+\text{poly3} & $284.5352$ & $289.5282$\\
+\text{exp} & $283.4443$ & $288.4373$\\
+\text{log} & $284.4281$ & $289.4211$\\
+\text{power} & $284.7878$ & $289.7808$\\
+\text{mult} & $284.7878$ & $289.7808$\\
+\text{hybrid mult} & $285.3729$ & $290.3659$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.2378$ & $-0.0186$\\
+\text{poly2} & $-141.2776$ & $-0.0211$\\
+\text{poly3} & $-141.2676$ & $-0.0204$\\
+\text{exp} & $-140.7222$ & $0.0127$\\
+\text{log} & $-141.2141$ & $-0.0171$\\
+\text{power} & $-141.3939$ & $-0.0283$\\
+\text{mult} & $-141.3939$ & $-0.0283$\\
+\text{hybrid mult} & $-141.6865$ & $-0.0467$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0444$ & $0.0620$\\
+\text{poly2} & $0.0444$ & $0.0620$\\
+\text{poly3} & $0.0444$ & $0.0620$\\
+\text{exp} & $0.1202$ & $0.1032$\\
+\text{log} & $0.0444$ & $0.0620$\\
+\text{power} & $0.0179$ & $0.0222$\\
+\text{mult} & $0.0179$ & $0.0222$\\
+\text{hybrid mult} & $0.0210$ & $0.0154$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0001$\\
+\text{poly2} & $0.0038$ & $0.0001$\\
+\text{poly3} & $0.0038$ & $0.0001$\\
+\text{exp} & $0.0021$ & $0.0002$\\
+\text{log} & $0.0038$ & $0.0001$\\
+\text{power} & $0.0119$ & $0.0001$\\
+\text{mult} & $0.0119$ & $0.0001$\\
+\text{hybrid mult} & $0.0150$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $264.8525$ & $269.8455$\\
+\text{poly2} & $265.4834$ & $270.4764$\\
+\text{poly3} & $264.7999$ & $269.7929$\\
+\text{exp} & $263.7321$ & $268.7251$\\
+\text{log} & $264.6145$ & $269.6075$\\
+\text{power} & $263.8248$ & $268.8178$\\
+\text{mult} & $263.8248$ & $268.8178$\\
+\text{hybrid mult} & $263.9194$ & $268.9124$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.4262$ & $-0.0386$\\
+\text{poly2} & $-131.7417$ & $-0.0586$\\
+\text{poly3} & $-131.3999$ & $-0.0369$\\
+\text{exp} & $-130.8660$ & $-0.0039$\\
+\text{log} & $-131.3073$ & $-0.0311$\\
+\text{power} & $-130.9124$ & $-0.0067$\\
+\text{mult} & $-130.9124$ & $-0.0067$\\
+\text{hybrid mult} & $-130.9597$ & $-0.0096$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0004$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0994$ & $0.0006$\\
+\text{poly2} & $0.0994$ & $0.0006$\\
+\text{poly3} & $0.0994$ & $0.0006$\\
+\text{exp} & $0.1022$ & $0.0006$\\
+\text{log} & $0.0994$ & $0.0006$\\
+\text{power} & $0.0892$ & $0.0006$\\
+\text{mult} & $0.0892$ & $0.0006$\\
+\text{hybrid mult} & $0.0871$ & $0.0007$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $218.2537$ & $223.2467$\\
+\text{poly2} & $218.2698$ & $223.2628$\\
+\text{poly3} & $218.8873$ & $223.8803$\\
+\text{exp} & $214.1207$ & $219.1137$\\
+\text{log} & $218.2545$ & $223.2476$\\
+\text{power} & $212.1048$ & $217.0978$\\
+\text{mult} & $212.1048$ & $217.0978$\\
+\text{hybrid mult} & $211.9940$ & $216.9870$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.1269$ & $-0.1795$\\
+\text{poly2} & $-108.1349$ & $-0.1800$\\
+\text{poly3} & $-108.4436$ & $-0.2023$\\
+\text{exp} & $-106.0604$ & $-0.0406$\\
+\text{log} & $-108.1273$ & $-0.1795$\\
+\text{power} & $-105.0524$ & $0.0211$\\
+\text{mult} & $-105.0524$ & $0.0211$\\
+\text{hybrid mult} & $-104.9970$ & $0.0243$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0001$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0002$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: gen+geo}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0001$\\
+\text{poly3} & $0.0000$ & $0.0003$\\
+\text{exp} & $0.0002$ & $0.0011$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0000$ & $0.0004$\\
+\text{mult} & $0.0003$ & $0.0014$\\
+\text{hybrid mult} & $0.0013$ & $0.0034$\\
+\text{am} & $0.0000$ & $0.0001$\\
+\text{gm} & $0.0000$ & $0.0001$\\
+\text{hm} & $0.0000$ & $0.0001$\\
+\text{diff} & $0.0000$ & $0.0002$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.2766$ & $289.2696$\\
+\text{poly2} & $284.6124$ & $289.6054$\\
+\text{poly3} & $285.4841$ & $290.4771$\\
+\text{exp} & $285.1037$ & $290.0967$\\
+\text{log} & $284.5478$ & $289.5408$\\
+\text{power} & $284.5921$ & $289.5851$\\
+\text{mult} & $285.4033$ & $290.3963$\\
+\text{hybrid mult} & $286.7032$ & $291.6963$\\
+\text{am} & $284.5554$ & $289.5484$\\
+\text{gm} & $284.5692$ & $289.5622$\\
+\text{hm} & $284.4504$ & $289.4434$\\
+\text{diff} & $284.8563$ & $289.8493$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.1383$ & $-0.0125$\\
+\text{poly2} & $-141.3062$ & $-0.0228$\\
+\text{poly3} & $-141.7421$ & $-0.0502$\\
+\text{exp} & $-141.5519$ & $-0.0382$\\
+\text{log} & $-141.2739$ & $-0.0208$\\
+\text{power} & $-141.2961$ & $-0.0222$\\
+\text{mult} & $-141.7016$ & $-0.0476$\\
+\text{hybrid mult} & $-142.3516$ & $-0.0897$\\
+\text{am} & $-141.2777$ & $-0.0211$\\
+\text{gm} & $-141.2846$ & $-0.0215$\\
+\text{hm} & $-141.2252$ & $-0.0178$\\
+\text{diff} & $-141.4281$ & $-0.0304$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0444$ & $0.0620$\\
+\text{poly2} & $0.0440$ & $0.0559$\\
+\text{poly3} & $0.0449$ & $0.0452$\\
+\text{exp} & $0.0563$ & $0.0408$\\
+\text{log} & $0.0444$ & $0.0620$\\
+\text{power} & $0.0358$ & $0.0498$\\
+\text{mult} & $0.0289$ & $0.0466$\\
+\text{hybrid mult} & $0.0302$ & $0.0590$\\
+\text{am} & $0.0444$ & $0.0620$\\
+\text{gm} & $0.0444$ & $0.0620$\\
+\text{hm} & $0.0444$ & $0.0620$\\
+\text{diff} & $0.0438$ & $0.0536$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}\\
+\text{diff} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0047$ & $0.0001$\\
+\text{poly2} & $0.0044$ & $0.0001$\\
+\text{poly3} & $0.0069$ & $0.0002$\\
+\text{exp} & $0.0133$ & $0.0005$\\
+\text{log} & $0.0038$ & $0.0001$\\
+\text{power} & $0.0144$ & $0.0001$\\
+\text{mult} & $0.0243$ & $0.0003$\\
+\text{hybrid mult} & $0.0515$ & $0.0013$\\
+\text{am} & $0.0038$ & $0.0001$\\
+\text{gm} & $0.0038$ & $0.0001$\\
+\text{hm} & $0.0038$ & $0.0001$\\
+\text{diff} & $0.0047$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $265.1666$ & $270.1596$\\
+\text{poly2} & $264.9865$ & $269.9795$\\
+\text{poly3} & $265.4794$ & $270.4724$\\
+\text{exp} & $264.5262$ & $269.5192$\\
+\text{log} & $264.8652$ & $269.8583$\\
+\text{power} & $264.0008$ & $268.9938$\\
+\text{mult} & $264.5428$ & $269.5358$\\
+\text{hybrid mult} & $266.0878$ & $271.0808$\\
+\text{am} & $264.8401$ & $269.8331$\\
+\text{gm} & $264.8606$ & $269.8537$\\
+\text{hm} & $264.8904$ & $269.8834$\\
+\text{diff} & $264.8027$ & $269.7957$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.5833$ & $-0.0485$\\
+\text{poly2} & $-131.4932$ & $-0.0428$\\
+\text{poly3} & $-131.7397$ & $-0.0585$\\
+\text{exp} & $-131.2631$ & $-0.0283$\\
+\text{log} & $-131.4326$ & $-0.0390$\\
+\text{power} & $-131.0004$ & $-0.0121$\\
+\text{mult} & $-131.2714$ & $-0.0289$\\
+\text{hybrid mult} & $-132.0439$ & $-0.0782$\\
+\text{am} & $-131.4200$ & $-0.0382$\\
+\text{gm} & $-131.4303$ & $-0.0388$\\
+\text{hm} & $-131.4452$ & $-0.0397$\\
+\text{diff} & $-131.4014$ & $-0.0370$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0002$ & $0.0000$\\
+\text{poly2} & $0.0002$ & $0.0000$\\
+\text{poly3} & $0.0003$ & $0.0000$\\
+\text{exp} & $0.0010$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$\\
+\text{diff} & $0.0002$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}\\
+\text{diff} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0994$ & $0.0006$\\
+\text{poly2} & $0.0994$ & $0.0006$\\
+\text{poly3} & $0.1072$ & $0.0009$\\
+\text{exp} & $0.1157$ & $0.0016$\\
+\text{log} & $0.0853$ & $0.0004$\\
+\text{power} & $0.0699$ & $0.0005$\\
+\text{mult} & $0.0764$ & $0.0014$\\
+\text{hybrid mult} & $0.0812$ & $0.0019$\\
+\text{am} & $0.0994$ & $0.0006$\\
+\text{gm} & $0.0994$ & $0.0006$\\
+\text{hm} & $0.0994$ & $0.0006$\\
+\text{diff} & $0.1024$ & $0.0006$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $218.2883$ & $223.2813$\\
+\text{poly2} & $217.4734$ & $222.4664$\\
+\text{poly3} & $220.6745$ & $225.6676$\\
+\text{exp} & $214.7384$ & $219.7314$\\
+\text{log} & $217.7949$ & $222.7879$\\
+\text{power} & $212.0001$ & $216.9931$\\
+\text{mult} & $212.2032$ & $217.1962$\\
+\text{hybrid mult} & $212.3529$ & $217.3459$\\
+\text{am} & $218.3073$ & $223.3003$\\
+\text{gm} & $218.2635$ & $223.2565$\\
+\text{hm} & $219.1227$ & $224.1158$\\
+\text{diff} & $217.9148$ & $222.9078$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.1441$ & $-0.1807$\\
+\text{poly2} & $-107.7367$ & $-0.1519$\\
+\text{poly3} & $-109.3373$ & $-0.2692$\\
+\text{exp} & $-106.3692$ & $-0.0603$\\
+\text{log} & $-107.8975$ & $-0.1632$\\
+\text{power} & $-105.0001$ & $0.0242$\\
+\text{mult} & $-105.1016$ & $0.0181$\\
+\text{hybrid mult} & $-105.1764$ & $0.0137$\\
+\text{am} & $-108.1536$ & $-0.1814$\\
+\text{gm} & $-108.1317$ & $-0.1798$\\
+\text{hm} & $-108.5614$ & $-0.2109$\\
+\text{diff} & $-107.9574$ & $-0.1674$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0002$ & $0.0000$\\
+\text{log} & $0.0000$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0004$ & $0.0000$\\
+\text{hybrid mult} & $0.0007$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$\\
+\text{diff} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}\\
+\text{diff} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: inv+syn}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0001$\\
+\text{poly3} & $0.0000$ & $0.0001$\\
+\text{exp} & $0.0000$ & $0.0007$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0000$ & $0.0002$\\
+\text{mult} & $0.0000$ & $0.0002$\\
+\text{hybrid mult} & $0.0000$ & $0.0002$\\
+\text{am} & $0.0000$ & $0.0001$\\
+\text{gm} & $0.0000$ & $0.0001$\\
+\text{hm} & $0.0000$ & $0.0001$\\
+\text{diff} & $0.0000$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.4264$ & $289.4194$\\
+\text{poly2} & $284.7715$ & $289.7645$\\
+\text{poly3} & $284.5072$ & $289.5002$\\
+\text{exp} & $283.4632$ & $288.4562$\\
+\text{log} & $284.7747$ & $289.7677$\\
+\text{power} & $284.4931$ & $289.4861$\\
+\text{mult} & $284.4318$ & $289.4248$\\
+\text{hybrid mult} & $284.5691$ & $289.5622$\\
+\text{am} & $284.4522$ & $289.4452$\\
+\text{gm} & $284.5456$ & $289.5386$\\
+\text{hm} & $284.5483$ & $289.5413$\\
+\text{diff} & $284.8860$ & $289.8790$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.2132$ & $-0.0171$\\
+\text{poly2} & $-141.3858$ & $-0.0278$\\
+\text{poly3} & $-141.2536$ & $-0.0196$\\
+\text{exp} & $-140.7316$ & $0.0122$\\
+\text{log} & $-141.3873$ & $-0.0279$\\
+\text{power} & $-141.2465$ & $-0.0191$\\
+\text{mult} & $-141.2159$ & $-0.0173$\\
+\text{hybrid mult} & $-141.2846$ & $-0.0215$\\
+\text{am} & $-141.2261$ & $-0.0179$\\
+\text{gm} & $-141.2728$ & $-0.0208$\\
+\text{hm} & $-141.2741$ & $-0.0209$\\
+\text{diff} & $-141.4430$ & $-0.0314$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0556$ & $0.0742$\\
+\text{poly2} & $0.0557$ & $0.0744$\\
+\text{poly3} & $0.0550$ & $0.0737$\\
+\text{exp} & $0.6736$ & $0.4795$\\
+\text{log} & $0.0381$ & $0.0540$\\
+\text{power} & $0.0206$ & $0.0287$\\
+\text{mult} & $0.0211$ & $0.0350$\\
+\text{hybrid mult} & $0.0216$ & $0.0353$\\
+\text{am} & $0.0444$ & $0.0620$\\
+\text{gm} & $0.0444$ & $0.0620$\\
+\text{hm} & $0.0444$ & $0.0620$\\
+\text{diff} & $0.0445$ & $0.0621$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{not F}\\
+\text{poly2} & \text{X} & \text{not F}\\
+\text{poly3} & \text{X} & \text{not F}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}\\
+\text{diff} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0001$\\
+\text{poly2} & $0.0029$ & $0.0001$\\
+\text{poly3} & $0.0029$ & $0.0001$\\
+\text{exp} & $0.0009$ & $0.0010$\\
+\text{log} & $0.0043$ & $0.0001$\\
+\text{power} & $0.0087$ & $0.0001$\\
+\text{mult} & $0.0119$ & $0.0001$\\
+\text{hybrid mult} & $0.0150$ & $0.0001$\\
+\text{am} & $0.0038$ & $0.0001$\\
+\text{gm} & $0.0038$ & $0.0001$\\
+\text{hm} & $0.0038$ & $0.0001$\\
+\text{diff} & $0.0029$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $264.8378$ & $269.8308$\\
+\text{poly2} & $265.3684$ & $270.3614$\\
+\text{poly3} & $265.0587$ & $270.0517$\\
+\text{exp} & $264.1701$ & $269.1631$\\
+\text{log} & $265.0950$ & $270.0880$\\
+\text{power} & $263.7378$ & $268.7308$\\
+\text{mult} & $263.8248$ & $268.8178$\\
+\text{hybrid mult} & $263.9194$ & $268.9125$\\
+\text{am} & $264.8660$ & $269.8590$\\
+\text{gm} & $264.8621$ & $269.8551$\\
+\text{hm} & $264.8720$ & $269.8650$\\
+\text{diff} & $265.7098$ & $270.7028$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.4189$ & $-0.0381$\\
+\text{poly2} & $-131.6842$ & $-0.0549$\\
+\text{poly3} & $-131.5293$ & $-0.0451$\\
+\text{exp} & $-131.0850$ & $-0.0173$\\
+\text{log} & $-131.5475$ & $-0.0462$\\
+\text{power} & $-130.8689$ & $-0.0041$\\
+\text{mult} & $-130.9124$ & $-0.0067$\\
+\text{hybrid mult} & $-130.9597$ & $-0.0096$\\
+\text{am} & $-131.4330$ & $-0.0390$\\
+\text{gm} & $-131.4310$ & $-0.0389$\\
+\text{hm} & $-131.4360$ & $-0.0392$\\
+\text{diff} & $-131.8549$ & $-0.0659$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0002$ & $0.0000$\\
+\text{poly3} & $0.0002$ & $0.0000$\\
+\text{exp} & $0.0027$ & $0.0001$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$\\
+\text{diff} & $0.0002$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}\\
+\text{diff} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0994$ & $0.0006$\\
+\text{poly2} & $0.0994$ & $0.0006$\\
+\text{poly3} & $0.1003$ & $0.0006$\\
+\text{exp} & $0.1074$ & $0.0012$\\
+\text{log} & $0.0994$ & $0.0006$\\
+\text{power} & $0.0967$ & $0.0005$\\
+\text{mult} & $0.0891$ & $0.0006$\\
+\text{hybrid mult} & $0.0871$ & $0.0007$\\
+\text{am} & $0.0994$ & $0.0006$\\
+\text{gm} & $0.0994$ & $0.0006$\\
+\text{hm} & $0.0994$ & $0.0006$\\
+\text{diff} & $0.0994$ & $0.0006$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $218.2713$ & $223.2643$\\
+\text{poly2} & $218.0725$ & $223.0656$\\
+\text{poly3} & $220.4169$ & $225.4100$\\
+\text{exp} & $215.2619$ & $220.2550$\\
+\text{log} & $218.2551$ & $223.2481$\\
+\text{power} & $213.0189$ & $218.0120$\\
+\text{mult} & $212.2116$ & $217.2046$\\
+\text{hybrid mult} & $211.9934$ & $216.9864$\\
+\text{am} & $218.7899$ & $223.7829$\\
+\text{gm} & $218.8463$ & $223.8393$\\
+\text{hm} & $218.9125$ & $223.9055$\\
+\text{diff} & $217.1507$ & $222.1437$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.1356$ & $-0.1801$\\
+\text{poly2} & $-108.0363$ & $-0.1730$\\
+\text{poly3} & $-109.2085$ & $-0.2594$\\
+\text{exp} & $-106.6310$ & $-0.0772$\\
+\text{log} & $-108.1276$ & $-0.1795$\\
+\text{power} & $-105.5095$ & $-0.0064$\\
+\text{mult} & $-105.1058$ & $0.0179$\\
+\text{hybrid mult} & $-104.9967$ & $0.0243$\\
+\text{am} & $-108.3949$ & $-0.1988$\\
+\text{gm} & $-108.4231$ & $-0.2008$\\
+\text{hm} & $-108.4563$ & $-0.2032$\\
+\text{diff} & $-107.5754$ & $-0.1407$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0001$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0002$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$\\
+\text{diff} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}\\
+\text{diff} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: inv+pho+syn}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0001$\\
+\text{poly3} & $0.0000$ & $0.0001$\\
+\text{exp} & $0.0000$ & $0.0007$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0000$ & $0.0001$\\
+\text{mult} & $0.0000$ & $0.0002$\\
+\text{hybrid mult} & $0.0005$ & $0.0006$\\
+\text{am} & $0.0000$ & $0.0001$\\
+\text{gm} & $0.0000$ & $0.0001$\\
+\text{hm} & $0.0000$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.5279$ & $289.5210$\\
+\text{poly2} & $284.5384$ & $289.5314$\\
+\text{poly3} & $284.2855$ & $289.2785$\\
+\text{exp} & $283.4635$ & $288.4565$\\
+\text{log} & $285.0726$ & $290.0656$\\
+\text{power} & $284.0260$ & $289.0190$\\
+\text{mult} & $284.4311$ & $289.4241$\\
+\text{hybrid mult} & $285.2693$ & $290.2623$\\
+\text{am} & $284.5478$ & $289.5408$\\
+\text{gm} & $284.4565$ & $289.4495$\\
+\text{hm} & $284.4579$ & $289.4509$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.2640$ & $-0.0202$\\
+\text{poly2} & $-141.2692$ & $-0.0205$\\
+\text{poly3} & $-141.1427$ & $-0.0128$\\
+\text{exp} & $-140.7317$ & $0.0122$\\
+\text{log} & $-141.5363$ & $-0.0372$\\
+\text{power} & $-141.0130$ & $-0.0048$\\
+\text{mult} & $-141.2155$ & $-0.0172$\\
+\text{hybrid mult} & $-141.6346$ & $-0.0434$\\
+\text{am} & $-141.2739$ & $-0.0208$\\
+\text{gm} & $-141.2283$ & $-0.0180$\\
+\text{hm} & $-141.2289$ & $-0.0181$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0444$ & $0.0620$\\
+\text{poly2} & $0.0551$ & $0.0738$\\
+\text{poly3} & $0.0567$ & $0.0749$\\
+\text{exp} & $0.6731$ & $0.4793$\\
+\text{log} & $0.0417$ & $0.0551$\\
+\text{power} & $0.0376$ & $0.0537$\\
+\text{mult} & $0.0212$ & $0.0350$\\
+\text{hybrid mult} & $0.0201$ & $0.0162$\\
+\text{am} & $0.0444$ & $0.0620$\\
+\text{gm} & $0.0444$ & $0.0620$\\
+\text{hm} & $0.0444$ & $0.0620$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{not F}\\
+\text{poly3} & \text{X} & \text{not F}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0001$\\
+\text{poly2} & $0.0029$ & $0.0001$\\
+\text{poly3} & $0.0029$ & $0.0001$\\
+\text{exp} & $0.0009$ & $0.0009$\\
+\text{log} & $0.0035$ & $0.0001$\\
+\text{power} & $0.0038$ & $0.0001$\\
+\text{mult} & $0.0119$ & $0.0001$\\
+\text{hybrid mult} & $0.0150$ & $0.0001$\\
+\text{am} & $0.0038$ & $0.0001$\\
+\text{gm} & $0.0038$ & $0.0001$\\
+\text{hm} & $0.0038$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $264.7912$ & $269.7842$\\
+\text{poly2} & $265.2053$ & $270.1983$\\
+\text{poly3} & $265.0683$ & $270.0613$\\
+\text{exp} & $264.1282$ & $269.1212$\\
+\text{log} & $265.3593$ & $270.3523$\\
+\text{power} & $263.7464$ & $268.7394$\\
+\text{mult} & $263.8334$ & $268.8264$\\
+\text{hybrid mult} & $263.9195$ & $268.9125$\\
+\text{am} & $264.8882$ & $269.8812$\\
+\text{gm} & $264.9000$ & $269.8930$\\
+\text{hm} & $264.9043$ & $269.8974$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.3956$ & $-0.0366$\\
+\text{poly2} & $-131.6027$ & $-0.0497$\\
+\text{poly3} & $-131.5341$ & $-0.0454$\\
+\text{exp} & $-131.0641$ & $-0.0160$\\
+\text{log} & $-131.6796$ & $-0.0546$\\
+\text{power} & $-130.8732$ & $-0.0043$\\
+\text{mult} & $-130.9167$ & $-0.0070$\\
+\text{hybrid mult} & $-130.9598$ & $-0.0096$\\
+\text{am} & $-131.4441$ & $-0.0397$\\
+\text{gm} & $-131.4500$ & $-0.0401$\\
+\text{hm} & $-131.4522$ & $-0.0402$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0002$ & $0.0000$\\
+\text{poly3} & $0.0002$ & $0.0000$\\
+\text{exp} & $0.0025$ & $0.0001$\\
+\text{log} & $0.0003$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.1002$ & $0.0006$\\
+\text{poly2} & $0.0994$ & $0.0006$\\
+\text{poly3} & $0.1003$ & $0.0006$\\
+\text{exp} & $0.1077$ & $0.0013$\\
+\text{log} & $0.0995$ & $0.0006$\\
+\text{power} & $0.0994$ & $0.0006$\\
+\text{mult} & $0.0953$ & $0.0008$\\
+\text{hybrid mult} & $0.0933$ & $0.0009$\\
+\text{am} & $0.0994$ & $0.0006$\\
+\text{gm} & $0.0994$ & $0.0006$\\
+\text{hm} & $0.0994$ & $0.0006$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $219.5202$ & $224.5132$\\
+\text{poly2} & $218.3061$ & $223.2991$\\
+\text{poly3} & $219.6892$ & $224.6822$\\
+\text{exp} & $215.2830$ & $220.2760$\\
+\text{log} & $218.5364$ & $223.5295$\\
+\text{power} & $213.4572$ & $218.4502$\\
+\text{mult} & $212.1959$ & $217.1890$\\
+\text{hybrid mult} & $212.0547$ & $217.0477$\\
+\text{am} & $219.1171$ & $224.1101$\\
+\text{gm} & $219.2093$ & $224.2023$\\
+\text{hm} & $218.1101$ & $223.1031$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.7601$ & $-0.2256$\\
+\text{poly2} & $-108.1531$ & $-0.1813$\\
+\text{poly3} & $-108.8446$ & $-0.2319$\\
+\text{exp} & $-106.6415$ & $-0.0779$\\
+\text{log} & $-108.2682$ & $-0.1896$\\
+\text{power} & $-105.7286$ & $-0.0199$\\
+\text{mult} & $-105.0980$ & $0.0183$\\
+\text{hybrid mult} & $-105.0274$ & $0.0225$\\
+\text{am} & $-108.5585$ & $-0.2107$\\
+\text{gm} & $-108.6046$ & $-0.2141$\\
+\text{hm} & $-108.0550$ & $-0.1743$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0002$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0002$ & $0.0000$\\
+\text{hybrid mult} & $0.0002$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: syn}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0001$\\
+\text{poly3} & $0.0000$ & $0.0001$\\
+\text{exp} & $0.0000$ & $0.0007$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0026$ & $0.0015$\\
+\text{mult} & $0.0026$ & $0.0015$\\
+\text{hybrid mult} & $0.0000$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.4496$ & $289.4426$\\
+\text{poly2} & $284.4218$ & $289.4148$\\
+\text{poly3} & $284.5697$ & $289.5627$\\
+\text{exp} & $283.4649$ & $288.4579$\\
+\text{log} & $284.5456$ & $289.5386$\\
+\text{power} & $285.8921$ & $290.8851$\\
+\text{mult} & $285.8921$ & $290.8851$\\
+\text{hybrid mult} & $283.9601$ & $288.9531$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.2248$ & $-0.0178$\\
+\text{poly2} & $-141.2109$ & $-0.0169$\\
+\text{poly3} & $-141.2848$ & $-0.0215$\\
+\text{exp} & $-140.7324$ & $0.0121$\\
+\text{log} & $-141.2728$ & $-0.0208$\\
+\text{power} & $-141.9460$ & $-0.0633$\\
+\text{mult} & $-141.9460$ & $-0.0633$\\
+\text{hybrid mult} & $-140.9800$ & $-0.0028$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0444$ & $0.0620$\\
+\text{poly2} & $0.0552$ & $0.0738$\\
+\text{poly3} & $0.0442$ & $0.0617$\\
+\text{exp} & $0.6746$ & $0.4807$\\
+\text{log} & $0.0444$ & $0.0620$\\
+\text{power} & $0.0202$ & $0.0119$\\
+\text{mult} & $0.0202$ & $0.0119$\\
+\text{hybrid mult} & $0.0444$ & $0.0620$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{not F}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0001$\\
+\text{poly2} & $0.0029$ & $0.0001$\\
+\text{poly3} & $0.0029$ & $0.0001$\\
+\text{exp} & $0.0009$ & $0.0009$\\
+\text{log} & $0.0038$ & $0.0001$\\
+\text{power} & $0.0476$ & $0.0005$\\
+\text{mult} & $0.0476$ & $0.0005$\\
+\text{hybrid mult} & $0.0038$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $264.8279$ & $269.8209$\\
+\text{poly2} & $265.1403$ & $270.1333$\\
+\text{poly3} & $265.5383$ & $270.5313$\\
+\text{exp} & $264.1371$ & $269.1301$\\
+\text{log} & $264.8508$ & $269.8439$\\
+\text{power} & $265.2745$ & $270.2675$\\
+\text{mult} & $265.2745$ & $270.2675$\\
+\text{hybrid mult} & $263.7224$ & $268.7154$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.4139$ & $-0.0378$\\
+\text{poly2} & $-131.5701$ & $-0.0477$\\
+\text{poly3} & $-131.7691$ & $-0.0604$\\
+\text{exp} & $-131.0685$ & $-0.0163$\\
+\text{log} & $-131.4254$ & $-0.0385$\\
+\text{power} & $-131.6373$ & $-0.0519$\\
+\text{mult} & $-131.6373$ & $-0.0519$\\
+\text{hybrid mult} & $-130.8612$ & $-0.0036$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0002$ & $0.0000$\\
+\text{poly3} & $0.0002$ & $0.0000$\\
+\text{exp} & $0.0025$ & $0.0001$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0013$ & $0.0000$\\
+\text{mult} & $0.0013$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0994$ & $0.0006$\\
+\text{poly2} & $0.0994$ & $0.0006$\\
+\text{poly3} & $0.0994$ & $0.0006$\\
+\text{exp} & $0.1074$ & $0.0012$\\
+\text{log} & $0.0994$ & $0.0006$\\
+\text{power} & $0.0989$ & $0.0042$\\
+\text{mult} & $0.0989$ & $0.0042$\\
+\text{hybrid mult} & $0.0994$ & $0.0006$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $218.2526$ & $223.2456$\\
+\text{poly2} & $218.2918$ & $223.2849$\\
+\text{poly3} & $217.7531$ & $222.7462$\\
+\text{exp} & $215.2666$ & $220.2596$\\
+\text{log} & $218.2546$ & $223.2477$\\
+\text{power} & $212.8875$ & $217.8805$\\
+\text{mult} & $212.8875$ & $217.8805$\\
+\text{hybrid mult} & $218.2546$ & $223.2476$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.1263$ & $-0.1794$\\
+\text{poly2} & $-108.1459$ & $-0.1808$\\
+\text{poly3} & $-107.8766$ & $-0.1617$\\
+\text{exp} & $-106.6333$ & $-0.0774$\\
+\text{log} & $-108.1273$ & $-0.1795$\\
+\text{power} & $-105.4437$ & $-0.0024$\\
+\text{mult} & $-105.4437$ & $-0.0024$\\
+\text{hybrid mult} & $-108.1273$ & $-0.1795$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0001$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0017$ & $0.0000$\\
+\text{mult} & $0.0017$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: pho+syn}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0001$\\
+\text{poly3} & $0.0000$ & $0.0001$\\
+\text{exp} & $0.0000$ & $0.0006$\\
+\text{log} & $0.0000$ & $0.0003$\\
+\text{power} & $0.0000$ & $0.0004$\\
+\text{mult} & $0.0001$ & $0.0017$\\
+\text{hybrid mult} & $0.0000$ & $0.0011$\\
+\text{am} & $0.0000$ & $0.0001$\\
+\text{gm} & $0.0000$ & $0.0001$\\
+\text{hm} & $0.0000$ & $0.0001$\\
+\text{diff} & $0.0000$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $285.3496$ & $290.3427$\\
+\text{poly2} & $284.5384$ & $289.5314$\\
+\text{poly3} & $284.6854$ & $289.6784$\\
+\text{exp} & $283.3878$ & $288.3808$\\
+\text{log} & $285.1253$ & $290.1183$\\
+\text{power} & $284.4551$ & $289.4481$\\
+\text{mult} & $285.8903$ & $290.8833$\\
+\text{hybrid mult} & $285.6309$ & $290.6239$\\
+\text{am} & $284.4550$ & $289.4480$\\
+\text{gm} & $284.4536$ & $289.4467$\\
+\text{hm} & $284.5477$ & $289.5408$\\
+\text{diff} & $285.1545$ & $290.1475$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.6748$ & $-0.0459$\\
+\text{poly2} & $-141.2692$ & $-0.0205$\\
+\text{poly3} & $-141.3427$ & $-0.0251$\\
+\text{exp} & $-140.6939$ & $0.0144$\\
+\text{log} & $-141.5626$ & $-0.0389$\\
+\text{power} & $-141.2276$ & $-0.0180$\\
+\text{mult} & $-141.9451$ & $-0.0632$\\
+\text{hybrid mult} & $-141.8154$ & $-0.0549$\\
+\text{am} & $-141.2275$ & $-0.0180$\\
+\text{gm} & $-141.2268$ & $-0.0179$\\
+\text{hm} & $-141.2739$ & $-0.0208$\\
+\text{diff} & $-141.5773$ & $-0.0398$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0444$ & $0.0620$\\
+\text{poly2} & $0.0548$ & $0.0734$\\
+\text{poly3} & $0.0462$ & $0.0641$\\
+\text{exp} & $0.5576$ & $0.3828$\\
+\text{log} & $0.0408$ & $0.0460$\\
+\text{power} & $0.0375$ & $0.0441$\\
+\text{mult} & $0.0176$ & $0.0569$\\
+\text{hybrid mult} & $0.0189$ & $0.0411$\\
+\text{am} & $0.0444$ & $0.0620$\\
+\text{gm} & $0.0444$ & $0.0620$\\
+\text{hm} & $0.0444$ & $0.0620$\\
+\text{diff} & $0.0555$ & $0.0740$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{not F}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}\\
+\text{diff} & \text{X} & \text{not F}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0001$\\
+\text{poly2} & $0.0030$ & $0.0001$\\
+\text{poly3} & $0.0029$ & $0.0001$\\
+\text{exp} & $0.0009$ & $0.0009$\\
+\text{log} & $0.0038$ & $0.0001$\\
+\text{power} & $0.0037$ & $0.0002$\\
+\text{mult} & $0.0073$ & $0.0013$\\
+\text{hybrid mult} & $0.0337$ & $0.0088$\\
+\text{am} & $0.0038$ & $0.0001$\\
+\text{gm} & $0.0038$ & $0.0001$\\
+\text{hm} & $0.0038$ & $0.0001$\\
+\text{diff} & $0.0038$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $264.8751$ & $269.8681$\\
+\text{poly2} & $265.9437$ & $270.9367$\\
+\text{poly3} & $264.9503$ & $269.9433$\\
+\text{exp} & $264.1386$ & $269.1316$\\
+\text{log} & $264.9225$ & $269.9155$\\
+\text{power} & $264.2252$ & $269.2183$\\
+\text{mult} & $265.6396$ & $270.6327$\\
+\text{hybrid mult} & $268.7602$ & $273.7532$\\
+\text{am} & $264.8515$ & $269.8445$\\
+\text{gm} & $264.8851$ & $269.8781$\\
+\text{hm} & $264.8476$ & $269.8406$\\
+\text{diff} & $265.0904$ & $270.0834$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.4375$ & $-0.0393$\\
+\text{poly2} & $-131.9719$ & $-0.0735$\\
+\text{poly3} & $-131.4751$ & $-0.0416$\\
+\text{exp} & $-131.0693$ & $-0.0163$\\
+\text{log} & $-131.4612$ & $-0.0408$\\
+\text{power} & $-131.1126$ & $-0.0190$\\
+\text{mult} & $-131.8198$ & $-0.0636$\\
+\text{hybrid mult} & $-133.3801$ & $-0.1691$\\
+\text{am} & $-131.4257$ & $-0.0385$\\
+\text{gm} & $-131.4425$ & $-0.0396$\\
+\text{hm} & $-131.4238$ & $-0.0384$\\
+\text{diff} & $-131.5452$ & $-0.0461$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0002$ & $0.0000$\\
+\text{poly3} & $0.0002$ & $0.0000$\\
+\text{exp} & $0.0025$ & $0.0001$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0006$ & $0.0000$\\
+\text{mult} & $0.0011$ & $0.0001$\\
+\text{hybrid mult} & $0.0207$ & $0.0077$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$\\
+\text{diff} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}\\
+\text{diff} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0994$ & $0.0006$\\
+\text{poly2} & $0.1004$ & $0.0006$\\
+\text{poly3} & $0.0994$ & $0.0006$\\
+\text{exp} & $0.1042$ & $0.0008$\\
+\text{log} & $0.1022$ & $0.0006$\\
+\text{power} & $0.1218$ & $0.0015$\\
+\text{mult} & $0.2334$ & $0.0255$\\
+\text{hybrid mult} & $0.3298$ & $0.0791$\\
+\text{am} & $0.0994$ & $0.0006$\\
+\text{gm} & $0.0994$ & $0.0006$\\
+\text{hm} & $0.0994$ & $0.0006$\\
+\text{diff} & $0.0995$ & $0.0006$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $218.5194$ & $223.5124$\\
+\text{poly2} & $219.0949$ & $224.0880$\\
+\text{poly3} & $218.2005$ & $223.1935$\\
+\text{exp} & $215.3995$ & $220.3925$\\
+\text{log} & $221.6002$ & $226.5932$\\
+\text{power} & $213.3802$ & $218.3732$\\
+\text{mult} & $215.6316$ & $220.6247$\\
+\text{hybrid mult} & $217.1285$ & $222.1215$\\
+\text{am} & $218.0717$ & $223.0647$\\
+\text{gm} & $218.0769$ & $223.0700$\\
+\text{hm} & $218.2445$ & $223.2375$\\
+\text{diff} & $221.7926$ & $226.7856$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.2597$ & $-0.1890$\\
+\text{poly2} & $-108.5475$ & $-0.2099$\\
+\text{poly3} & $-108.1002$ & $-0.1776$\\
+\text{exp} & $-106.6998$ & $-0.0817$\\
+\text{log} & $-109.8001$ & $-0.3053$\\
+\text{power} & $-105.6901$ & $-0.0175$\\
+\text{mult} & $-106.8158$ & $-0.0894$\\
+\text{hybrid mult} & $-107.5642$ & $-0.1399$\\
+\text{am} & $-108.0358$ & $-0.1730$\\
+\text{gm} & $-108.0385$ & $-0.1732$\\
+\text{hm} & $-108.1223$ & $-0.1791$\\
+\text{diff} & $-109.8963$ & $-0.3130$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0001$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0004$ & $0.0000$\\
+\text{mult} & $0.0303$ & $0.0017$\\
+\text{hybrid mult} & $0.1975$ & $0.0174$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$\\
+\text{diff} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{not F} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}\\
+\text{diff} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: pho}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0001$\\
+\text{poly3} & $0.0000$ & $0.0001$\\
+\text{exp} & $0.0005$ & $0.0034$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0001$ & $0.0017$\\
+\text{mult} & $0.0001$ & $0.0017$\\
+\text{hybrid mult} & $0.0000$ & $0.0011$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.5472$ & $289.5402$\\
+\text{poly2} & $284.5444$ & $289.5374$\\
+\text{poly3} & $284.5480$ & $289.5410$\\
+\text{exp} & $285.1327$ & $290.1257$\\
+\text{log} & $284.4806$ & $289.4736$\\
+\text{power} & $285.8903$ & $290.8833$\\
+\text{mult} & $285.8903$ & $290.8833$\\
+\text{hybrid mult} & $285.6310$ & $290.6240$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.2736$ & $-0.0208$\\
+\text{poly2} & $-141.2722$ & $-0.0207$\\
+\text{poly3} & $-141.2740$ & $-0.0208$\\
+\text{exp} & $-141.5663$ & $-0.0391$\\
+\text{log} & $-141.2403$ & $-0.0188$\\
+\text{power} & $-141.9451$ & $-0.0632$\\
+\text{mult} & $-141.9451$ & $-0.0632$\\
+\text{hybrid mult} & $-141.8155$ & $-0.0549$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0444$ & $0.0620$\\
+\text{poly2} & $0.0444$ & $0.0620$\\
+\text{poly3} & $0.0444$ & $0.0620$\\
+\text{exp} & $0.1600$ & $0.1044$\\
+\text{log} & $0.0444$ & $0.0620$\\
+\text{power} & $0.0176$ & $0.0569$\\
+\text{mult} & $0.0176$ & $0.0569$\\
+\text{hybrid mult} & $0.0189$ & $0.0411$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0001$\\
+\text{poly2} & $0.0038$ & $0.0001$\\
+\text{poly3} & $0.0038$ & $0.0001$\\
+\text{exp} & $0.0216$ & $0.0010$\\
+\text{log} & $0.0038$ & $0.0001$\\
+\text{power} & $0.0073$ & $0.0013$\\
+\text{mult} & $0.0073$ & $0.0013$\\
+\text{hybrid mult} & $0.0131$ & $0.0026$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $264.9639$ & $269.9569$\\
+\text{poly2} & $265.2680$ & $270.2611$\\
+\text{poly3} & $264.9483$ & $269.9413$\\
+\text{exp} & $265.1554$ & $270.1484$\\
+\text{log} & $264.7359$ & $269.7290$\\
+\text{power} & $265.6390$ & $270.6321$\\
+\text{mult} & $265.6390$ & $270.6321$\\
+\text{hybrid mult} & $266.9773$ & $271.9703$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.4820$ & $-0.0421$\\
+\text{poly2} & $-131.6340$ & $-0.0517$\\
+\text{poly3} & $-131.4742$ & $-0.0416$\\
+\text{exp} & $-131.5777$ & $-0.0481$\\
+\text{log} & $-131.3680$ & $-0.0349$\\
+\text{power} & $-131.8195$ & $-0.0636$\\
+\text{mult} & $-131.8195$ & $-0.0636$\\
+\text{hybrid mult} & $-132.4886$ & $-0.1076$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0007$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0011$ & $0.0001$\\
+\text{mult} & $0.0011$ & $0.0001$\\
+\text{hybrid mult} & $0.0023$ & $0.0004$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0994$ & $0.0006$\\
+\text{poly2} & $0.0993$ & $0.0006$\\
+\text{poly3} & $0.0994$ & $0.0006$\\
+\text{exp} & $0.0951$ & $0.0011$\\
+\text{log} & $0.0994$ & $0.0006$\\
+\text{power} & $0.2334$ & $0.0255$\\
+\text{mult} & $0.2334$ & $0.0255$\\
+\text{hybrid mult} & $0.3030$ & $0.0632$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $218.2546$ & $223.2476$\\
+\text{poly2} & $219.0618$ & $224.0548$\\
+\text{poly3} & $218.5038$ & $223.4968$\\
+\text{exp} & $215.5327$ & $220.5258$\\
+\text{log} & $218.2590$ & $223.2521$\\
+\text{power} & $215.6292$ & $220.6222$\\
+\text{mult} & $215.6292$ & $220.6222$\\
+\text{hybrid mult} & $217.5951$ & $222.5881$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.1273$ & $-0.1795$\\
+\text{poly2} & $-108.5309$ & $-0.2087$\\
+\text{poly3} & $-108.2519$ & $-0.1884$\\
+\text{exp} & $-106.7664$ & $-0.0861$\\
+\text{log} & $-108.1295$ & $-0.1796$\\
+\text{power} & $-106.8146$ & $-0.0893$\\
+\text{mult} & $-106.8146$ & $-0.0893$\\
+\text{hybrid mult} & $-107.7975$ & $-0.1562$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0000$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0303$ & $0.0017$\\
+\text{mult} & $0.0303$ & $0.0017$\\
+\text{hybrid mult} & $0.1344$ & $0.0112$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{not F} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: fea+inv+pho+syn+gen+geo}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0002$\\
+\text{poly3} & $0.0000$ & $0.0003$\\
+\text{exp} & $0.0000$ & $0.0006$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0000$ & $0.0001$\\
+\text{mult} & $0.0001$ & $0.0004$\\
+\text{hybrid mult} & $0.0001$ & $0.0007$\\
+\text{am} & $0.0000$ & $0.0001$\\
+\text{gm} & $0.0000$ & $0.0001$\\
+\text{hm} & $0.0000$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.7421$ & $289.7351$\\
+\text{poly2} & $284.8922$ & $289.8852$\\
+\text{poly3} & $285.0755$ & $290.0685$\\
+\text{exp} & $283.4788$ & $288.4718$\\
+\text{log} & $284.6569$ & $289.6500$\\
+\text{power} & $283.8852$ & $288.8782$\\
+\text{mult} & $284.9599$ & $289.9529$\\
+\text{hybrid mult} & $285.4588$ & $290.4518$\\
+\text{am} & $284.4519$ & $289.4449$\\
+\text{gm} & $284.5710$ & $289.5640$\\
+\text{hm} & $284.5641$ & $289.5571$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.3710$ & $-0.0269$\\
+\text{poly2} & $-141.4461$ & $-0.0315$\\
+\text{poly3} & $-141.5378$ & $-0.0373$\\
+\text{exp} & $-140.7394$ & $0.0117$\\
+\text{log} & $-141.3285$ & $-0.0242$\\
+\text{power} & $-140.9426$ & $-0.0005$\\
+\text{mult} & $-141.4799$ & $-0.0337$\\
+\text{hybrid mult} & $-141.7294$ & $-0.0494$\\
+\text{am} & $-141.2260$ & $-0.0179$\\
+\text{gm} & $-141.2855$ & $-0.0216$\\
+\text{hm} & $-141.2821$ & $-0.0213$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0528$ & $0.0612$\\
+\text{poly2} & $0.0509$ & $0.0539$\\
+\text{poly3} & $0.0506$ & $0.0492$\\
+\text{exp} & $0.4713$ & $0.3175$\\
+\text{log} & $0.0270$ & $0.0442$\\
+\text{power} & $0.0444$ & $0.0620$\\
+\text{mult} & $0.0275$ & $0.0315$\\
+\text{hybrid mult} & $0.0308$ & $0.0432$\\
+\text{am} & $0.0444$ & $0.0620$\\
+\text{gm} & $0.0444$ & $0.0620$\\
+\text{hm} & $0.0444$ & $0.0620$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{not F}\\
+\text{poly2} & \text{X} & \text{not F}\\
+\text{poly3} & \text{X} & \text{not F}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0001$\\
+\text{poly2} & $0.0048$ & $0.0001$\\
+\text{poly3} & $0.0059$ & $0.0002$\\
+\text{exp} & $0.0035$ & $0.0003$\\
+\text{log} & $0.0056$ & $0.0001$\\
+\text{power} & $0.0038$ & $0.0001$\\
+\text{mult} & $0.0161$ & $0.0002$\\
+\text{hybrid mult} & $0.0188$ & $0.0001$\\
+\text{am} & $0.0038$ & $0.0001$\\
+\text{gm} & $0.0038$ & $0.0001$\\
+\text{hm} & $0.0038$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $265.2304$ & $270.2235$\\
+\text{poly2} & $265.4462$ & $270.4392$\\
+\text{poly3} & $265.8221$ & $270.8151$\\
+\text{exp} & $264.1309$ & $269.1240$\\
+\text{log} & $264.8505$ & $269.8436$\\
+\text{power} & $263.6395$ & $268.6325$\\
+\text{mult} & $264.0017$ & $268.9947$\\
+\text{hybrid mult} & $264.0528$ & $269.0458$\\
+\text{am} & $264.8657$ & $269.8587$\\
+\text{gm} & $264.8802$ & $269.8732$\\
+\text{hm} & $264.9000$ & $269.8931$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.6152$ & $-0.0505$\\
+\text{poly2} & $-131.7231$ & $-0.0574$\\
+\text{poly3} & $-131.9110$ & $-0.0695$\\
+\text{exp} & $-131.0655$ & $-0.0161$\\
+\text{log} & $-131.4253$ & $-0.0385$\\
+\text{power} & $-130.8197$ & $-0.0011$\\
+\text{mult} & $-131.0009$ & $-0.0121$\\
+\text{hybrid mult} & $-131.0264$ & $-0.0137$\\
+\text{am} & $-131.4329$ & $-0.0390$\\
+\text{gm} & $-131.4401$ & $-0.0394$\\
+\text{hm} & $-131.4500$ & $-0.0401$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0002$ & $0.0000$\\
+\text{poly2} & $0.0002$ & $0.0000$\\
+\text{poly3} & $0.0003$ & $0.0000$\\
+\text{exp} & $0.0008$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.1017$ & $0.0006$\\
+\text{poly2} & $0.1044$ & $0.0007$\\
+\text{poly3} & $0.1068$ & $0.0008$\\
+\text{exp} & $0.0994$ & $0.0006$\\
+\text{log} & $0.0964$ & $0.0006$\\
+\text{power} & $0.0994$ & $0.0006$\\
+\text{mult} & $0.0558$ & $0.0006$\\
+\text{hybrid mult} & $0.0541$ & $0.0006$\\
+\text{am} & $0.0994$ & $0.0006$\\
+\text{gm} & $0.0994$ & $0.0006$\\
+\text{hm} & $0.0994$ & $0.0006$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $219.2831$ & $224.2761$\\
+\text{poly2} & $219.8816$ & $224.8746$\\
+\text{poly3} & $219.5733$ & $224.5663$\\
+\text{exp} & $241.0100$ & $246.0031$\\
+\text{log} & $218.3208$ & $223.3138$\\
+\text{power} & $212.9689$ & $217.9619$\\
+\text{mult} & $211.4675$ & $216.4605$\\
+\text{hybrid mult} & $211.2444$ & $216.2374$\\
+\text{am} & $218.7832$ & $223.7762$\\
+\text{gm} & $218.1061$ & $223.0991$\\
+\text{hm} & $219.2076$ & $224.2006$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.6415$ & $-0.2168$\\
+\text{poly2} & $-108.9408$ & $-0.2391$\\
+\text{poly3} & $-108.7867$ & $-0.2276$\\
+\text{exp} & $-119.5050$ & $-1.3505$\\
+\text{log} & $-108.1604$ & $-0.1819$\\
+\text{power} & $-105.4844$ & $-0.0049$\\
+\text{mult} & $-104.7338$ & $0.0398$\\
+\text{hybrid mult} & $-104.6222$ & $0.0462$\\
+\text{am} & $-108.3916$ & $-0.1985$\\
+\text{gm} & $-108.0531$ & $-0.1742$\\
+\text{hm} & $-108.6038$ & $-0.2141$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0001$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0002$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: gen}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0001$\\
+\text{poly3} & $0.0000$ & $0.0002$\\
+\text{exp} & $0.0001$ & $0.0009$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0000$ & $0.0002$\\
+\text{mult} & $0.0000$ & $0.0002$\\
+\text{hybrid mult} & $0.0000$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.5006$ & $289.4936$\\
+\text{poly2} & $284.6625$ & $289.6555$\\
+\text{poly3} & $284.8187$ & $289.8118$\\
+\text{exp} & $284.9267$ & $289.9198$\\
+\text{log} & $284.5474$ & $289.5404$\\
+\text{power} & $284.1509$ & $289.1440$\\
+\text{mult} & $284.1509$ & $289.1440$\\
+\text{hybrid mult} & $284.5467$ & $289.5397$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.2503$ & $-0.0194$\\
+\text{poly2} & $-141.3313$ & $-0.0244$\\
+\text{poly3} & $-141.4094$ & $-0.0293$\\
+\text{exp} & $-141.4634$ & $-0.0326$\\
+\text{log} & $-141.2737$ & $-0.0208$\\
+\text{power} & $-141.0755$ & $-0.0086$\\
+\text{mult} & $-141.0755$ & $-0.0086$\\
+\text{hybrid mult} & $-141.2733$ & $-0.0208$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0444$ & $0.0620$\\
+\text{poly2} & $0.0440$ & $0.0558$\\
+\text{poly3} & $0.0437$ & $0.0509$\\
+\text{exp} & $0.0562$ & $0.0402$\\
+\text{log} & $0.0444$ & $0.0620$\\
+\text{power} & $0.0664$ & $0.0784$\\
+\text{mult} & $0.0664$ & $0.0784$\\
+\text{hybrid mult} & $0.0444$ & $0.0620$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{not F}\\
+\text{mult} & \text{X} & \text{not F}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0001$\\
+\text{poly2} & $0.0044$ & $0.0001$\\
+\text{poly3} & $0.0038$ & $0.0001$\\
+\text{exp} & $0.0133$ & $0.0005$\\
+\text{log} & $0.0038$ & $0.0001$\\
+\text{power} & $0.0038$ & $0.0001$\\
+\text{mult} & $0.0038$ & $0.0001$\\
+\text{hybrid mult} & $0.0038$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $264.9640$ & $269.9570$\\
+\text{poly2} & $264.9564$ & $269.9494$\\
+\text{poly3} & $264.7933$ & $269.7863$\\
+\text{exp} & $264.5257$ & $269.5188$\\
+\text{log} & $264.8514$ & $269.8445$\\
+\text{power} & $264.8980$ & $269.8910$\\
+\text{mult} & $264.8980$ & $269.8910$\\
+\text{hybrid mult} & $264.8512$ & $269.8442$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.4820$ & $-0.0421$\\
+\text{poly2} & $-131.4782$ & $-0.0418$\\
+\text{poly3} & $-131.3966$ & $-0.0367$\\
+\text{exp} & $-131.2629$ & $-0.0283$\\
+\text{log} & $-131.4257$ & $-0.0385$\\
+\text{power} & $-131.4490$ & $-0.0400$\\
+\text{mult} & $-131.4490$ & $-0.0400$\\
+\text{hybrid mult} & $-131.4256$ & $-0.0385$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0002$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0010$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0994$ & $0.0006$\\
+\text{poly2} & $0.1014$ & $0.0006$\\
+\text{poly3} & $0.0994$ & $0.0006$\\
+\text{exp} & $0.1157$ & $0.0016$\\
+\text{log} & $0.0994$ & $0.0006$\\
+\text{power} & $0.0994$ & $0.0006$\\
+\text{mult} & $0.0994$ & $0.0006$\\
+\text{hybrid mult} & $0.0994$ & $0.0006$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $218.0453$ & $223.0383$\\
+\text{poly2} & $218.7012$ & $223.6943$\\
+\text{poly3} & $218.7725$ & $223.7655$\\
+\text{exp} & $214.7426$ & $219.7356$\\
+\text{log} & $218.2560$ & $223.2490$\\
+\text{power} & $218.2531$ & $223.2461$\\
+\text{mult} & $218.2531$ & $223.2461$\\
+\text{hybrid mult} & $218.2537$ & $223.2468$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.0226$ & $-0.1720$\\
+\text{poly2} & $-108.3506$ & $-0.1956$\\
+\text{poly3} & $-108.3862$ & $-0.1981$\\
+\text{exp} & $-106.3713$ & $-0.0604$\\
+\text{log} & $-108.1280$ & $-0.1795$\\
+\text{power} & $-108.1266$ & $-0.1794$\\
+\text{mult} & $-108.1266$ & $-0.1794$\\
+\text{hybrid mult} & $-108.1269$ & $-0.1795$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0002$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: inv+pho}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0001$\\
+\text{poly3} & $0.0000$ & $0.0001$\\
+\text{exp} & $0.0000$ & $0.0003$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0000$ & $0.0002$\\
+\text{mult} & $0.0001$ & $0.0003$\\
+\text{hybrid mult} & $0.0005$ & $0.0006$\\
+\text{am} & $0.0000$ & $0.0001$\\
+\text{gm} & $0.0000$ & $0.0001$\\
+\text{hm} & $0.0000$ & $0.0001$\\
+\text{diff} & $0.0000$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.4394$ & $289.4324$\\
+\text{poly2} & $284.3910$ & $289.3840$\\
+\text{poly3} & $284.5595$ & $289.5525$\\
+\text{exp} & $283.4209$ & $288.4139$\\
+\text{log} & $284.5499$ & $289.5430$\\
+\text{power} & $284.4930$ & $289.4860$\\
+\text{mult} & $284.7879$ & $289.7809$\\
+\text{hybrid mult} & $285.2701$ & $290.2632$\\
+\text{am} & $284.4813$ & $289.4743$\\
+\text{gm} & $284.5479$ & $289.5409$\\
+\text{hm} & $284.5489$ & $289.5419$\\
+\text{diff} & $284.5483$ & $289.5413$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.2197$ & $-0.0175$\\
+\text{poly2} & $-141.1955$ & $-0.0160$\\
+\text{poly3} & $-141.2798$ & $-0.0212$\\
+\text{exp} & $-140.7104$ & $0.0134$\\
+\text{log} & $-141.2750$ & $-0.0209$\\
+\text{power} & $-141.2465$ & $-0.0191$\\
+\text{mult} & $-141.3939$ & $-0.0283$\\
+\text{hybrid mult} & $-141.6351$ & $-0.0434$\\
+\text{am} & $-141.2407$ & $-0.0188$\\
+\text{gm} & $-141.2739$ & $-0.0208$\\
+\text{hm} & $-141.2745$ & $-0.0209$\\
+\text{diff} & $-141.2741$ & $-0.0209$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0449$ & $0.0623$\\
+\text{poly2} & $0.0442$ & $0.0618$\\
+\text{poly3} & $0.0444$ & $0.0620$\\
+\text{exp} & $0.1305$ & $0.1086$\\
+\text{log} & $0.0436$ & $0.0573$\\
+\text{power} & $0.0206$ & $0.0287$\\
+\text{mult} & $0.0179$ & $0.0222$\\
+\text{hybrid mult} & $0.0197$ & $0.0166$\\
+\text{am} & $0.0444$ & $0.0620$\\
+\text{gm} & $0.0444$ & $0.0620$\\
+\text{hm} & $0.0444$ & $0.0620$\\
+\text{diff} & $0.0444$ & $0.0620$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}\\
+\text{diff} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0001$\\
+\text{poly2} & $0.0038$ & $0.0001$\\
+\text{poly3} & $0.0038$ & $0.0001$\\
+\text{exp} & $0.0021$ & $0.0002$\\
+\text{log} & $0.0038$ & $0.0001$\\
+\text{power} & $0.0087$ & $0.0001$\\
+\text{mult} & $0.0119$ & $0.0001$\\
+\text{hybrid mult} & $0.0150$ & $0.0001$\\
+\text{am} & $0.0038$ & $0.0001$\\
+\text{gm} & $0.0038$ & $0.0001$\\
+\text{hm} & $0.0038$ & $0.0001$\\
+\text{diff} & $0.0038$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $264.7544$ & $269.7474$\\
+\text{poly2} & $265.0040$ & $269.9970$\\
+\text{poly3} & $264.8312$ & $269.8242$\\
+\text{exp} & $263.7321$ & $268.7251$\\
+\text{log} & $265.1742$ & $270.1672$\\
+\text{power} & $263.7374$ & $268.7304$\\
+\text{mult} & $263.8247$ & $268.8177$\\
+\text{hybrid mult} & $263.9192$ & $268.9122$\\
+\text{am} & $264.8532$ & $269.8462$\\
+\text{gm} & $264.8505$ & $269.8436$\\
+\text{hm} & $264.9477$ & $269.9407$\\
+\text{diff} & $264.8510$ & $269.8440$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.3772$ & $-0.0355$\\
+\text{poly2} & $-131.5020$ & $-0.0433$\\
+\text{poly3} & $-131.4156$ & $-0.0379$\\
+\text{exp} & $-130.8660$ & $-0.0039$\\
+\text{log} & $-131.5871$ & $-0.0487$\\
+\text{power} & $-130.8687$ & $-0.0040$\\
+\text{mult} & $-130.9124$ & $-0.0067$\\
+\text{hybrid mult} & $-130.9596$ & $-0.0096$\\
+\text{am} & $-131.4266$ & $-0.0386$\\
+\text{gm} & $-131.4253$ & $-0.0385$\\
+\text{hm} & $-131.4739$ & $-0.0416$\\
+\text{diff} & $-131.4255$ & $-0.0385$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0004$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$\\
+\text{diff} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}\\
+\text{diff} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0993$ & $0.0006$\\
+\text{poly2} & $0.0994$ & $0.0006$\\
+\text{poly3} & $0.0995$ & $0.0006$\\
+\text{exp} & $0.1022$ & $0.0006$\\
+\text{log} & $0.1030$ & $0.0006$\\
+\text{power} & $0.1313$ & $0.0022$\\
+\text{mult} & $0.0970$ & $0.0009$\\
+\text{hybrid mult} & $0.0933$ & $0.0009$\\
+\text{am} & $0.0994$ & $0.0006$\\
+\text{gm} & $0.0994$ & $0.0006$\\
+\text{hm} & $0.0994$ & $0.0006$\\
+\text{diff} & $0.0994$ & $0.0006$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $219.3874$ & $224.3805$\\
+\text{poly2} & $218.2614$ & $223.2544$\\
+\text{poly3} & $218.0103$ & $223.0033$\\
+\text{exp} & $214.1144$ & $219.1074$\\
+\text{log} & $219.1350$ & $224.1280$\\
+\text{power} & $213.6559$ & $218.6489$\\
+\text{mult} & $212.1814$ & $217.1745$\\
+\text{hybrid mult} & $212.0541$ & $217.0471$\\
+\text{am} & $217.4603$ & $222.4533$\\
+\text{gm} & $218.2546$ & $223.2476$\\
+\text{hm} & $217.2096$ & $222.2026$\\
+\text{diff} & $217.9814$ & $222.9744$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.6937$ & $-0.2207$\\
+\text{poly2} & $-108.1307$ & $-0.1797$\\
+\text{poly3} & $-108.0052$ & $-0.1708$\\
+\text{exp} & $-106.0572$ & $-0.0404$\\
+\text{log} & $-108.5675$ & $-0.2114$\\
+\text{power} & $-105.8279$ & $-0.0261$\\
+\text{mult} & $-105.0907$ & $0.0188$\\
+\text{hybrid mult} & $-105.0270$ & $0.0226$\\
+\text{am} & $-107.7301$ & $-0.1514$\\
+\text{gm} & $-108.1273$ & $-0.1795$\\
+\text{hm} & $-107.6048$ & $-0.1427$\\
+\text{diff} & $-107.9907$ & $-0.1698$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0001$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0006$ & $0.0000$\\
+\text{mult} & $0.0002$ & $0.0000$\\
+\text{hybrid mult} & $0.0002$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$\\
+\text{diff} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}\\
+\text{diff} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: geo}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0001$\\
+\text{poly3} & $0.0000$ & $0.0001$\\
+\text{exp} & $0.0000$ & $0.0004$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0003$ & $0.0014$\\
+\text{mult} & $0.0003$ & $0.0014$\\
+\text{hybrid mult} & $0.0013$ & $0.0034$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.5316$ & $289.5246$\\
+\text{poly2} & $284.5427$ & $289.5357$\\
+\text{poly3} & $284.5203$ & $289.5133$\\
+\text{exp} & $284.2163$ & $289.2093$\\
+\text{log} & $284.5345$ & $289.5276$\\
+\text{power} & $285.4032$ & $290.3962$\\
+\text{mult} & $285.4032$ & $290.3962$\\
+\text{hybrid mult} & $286.7024$ & $291.6954$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.2658$ & $-0.0203$\\
+\text{poly2} & $-141.2714$ & $-0.0207$\\
+\text{poly3} & $-141.2601$ & $-0.0200$\\
+\text{exp} & $-141.1081$ & $-0.0106$\\
+\text{log} & $-141.2673$ & $-0.0204$\\
+\text{power} & $-141.7016$ & $-0.0476$\\
+\text{mult} & $-141.7016$ & $-0.0476$\\
+\text{hybrid mult} & $-142.3512$ & $-0.0897$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0444$ & $0.0620$\\
+\text{poly2} & $0.0444$ & $0.0620$\\
+\text{poly3} & $0.0444$ & $0.0620$\\
+\text{exp} & $0.1159$ & $0.1307$\\
+\text{log} & $0.0444$ & $0.0620$\\
+\text{power} & $0.0289$ & $0.0466$\\
+\text{mult} & $0.0289$ & $0.0466$\\
+\text{hybrid mult} & $0.0302$ & $0.0590$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0038$ & $0.0001$\\
+\text{poly2} & $0.0038$ & $0.0001$\\
+\text{poly3} & $0.0038$ & $0.0001$\\
+\text{exp} & $0.0016$ & $0.0002$\\
+\text{log} & $0.0038$ & $0.0001$\\
+\text{power} & $0.0243$ & $0.0003$\\
+\text{mult} & $0.0243$ & $0.0003$\\
+\text{hybrid mult} & $0.0518$ & $0.0013$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $264.8516$ & $269.8447$\\
+\text{poly2} & $264.4253$ & $269.4183$\\
+\text{poly3} & $265.1098$ & $270.1028$\\
+\text{exp} & $264.3603$ & $269.3533$\\
+\text{log} & $264.8797$ & $269.8727$\\
+\text{power} & $264.5428$ & $269.5358$\\
+\text{mult} & $264.5428$ & $269.5358$\\
+\text{hybrid mult} & $266.0860$ & $271.0790$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.4258$ & $-0.0385$\\
+\text{poly2} & $-131.2127$ & $-0.0252$\\
+\text{poly3} & $-131.5549$ & $-0.0467$\\
+\text{exp} & $-131.1802$ & $-0.0232$\\
+\text{log} & $-131.4398$ & $-0.0394$\\
+\text{power} & $-131.2714$ & $-0.0289$\\
+\text{mult} & $-131.2714$ & $-0.0289$\\
+\text{hybrid mult} & $-132.0430$ & $-0.0781$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0006$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0994$ & $0.0006$\\
+\text{poly2} & $0.0994$ & $0.0006$\\
+\text{poly3} & $0.0994$ & $0.0006$\\
+\text{exp} & $0.1137$ & $0.0010$\\
+\text{log} & $0.0853$ & $0.0004$\\
+\text{power} & $0.0764$ & $0.0014$\\
+\text{mult} & $0.0764$ & $0.0014$\\
+\text{hybrid mult} & $0.0812$ & $0.0019$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $218.2549$ & $223.2479$\\
+\text{poly2} & $218.5914$ & $223.5844$\\
+\text{poly3} & $218.2683$ & $223.2613$\\
+\text{exp} & $215.3242$ & $220.3172$\\
+\text{log} & $217.7955$ & $222.7885$\\
+\text{power} & $212.2030$ & $217.1960$\\
+\text{mult} & $212.2030$ & $217.1960$\\
+\text{hybrid mult} & $212.3519$ & $217.3449$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.1275$ & $-0.1795$\\
+\text{poly2} & $-108.2957$ & $-0.1916$\\
+\text{poly3} & $-108.1341$ & $-0.1800$\\
+\text{exp} & $-106.6621$ & $-0.0793$\\
+\text{log} & $-107.8977$ & $-0.1632$\\
+\text{power} & $-105.1015$ & $0.0181$\\
+\text{mult} & $-105.1015$ & $0.0181$\\
+\text{hybrid mult} & $-105.1760$ & $0.0137$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0002$ & $0.0000$\\
+\text{log} & $0.0000$ & $0.0000$\\
+\text{power} & $0.0004$ & $0.0000$\\
+\text{mult} & $0.0004$ & $0.0000$\\
+\text{hybrid mult} & $0.0007$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: fea+inv+pho+syn}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0001$\\
+\text{poly3} & $0.0000$ & $0.0001$\\
+\text{exp} & $0.0000$ & $0.0007$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0000$ & $0.0001$\\
+\text{mult} & $0.0000$ & $0.0002$\\
+\text{hybrid mult} & $0.0000$ & $0.0002$\\
+\text{am} & $0.0000$ & $0.0001$\\
+\text{gm} & $0.0000$ & $0.0001$\\
+\text{hm} & $0.0000$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $285.2395$ & $290.2325$\\
+\text{poly2} & $284.9671$ & $289.9602$\\
+\text{poly3} & $284.5173$ & $289.5103$\\
+\text{exp} & $283.4448$ & $288.4378$\\
+\text{log} & $284.5401$ & $289.5331$\\
+\text{power} & $283.9914$ & $288.9844$\\
+\text{mult} & $284.4375$ & $289.4305$\\
+\text{hybrid mult} & $284.5739$ & $289.5669$\\
+\text{am} & $284.4549$ & $289.4479$\\
+\text{gm} & $284.4534$ & $289.4464$\\
+\text{hm} & $284.5479$ & $289.5409$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.6197$ & $-0.0425$\\
+\text{poly2} & $-141.4836$ & $-0.0339$\\
+\text{poly3} & $-141.2586$ & $-0.0199$\\
+\text{exp} & $-140.7224$ & $0.0127$\\
+\text{log} & $-141.2701$ & $-0.0206$\\
+\text{power} & $-140.9957$ & $-0.0038$\\
+\text{mult} & $-141.2187$ & $-0.0174$\\
+\text{hybrid mult} & $-141.2870$ & $-0.0216$\\
+\text{am} & $-141.2274$ & $-0.0180$\\
+\text{gm} & $-141.2267$ & $-0.0179$\\
+\text{hm} & $-141.2739$ & $-0.0208$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0442$ & $0.0618$\\
+\text{poly2} & $0.0523$ & $0.0707$\\
+\text{poly3} & $0.0525$ & $0.0709$\\
+\text{exp} & $0.6838$ & $0.4620$\\
+\text{log} & $0.0444$ & $0.0620$\\
+\text{power} & $0.0399$ & $0.0563$\\
+\text{mult} & $0.0211$ & $0.0348$\\
+\text{hybrid mult} & $0.0215$ & $0.0351$\\
+\text{am} & $0.0444$ & $0.0620$\\
+\text{gm} & $0.0444$ & $0.0620$\\
+\text{hm} & $0.0444$ & $0.0620$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{not F}\\
+\text{poly3} & \text{X} & \text{not F}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0029$ & $0.0001$\\
+\text{poly2} & $0.0029$ & $0.0001$\\
+\text{poly3} & $0.0029$ & $0.0001$\\
+\text{exp} & $0.0009$ & $0.0008$\\
+\text{log} & $0.0035$ & $0.0001$\\
+\text{power} & $0.0038$ & $0.0001$\\
+\text{mult} & $0.0121$ & $0.0001$\\
+\text{hybrid mult} & $0.0150$ & $0.0001$\\
+\text{am} & $0.0038$ & $0.0001$\\
+\text{gm} & $0.0038$ & $0.0001$\\
+\text{hm} & $0.0038$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $265.2765$ & $270.2695$\\
+\text{poly2} & $265.2253$ & $270.2184$\\
+\text{poly3} & $265.2591$ & $270.2521$\\
+\text{exp} & $264.0714$ & $269.0644$\\
+\text{log} & $264.6367$ & $269.6297$\\
+\text{power} & $263.7256$ & $268.7186$\\
+\text{mult} & $263.8302$ & $268.8232$\\
+\text{hybrid mult} & $263.9194$ & $268.9124$\\
+\text{am} & $264.8920$ & $269.8850$\\
+\text{gm} & $264.8912$ & $269.8843$\\
+\text{hm} & $264.9004$ & $269.8934$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.6382$ & $-0.0520$\\
+\text{poly2} & $-131.6127$ & $-0.0504$\\
+\text{poly3} & $-131.6295$ & $-0.0514$\\
+\text{exp} & $-131.0357$ & $-0.0143$\\
+\text{log} & $-131.3184$ & $-0.0318$\\
+\text{power} & $-130.8628$ & $-0.0037$\\
+\text{mult} & $-130.9151$ & $-0.0069$\\
+\text{hybrid mult} & $-130.9597$ & $-0.0096$\\
+\text{am} & $-131.4460$ & $-0.0398$\\
+\text{gm} & $-131.4456$ & $-0.0398$\\
+\text{hm} & $-131.4502$ & $-0.0401$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0002$ & $0.0000$\\
+\text{poly2} & $0.0002$ & $0.0000$\\
+\text{poly3} & $0.0002$ & $0.0000$\\
+\text{exp} & $0.0021$ & $0.0001$\\
+\text{log} & $0.0002$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0001$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0994$ & $0.0006$\\
+\text{poly2} & $0.1001$ & $0.0006$\\
+\text{poly3} & $0.0994$ & $0.0006$\\
+\text{exp} & $0.0994$ & $0.0006$\\
+\text{log} & $0.0994$ & $0.0006$\\
+\text{power} & $0.0994$ & $0.0006$\\
+\text{mult} & $0.0970$ & $0.0009$\\
+\text{hybrid mult} & $0.0920$ & $0.0008$\\
+\text{am} & $0.0994$ & $0.0006$\\
+\text{gm} & $0.0994$ & $0.0006$\\
+\text{hm} & $0.0994$ & $0.0006$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $219.0319$ & $224.0249$\\
+\text{poly2} & $219.1447$ & $224.1377$\\
+\text{poly3} & $241.0100$ & $246.0031$\\
+\text{exp} & $241.0100$ & $246.0031$\\
+\text{log} & $218.5278$ & $223.5208$\\
+\text{power} & $213.1789$ & $218.1719$\\
+\text{mult} & $212.1792$ & $217.1722$\\
+\text{hybrid mult} & $212.0623$ & $217.0553$\\
+\text{am} & $219.0678$ & $224.0608$\\
+\text{gm} & $219.1325$ & $224.1256$\\
+\text{hm} & $219.2053$ & $224.1983$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.5159$ & $-0.2076$\\
+\text{poly2} & $-108.5724$ & $-0.2117$\\
+\text{poly3} & $-119.5050$ & $-1.3505$\\
+\text{exp} & $-119.5050$ & $-1.3505$\\
+\text{log} & $-108.2639$ & $-0.1893$\\
+\text{power} & $-105.5895$ & $-0.0113$\\
+\text{mult} & $-105.0896$ & $0.0188$\\
+\text{hybrid mult} & $-105.0311$ & $0.0223$\\
+\text{am} & $-108.5339$ & $-0.2089$\\
+\text{gm} & $-108.5663$ & $-0.2113$\\
+\text{hm} & $-108.6026$ & $-0.2140$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0001$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0002$ & $0.0000$\\
+\text{hybrid mult} & $0.0002$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\subsection{slice: test, variables: fea+gen+geo}
+\textbf{Fold:} gov.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0000$ & $0.0001$\\
+\text{poly2} & $0.0000$ & $0.0002$\\
+\text{poly3} & $0.0000$ & $0.0003$\\
+\text{exp} & $0.0000$ & $0.0006$\\
+\text{log} & $0.0000$ & $0.0001$\\
+\text{power} & $0.0000$ & $0.0001$\\
+\text{mult} & $0.0004$ & $0.0009$\\
+\text{hybrid mult} & $0.0053$ & $0.0038$\\
+\text{am} & $0.0000$ & $0.0001$\\
+\text{gm} & $0.0000$ & $0.0001$\\
+\text{hm} & $0.0000$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $284.6208$ & $289.6138$\\
+\text{poly2} & $284.9626$ & $289.9556$\\
+\text{poly3} & $284.8859$ & $289.8789$\\
+\text{exp} & $283.7053$ & $288.6983$\\
+\text{log} & $285.1496$ & $290.1426$\\
+\text{power} & $284.2695$ & $289.2625$\\
+\text{mult} & $285.3546$ & $290.3476$\\
+\text{hybrid mult} & $286.8945$ & $291.8875$\\
+\text{am} & $284.4448$ & $289.4378$\\
+\text{gm} & $284.5697$ & $289.5628$\\
+\text{hm} & $284.4531$ & $289.4461$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-141.3104$ & $-0.0231$\\
+\text{poly2} & $-141.4813$ & $-0.0338$\\
+\text{poly3} & $-141.4429$ & $-0.0313$\\
+\text{exp} & $-140.8526$ & $0.0049$\\
+\text{log} & $-141.5748$ & $-0.0396$\\
+\text{power} & $-141.1348$ & $-0.0123$\\
+\text{mult} & $-141.6773$ & $-0.0461$\\
+\text{hybrid mult} & $-142.4472$ & $-0.0961$\\
+\text{am} & $-141.2224$ & $-0.0177$\\
+\text{gm} & $-141.2849$ & $-0.0215$\\
+\text{hm} & $-141.2265$ & $-0.0179$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0444$ & $0.0620$\\
+\text{poly2} & $0.0457$ & $0.0492$\\
+\text{poly3} & $0.0450$ & $0.0449$\\
+\text{exp} & $0.1864$ & $0.1273$\\
+\text{log} & $0.0344$ & $0.0548$\\
+\text{power} & $0.0417$ & $0.0621$\\
+\text{mult} & $0.0264$ & $0.0291$\\
+\text{hybrid mult} & $0.0400$ & $0.0207$\\
+\text{am} & $0.0444$ & $0.0620$\\
+\text{gm} & $0.0444$ & $0.0620$\\
+\text{hm} & $0.0444$ & $0.0620$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{not F}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} bible.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.0047$ & $0.0001$\\
+\text{poly2} & $0.0057$ & $0.0001$\\
+\text{poly3} & $0.0068$ & $0.0002$\\
+\text{exp} & $0.0095$ & $0.0004$\\
+\text{log} & $0.0059$ & $0.0001$\\
+\text{power} & $0.0091$ & $0.0001$\\
+\text{mult} & $0.0258$ & $0.0001$\\
+\text{hybrid mult} & $0.0386$ & $0.0003$\\
+\text{am} & $0.0038$ & $0.0001$\\
+\text{gm} & $0.0038$ & $0.0001$\\
+\text{hm} & $0.0038$ & $0.0001$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $264.8422$ & $269.8352$\\
+\text{poly2} & $265.4040$ & $270.3970$\\
+\text{poly3} & $265.2814$ & $270.2744$\\
+\text{exp} & $264.3130$ & $269.3060$\\
+\text{log} & $264.4933$ & $269.4864$\\
+\text{power} & $263.7257$ & $268.7187$\\
+\text{mult} & $264.1681$ & $269.1612$\\
+\text{hybrid mult} & $264.6240$ & $269.6170$\\
+\text{am} & $264.8364$ & $269.8294$\\
+\text{gm} & $264.8660$ & $269.8590$\\
+\text{hm} & $264.8848$ & $269.8778$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-131.4211$ & $-0.0382$\\
+\text{poly2} & $-131.7020$ & $-0.0561$\\
+\text{poly3} & $-131.6407$ & $-0.0521$\\
+\text{exp} & $-131.1565$ & $-0.0217$\\
+\text{log} & $-131.2467$ & $-0.0273$\\
+\text{power} & $-130.8629$ & $-0.0037$\\
+\text{mult} & $-131.0841$ & $-0.0172$\\
+\text{hybrid mult} & $-131.3120$ & $-0.0314$\\
+\text{am} & $-131.4182$ & $-0.0380$\\
+\text{gm} & $-131.4330$ & $-0.0390$\\
+\text{hm} & $-131.4424$ & $-0.0396$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0002$ & $0.0000$\\
+\text{poly2} & $0.0002$ & $0.0000$\\
+\text{poly3} & $0.0003$ & $0.0000$\\
+\text{exp} & $0.0007$ & $0.0000$\\
+\text{log} & $0.0001$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0001$ & $0.0000$\\
+\text{hybrid mult} & $0.0002$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
+\textbf{Fold:} flores.csv
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normality Pearson p-value} & \text{Normality Shapiro p-value}\\ \hline 
+\text{linear} & $0.1021$ & $0.0006$\\
+\text{poly2} & $0.1047$ & $0.0007$\\
+\text{poly3} & $0.1071$ & $0.0009$\\
+\text{exp} & $0.1157$ & $0.0016$\\
+\text{log} & $0.0853$ & $0.0004$\\
+\text{power} & $0.0986$ & $0.0005$\\
+\text{mult} & $0.0800$ & $0.0018$\\
+\text{hybrid mult} & $0.0812$ & $0.0019$\\
+\text{am} & $0.0994$ & $0.0006$\\
+\text{gm} & $0.0994$ & $0.0006$\\
+\text{hm} & $0.0994$ & $0.0006$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{AIC of model} & \text{BIC of model}\\ \hline 
+\text{linear} & $219.1293$ & $224.1223$\\
+\text{poly2} & $219.5357$ & $224.5287$\\
+\text{poly3} & $219.7093$ & $224.7023$\\
+\text{exp} & $214.7492$ & $219.7422$\\
+\text{log} & $217.8016$ & $222.7946$\\
+\text{power} & $213.4311$ & $218.4241$\\
+\text{mult} & $212.2082$ & $217.2012$\\
+\text{hybrid mult} & $212.3533$ & $217.3464$\\
+\text{am} & $218.1926$ & $223.1856$\\
+\text{gm} & $218.7775$ & $223.7705$\\
+\text{hm} & $218.1428$ & $223.1358$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{LogLikelyhood} & \text{R2 coefficient}\\ \hline 
+\text{linear} & $-108.5646$ & $-0.2112$\\
+\text{poly2} & $-108.7678$ & $-0.2262$\\
+\text{poly3} & $-108.8547$ & $-0.2326$\\
+\text{exp} & $-106.3746$ & $-0.0606$\\
+\text{log} & $-107.9008$ & $-0.1634$\\
+\text{power} & $-105.7156$ & $-0.0191$\\
+\text{mult} & $-105.1041$ & $0.0180$\\
+\text{hybrid mult} & $-105.1767$ & $0.0136$\\
+\text{am} & $-108.0963$ & $-0.1773$\\
+\text{gm} & $-108.3887$ & $-0.1983$\\
+\text{hm} & $-108.0714$ & $-0.1755$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Homocedasticity Levene p-value} & \text{Homocedasticity bartlett p-value}\\ \hline 
+\text{linear} & $0.0001$ & $0.0000$\\
+\text{poly2} & $0.0001$ & $0.0000$\\
+\text{poly3} & $0.0001$ & $0.0000$\\
+\text{exp} & $0.0002$ & $0.0000$\\
+\text{log} & $0.0000$ & $0.0000$\\
+\text{power} & $0.0001$ & $0.0000$\\
+\text{mult} & $0.0006$ & $0.0000$\\
+\text{hybrid mult} & $0.0007$ & $0.0000$\\
+\text{am} & $0.0001$ & $0.0000$\\
+\text{gm} & $0.0001$ & $0.0000$\\
+\text{hm} & $0.0001$ & $0.0000$
+\end{tabular}
+\end{center}
+\begin{center}
+\begin{tabular}{c|c|c}
+\text{models} & \text{Normal Test} & \text{Homoscedasticity Test}\\ \hline 
+\text{linear} & \text{X} & \text{X}\\
+\text{poly2} & \text{X} & \text{X}\\
+\text{poly3} & \text{X} & \text{X}\\
+\text{exp} & \text{X} & \text{X}\\
+\text{log} & \text{X} & \text{X}\\
+\text{power} & \text{X} & \text{X}\\
+\text{mult} & \text{X} & \text{X}\\
+\text{hybrid mult} & \text{X} & \text{X}\\
+\text{am} & \text{X} & \text{X}\\
+\text{gm} & \text{X} & \text{X}\\
+\text{hm} & \text{X} & \text{X}
+\end{tabular}
+\end{center}
