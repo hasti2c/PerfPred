@@ -109,9 +109,9 @@ class Trial:
     Saves fits, costs, and kfold costs in self.df.
     If path is not None, writes fits, costs, and kfold costs to a csv file.
     """
-    fits = np.empty((self.slices.N, len(self.model.init)))
-    costs = np.empty(self.slices.N)
-    kfs = np.empty(self.slices.N)
+    fits = np.empty((len(self.slices.slices), len(self.model.init)))
+    costs = np.empty(len(self.slices.slices))
+    kfs = np.empty(len(self.slices.slices))
     for i, slice in enumerate(self.slices.slices):
       fits[i, :], costs[i] = self.fit_slice(slice)
       kfs[i] = self.kfold_slice(slice)
