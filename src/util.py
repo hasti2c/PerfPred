@@ -91,7 +91,7 @@ def clear_sheet(sh: gs.Spreadsheet) -> None:
     time.sleep(60)
     clear_sheet(sh)
 
-def write_to_sheet(df: pd.DataFrame, sh: gs.Spreadsheet, name: str=None, index: bool=True) -> None:
+def write_to_sheet(df: pd.DataFrame, sh: gs.Spreadsheet, name: str=None, index: bool=True, decimals: int=4) -> None:
   """ Writes df to a worksheet.
   
   == Arguments ==
@@ -100,6 +100,7 @@ def write_to_sheet(df: pd.DataFrame, sh: gs.Spreadsheet, name: str=None, index: 
   name: Name of the worksheet in sh. If None, the initial worksheet will be written to.
   index: Whether or not to write df index to sheet.
   """
+  df = df.round(4)
   try:
     try:
       if name is None:

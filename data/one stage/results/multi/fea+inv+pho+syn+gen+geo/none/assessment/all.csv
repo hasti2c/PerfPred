@@ -1,2 +1,2 @@
-model,normality p-value,AIC of centered model,BIC of centered model,log likelihood,R2 coefficient,homocedasticity levene p-value,homocedasticity bartlett p-value
-linear,0.0014213216191783107,806.3277198365347,813.5179595368039,-402.16385991826735,-0.05254169247518847,1.8118431470160474e-16,1.7813931775394972e-35
+model,log likelihood,R2 coefficient,normality pearson p-value,normality shapiro p-value,homocedasticity levene p-value,homocedasticity bartlett p-value
+linear,-402.16385991826735,-0.05254169247518847,0.0014213216191783107,1.82031911766245e-09,1.8118431470160474e-16,1.7813931775394972e-35

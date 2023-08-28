@@ -2,7 +2,6 @@ import numpy as np
 import scipy as sp
 import matplotlib.pyplot as plt
 import os
-import statsmodels.api as sm
 
 class Errors():
     def __init__(self, predictions, points):
