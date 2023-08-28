@@ -58,7 +58,14 @@ class Model:
 
   @staticmethod
   def get_instance(f, n, k=1, init=None, bounds=None, alpha=DEFAULT_ALPHA, ord=DEFAULT_ORD):
-    """  """
+    """ Creates an instance of model.
+
+    == Arguments ==
+    n: Number of variables of the model.
+    k: Number of parameters per variable (k=1 for non-polynomial).
+    init: Initial value. If None, will use DEFAULT_INIT.
+    bounds: Bounds. If None, will use DEFAULT_BOUNDS.
+    """
     if k == 1:
       pars = [f"c{i}" for i in range(n + 1)]
     else:
