@@ -1,8 +1,8 @@
-model,pareto,rawlsian,
-linear,False,False,13.932224808635008
-poly2,False,False,13.900657238776494
-poly3,False,False,14.05853170168089
-exp,True,True,13.816238352884412
-log,False,False,13.901530722026026
-power,False,False,13.88852847714714
-hmult,False,False,14.210031777235107
+model,pareto,rawlsian,all
+linear,False,False,13.715799230497854
+poly2,False,False,13.715802476916505
+poly3,False,False,13.715798860934896
+exp,False,False,13.715799066497128
+log,False,False,13.71579904510762
+power,False,False,13.715799335844531
+hmult,True,True,13.715267648677628

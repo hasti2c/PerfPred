@@ -68,7 +68,7 @@ class Trial:
     If indices is not None, only considers points of the slice at the specified indices.
     """
     if indices is None:
-      indices = np.arange(len(slice.df))
+      indices = np.arange(len(slice))
     y_true = slice.y
     y_pred = self.model.f(fit, slice.x(self.xvars))
     return np.sqrt(skl.mean_squared_error(y_true, y_pred))
@@ -81,7 +81,7 @@ class Trial:
       cost: rmse of resulting fit.
     """
     if indices is None:
-      indices = np.arange(len(slice.df))
+      indices = np.arange(len(slice))
     fit = sp.minimize(self.model.loss, self.model.init, args=(slice.x(self.xvars)[indices], slice.y[indices]), 
                       bounds=self.model.bounds)
     fit_x = fit.x.copy()
@@ -93,15 +93,15 @@ class Trial:
     Holds out 1/10 of data points, fits on the rest of the points and calculates rmse on the held out points. 
     Performs this 10 times for each 1/10 of the points, and returns the mean of the calculated rmses.
     """
-    costs = np.zeros(len(slice.df))
-    if len(slice.df) < 10:
+    costs = np.zeros(min(len(slice), 10))
+    if len(slice) < 10:
       kf = LOO()
     else:
       kf = KF(n_splits=10)
     for i, (train, test) in enumerate(kf.split(slice.df)):
       fit, _ = self.fit_slice(slice, train)
       costs[i] = self.rmse(slice, fit, test)
-    return costs[i].mean()
+    return costs.mean()
   
   def fit(self) -> T.Tuple[list[np.ndarray[U.FloatT]], list[float], list[float]]:
     """ Fits all slices in self.slices. 
@@ -109,10 +109,10 @@ class Trial:
     Saves fits, costs, and kfold costs in self.df.
     If path is not None, writes fits, costs, and kfold costs to a csv file.
     """
-    fits = np.empty((len(self.slices.slices), len(self.model.init)))
-    costs = np.empty(len(self.slices.slices))
-    kfs = np.empty(len(self.slices.slices))
-    for i, slice in enumerate(self.slices.slices):
+    fits = np.empty((len(self.slices), len(self.model.init)))
+    costs = np.empty(len(self.slices))
+    kfs = np.empty(len(self.slices))
+    for i, slice in enumerate(self.slices):
       fits[i, :], costs[i] = self.fit_slice(slice)
       kfs[i] = self.kfold_slice(slice)
     
@@ -176,7 +176,7 @@ class Trial:
     """ Plots each slice with each possible horiz value. Saves each plot as a png file.
     Pre-Condition: Fits have been initalized (by calling fit, read_fits, or read_or_fit).
     """
-    prd = it.product(range(len(self.xvars)), range(self.slices.N))
+    prd = it.product(range(len(self.xvars)), range(len(self.slices)))
     for j, i in prd:
       horiz = self.xvars[j]
       slice = self.slices.slices[i]

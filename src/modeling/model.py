@@ -10,7 +10,7 @@ from util import FloatT
 
 DEFAULT_BOUNDS = (-np.inf, np.inf)
 DEFAULT_INIT = 0
-DEFAULT_ALPHA = 5
+DEFAULT_ALPHA = 0
 DEFAULT_ORD = 1
 
 class Model:

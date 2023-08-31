@@ -11,19 +11,19 @@ import util as U
 from slicing.variable import Variable as V
 
 
-def pearson(true, pred):
-    if len(true) < 8:
+def pearson(true_y, pred_y):
+    if len(true_y) < 8:
         return pd.NA
-    return sp.normaltest(true - pred).pvalue
+    return sp.normaltest(true_y - pred_y).pvalue
 
-def shapiro(true, pred):
-    # if len(true) < 20:
+def shapiro(true_y, pred_y):
+    # if len(true_y) < 20:
     #     return pd.NA
-    return sp.shapiro(true - pred).pvalue
+    return sp.shapiro(true_y - pred_y).pvalue
     
-def log_likelihood(true, pred):
-    sigma = np.sqrt(np.mean(abs(true - pred) ** 2))
-    return np.sum(np.log(sp.norm.pdf(true - pred, loc=0, scale=sigma)))
+def log_likelihood(true_y, pred_y):
+    sigma = np.sqrt(np.mean(abs(true_y - pred_y) ** 2))
+    return np.sum(np.log(sp.norm.pdf(true_y - pred_y, loc=0, scale=sigma)))
 
 def aic(llh):
     return 2 * (1 - llh)
@@ -31,21 +31,21 @@ def aic(llh):
 def bic(llh, n):
     return 2 * (np.log(n) - llh)
 
-def r2(true, pred):
-    return skl.r2_score(true, pred)
+def r2(true_y, pred_y):
+    return skl.r2_score(true_y, pred_y)
 
-def levene(true, pred, n_splits=2):
-    if len(true) < 5:
+def levene(true_y, pred_y, n_splits=2):
+    if len(true_y) < 5:
         return pd.NA
-    split = np.array_split(np.sort(true - pred), n_splits)
-    # if len(true) == 4:
-    #     print("HI", true, pred, split)
+    split = np.array_split(np.sort(true_y - pred_y), n_splits)
+    # if len(true_y) == 4:
+    #     print("HI", true_y, pred_y, split)
     return sp.levene(*split).pvalue
 
-def bartlett(true, pred, n_splits=2):
-    if len(true) < 5:
+def bartlett(true_y, pred_y, n_splits=2):
+    if len(true_y) < 5:
         return pd.NA
-    split = np.array_split(np.sort(true - pred), n_splits)
+    split = np.array_split(np.sort(true_y - pred_y), n_splits)
     return sp.bartlett(*split).pvalue
 
 def assess_trials(trials: pd.DataFrame):

@@ -112,6 +112,9 @@ class Slice:
       else:
         ax.plot(xs, ys, c=colors[i], label=" ".join([self.__repr__(), label]))
 
+  def __len__(self):
+    return len(self.df)
+
   def __repr__(self) -> str:
     return self.title
 
@@ -164,9 +167,12 @@ class SliceGroup:
       n, N = min(min(x), n), max(max(x), N)
 
     for i, slice in enumerate(self.slices):
-      slice.plot(ax, model, fits.loc[i].to_numpy(dtype=float), horiz, xvars, (n, N), (i / self.N, (i + 1) / self.N), \
+      slice.plot(ax, model, fits.loc[i].to_numpy(dtype=float), horiz, xvars, (n, N), (i / len(self), (i + 1) / len(self)), \
                  label_by_slice=True)
     
+  def __len__(self):
+    return len(self.slices)
+
   def __repr__(self):
     return '+'.join(map(V.__repr__, self.vary))
   
