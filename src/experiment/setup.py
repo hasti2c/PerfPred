@@ -98,7 +98,7 @@ def init_trials(vars_list: list[list[V]]=VARS_LIST, splits_list: list[list[V]]=S
         if (vars, splits, model) not in list(product(vars_list, splits_list, models)):
             init_trial(vars, splits, model)
 
-def get_trials(vars_list: list[list[V]]=VARS_LIST, splits_list: list[list[V]]=SPLITS_LIST, models: list[str]=MODELS) -> \
+def get_trials(vars_list: list[list[V]]=FULL_VARS_LIST, splits_list: list[list[V]]=SPLITS_LIST, models: list[str]=MODELS) -> \
     pd.DataFrame:
     """ Returns subset of TRIALS with vars, splits, and model within the specified values. """
     df = TRIALS.loc[TRIALS["splits"].isin(map(V.list_to_str, splits_list))].copy()

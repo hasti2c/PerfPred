@@ -56,4 +56,4 @@ def run_on_experiments(f: Typ.Callable[[pd.DataFrame], Typ.Any], vars_list: list
         sys.stdout.flush()
         sys.stderr.flush()
 
-run_on_trials(T.read_or_fit)
+# run_on_trials(T.read_or_fit)

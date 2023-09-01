@@ -1,2 +1,0 @@
-model,log likelihood,R2 coefficient,normality pearson p-value,normality shapiro p-value,homocedasticity levene p-value,homocedasticity bartlett p-value
-linear,-399.9687763636778,-0.00688637908975509,0.012623930746594353,0.0002287273237016052,6.08454711171524e-05,1.990184861129502e-05

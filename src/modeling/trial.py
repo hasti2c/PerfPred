@@ -112,7 +112,7 @@ class Trial:
     fits = np.empty((len(self.slices), len(self.model.init)))
     costs = np.empty(len(self.slices))
     kfs = np.empty(len(self.slices))
-    for i, slice in enumerate(self.slices):
+    for i, slice in enumerate(self.slices.slices):
       fits[i, :], costs[i] = self.fit_slice(slice)
       kfs[i] = self.kfold_slice(slice)
     
