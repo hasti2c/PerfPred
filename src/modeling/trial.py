@@ -150,6 +150,15 @@ class Trial:
       return self.read_fits()
     except FileNotFoundError:
       return self.fit()
+    
+  def fits(self, slice: S) -> np.ndarray[U.FloatT]:
+    ind = self.slices.slices.index(slice)
+    return self.df.loc[ind, self.model.pars].to_numpy()
+
+  def get_predictions(self, slice: S) -> np.ndarray[U.FloatT]:
+    c = self.fits(slice)
+    x = slice.x(self.xvars)
+    return self.model.f(c, x)
 
   def plot_slice(self, slice: S, fit: np.ndarray[U.FloatT], horiz: V) -> None:
     """ Plots specified slice with the given fit. Variable horiz is used as the x-axis variable.
