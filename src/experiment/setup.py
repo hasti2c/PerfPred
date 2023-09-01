@@ -14,6 +14,7 @@ from slicing.variable import Variable as V
 SIZE_VARS = [V.TRAIN_SIZE] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_SIZE, V.TRAIN2_SIZE]
 DOMAIN_VARS = [V.TRAIN_JSD] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_JSD, V.TRAIN2_JSD]
 LANG_VARS = [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST]
+ALL_VARS = SIZE_VARS + DOMAIN_VARS + LANG_VARS
 
 VARS_LIST, SPLITS_LIST = [], []
 
@@ -105,5 +106,13 @@ def get_trials(vars_list: list[list[V]]=FULL_VARS_LIST, splits_list: list[list[V
     df = df.loc[df["vars"].isin(map(V.list_to_str, vars_list))]
     df = df.loc[df["model"].isin(models)]
     return df
+
+def find_trial(vars: list[V], splits: list[V], model: str) -> T:
+    df = get_trials([vars], [splits], [model])
+    if len(df) > 1:
+        raise ValueError("Arguments don't specify a unique trial.")
+    elif len(df) == 0:
+        raise ValueError("No trial matches the arguments.")
+    return df.iloc[0].loc["trial"]
 
 init_trials()
