@@ -33,7 +33,8 @@ def read_config() -> None:
     global WRITE_TO_SHEET, SHEET_NAMES, EXPERIMENT_TYPE, DATA_PATH, MAX_NVARS, MAX_NSPLITS
     WRITE_TO_SHEET = config['API']['gsheet'] in ["True", "true", "1"]
     SHEET_NAMES["costs"], SHEET_NAMES["cost stats"] = config['API']['costs sheet'], config['API']['cost stats sheet']
-    SHEET_NAMES["baselines"], SHEET_NAMES["assessment"] = config['API']['baselines sheet'], config['API']['assessment sheet']
+    SHEET_NAMES["cost table"], SHEET_NAMES["baselines"] = config['API']['cost table sheet'], config['API']['baselines sheet']
+    SHEET_NAMES["assessment"] = config['API']['assessment sheet']
     EXPERIMENT_TYPE = config['Experiment']['type']
     MAX_NVARS, MAX_NSPLITS = int(config['Experiment']['max nvars']), int(config['Experiment']['max nsplits'])
     DATA_PATH = os.path.join(DATA_PATH, EXPERIMENT_TYPE)

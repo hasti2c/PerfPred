@@ -7,5 +7,6 @@ max nsplits = 4
 gsheet = False
 costs sheet = one stage costs
 cost stats sheet = one stage cost stats
+cost table sheet = one stage cost table
 baselines sheet = one stage baselines
 assessment sheet = one stage assessment

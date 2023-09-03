@@ -1,5 +1,5 @@
 import os
-import typing as T
+import typing as Typ
 from itertools import combinations, product
 
 import numpy as np
@@ -8,7 +8,7 @@ import pandas as pd
 import modeling.functions as F
 import util as U
 from modeling.model import Model as M
-from modeling.trial import Trial as Tr
+from modeling.trial import Trial as T
 from slicing.variable import Variable as V
 
 SIZE_VARS = [V.TRAIN_SIZE] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_SIZE, V.TRAIN2_SIZE]
@@ -59,20 +59,22 @@ def init_setup() -> None:
 
 init_setup()
 
-FULL_VARS_LIST = VARS_LIST + [SIZE_VARS + DOMAIN_VARS + LANG_VARS, SIZE_VARS, DOMAIN_VARS, LANG_VARS]
+FULL_VARS_LIST = VARS_LIST + [SIZE_VARS, SIZE_VARS + DOMAIN_VARS + LANG_VARS]
 
 BASELINES = [
-    (SIZE_VARS + DOMAIN_VARS + LANG_VARS, [], 'linear'),
     (SIZE_VARS, [], 'linear'),
     (DOMAIN_VARS, [], 'linear'),
-    (LANG_VARS, [], 'linear')
+    (LANG_VARS, [], 'linear'),
+    (SIZE_VARS + DOMAIN_VARS + LANG_VARS, [], 'linear')
 ]
 
 TRIALS = pd.DataFrame(columns=["vars", "splits", "model", "trial"])
 
-def get_path(vars: list[V], splits: list[V], model: str="") -> str:
+def get_path(vars: Typ.Union[str, list[V]]="", splits: Typ.Union[str, list[V]]="", model: str="") -> str:
     """ Returns path of experiment/trial given vars, splits, and optionally model."""
-    return os.path.join(U.DATA_PATH, "results", "multi" if len(vars) > 1 else "", V.list_to_str(vars), V.list_to_str(splits), model)
+    return os.path.join(U.DATA_PATH, "results", "multi" if len(vars) > 1 else "", 
+                        vars if isinstance(vars, str) else V.list_to_str(vars), 
+                        splits if isinstance(splits, str) else V.list_to_str(splits), model)
 
 def init_trial(vars: list[V], splits: list[V], model: str) -> None:
     """ Given vars, splits and models, creates corresponding trial and adds it to TRIALS. """
@@ -83,32 +85,33 @@ def init_trial(vars: list[V], splits: list[V], model: str) -> None:
     model_obj = M.get_instance(**args)
     
     try:
-        trial = Tr(vars, splits, model_obj, get_path(vars, splits, model), model)
+        trial = T(vars, splits, model_obj, get_path(vars, splits, model), model)
     except ValueError:
         return None
     TRIALS.loc[len(TRIALS.index)] = {"vars": var_names, "splits": split_names, "model": model, "trial": trial}
 
-def init_trials(vars_list: list[list[V]]=VARS_LIST, splits_list: list[list[V]]=SPLITS_LIST, models: list[str]=MODELS, 
-                conditions: dict[str, T.Callable[[list[V]], bool]]=MODEL_CONDITIONS) -> None:
+def init_trials() -> None:
     """ Initializes TRIALS based on vars_list, splits_list, models, and conditions. """
-    for vars, splits, model in list(product(vars_list, splits_list, models)):
-        if model in conditions and not conditions[model](vars):
-            continue
-        init_trial(vars, splits, model)
+    for vars, splits, model in list(product(VARS_LIST, SPLITS_LIST, MODELS)):
+        if model not in MODEL_CONDITIONS or MODEL_CONDITIONS[model](vars):
+            init_trial(vars, splits, model)
     for vars, splits, model in BASELINES:
-        if (vars, splits, model) not in list(product(vars_list, splits_list, models)):
+        if (vars, splits, model) not in list(product(VARS_LIST, SPLITS_LIST, MODELS)):
             init_trial(vars, splits, model)
 
-def get_trials(vars_list: list[list[V]]=FULL_VARS_LIST, splits_list: list[list[V]]=SPLITS_LIST, models: list[str]=MODELS) -> \
-    pd.DataFrame:
+def get_trials(vars: Typ.Optional[str]=None, splits: Typ.Optional[str]=None, model: Typ.Optional[str]=None, 
+               df: pd.DataFrame=TRIALS) -> pd.DataFrame:
     """ Returns subset of TRIALS with vars, splits, and model within the specified values. """
-    df = TRIALS.loc[TRIALS["splits"].isin(map(V.list_to_str, splits_list))].copy()
-    df = df.loc[df["vars"].isin(map(V.list_to_str, vars_list))]
-    df = df.loc[df["model"].isin(models)]
-    return df
+    if vars is not None:
+        df = df.loc[df["vars"] == vars]
+    if splits is not None:
+        df = df.loc[df["splits"] == splits]
+    if model is not None:
+        df = df.loc[df["model"] == model]
+    return df.reset_index()
 
-def find_trial(vars: list[V], splits: list[V], model: str) -> T:
-    df = get_trials([vars], [splits], [model])
+def find_trial(vars: str, splits: str, model: str) -> T:
+    df = get_trials(vars, splits, model)
     if len(df) > 1:
         raise ValueError("Arguments don't specify a unique trial.")
     elif len(df) == 0:
