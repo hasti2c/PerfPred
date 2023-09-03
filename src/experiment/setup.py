@@ -66,8 +66,7 @@ TRIALS = pd.DataFrame(columns=["vars", "splits", "model", "trial"])
 
 def get_path(vars: Typ.Union[str, list[V]]="", splits: Typ.Union[str, list[V]]="", model: str="") -> str:
     """ Returns path of experiment/trial given vars, splits, and optionally model."""
-    return os.path.join(U.DATA_PATH, "results", "multi" if len(vars) > 1 else "", 
-                        vars if isinstance(vars, str) else V.list_to_str(vars), 
+    return os.path.join(U.DATA_PATH, "results", vars if isinstance(vars, str) else V.list_to_str(vars), 
                         splits if isinstance(splits, str) else V.list_to_str(splits), model)
 
 def init_trial(vars: list[V], splits: list[V], model: str) -> None:
