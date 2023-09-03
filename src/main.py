@@ -13,4 +13,4 @@ from modeling.trial import Trial as T
 import pandas as pd
 pd.set_option("display.max_columns", 10)
 
-R.run_on_experiments(A.create_cost_table, group_by_vars=True)
+R.run_on_experiments(A.plot_compact)

@@ -28,7 +28,7 @@ def run_on_trials(f: Typ.Callable[[T], Typ.Any], df: pd.DataFrame=S.TRIALS, supp
         sys.stdout.flush()
         sys.stderr.flush()
 
-def run_on_experiments(f: Typ.Callable[[pd.DataFrame], Typ.Any], group_by_vars: bool=False, group_by_splits: bool=False, 
+def run_on_experiments(f: Typ.Callable[[pd.DataFrame], Typ.Any], group_by_vars: bool=True, group_by_splits: bool=True, 
                        group_by_model: bool=False, trials: pd.DataFrame=S.TRIALS, suppress: bool=False) -> None:
     """ For each vars, splits and model in the specified lists, runs f on the subset of TRIALS corresponding to these 
     values.

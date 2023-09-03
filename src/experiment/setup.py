@@ -59,14 +59,8 @@ def init_setup() -> None:
 
 init_setup()
 
-FULL_VARS_LIST = VARS_LIST + [SIZE_VARS, SIZE_VARS + DOMAIN_VARS + LANG_VARS]
-
-BASELINES = [
-    (SIZE_VARS, [], 'linear'),
-    (DOMAIN_VARS, [], 'linear'),
-    (LANG_VARS, [], 'linear'),
-    (SIZE_VARS + DOMAIN_VARS + LANG_VARS, [], 'linear')
-]
+BASELINE_VARS_LIST = [SIZE_VARS + DOMAIN_VARS, LANG_VARS, SIZE_VARS + DOMAIN_VARS + LANG_VARS]
+FULL_VARS_LIST = VARS_LIST + BASELINE_VARS_LIST
 
 TRIALS = pd.DataFrame(columns=["vars", "splits", "model", "trial"])
 
@@ -95,8 +89,8 @@ def init_trials() -> None:
     for vars, splits, model in list(product(VARS_LIST, SPLITS_LIST, MODELS)):
         if model not in MODEL_CONDITIONS or MODEL_CONDITIONS[model](vars):
             init_trial(vars, splits, model)
-    for vars, splits, model in BASELINES:
-        if (vars, splits, model) not in list(product(VARS_LIST, SPLITS_LIST, MODELS)):
+    for vars, splits, model in list(product(BASELINE_VARS_LIST, SPLITS_LIST, MODELS)):
+        if model not in MODEL_CONDITIONS or MODEL_CONDITIONS[model](vars):
             init_trial(vars, splits, model)
 
 def get_trials(vars: Typ.Optional[str]=None, splits: Typ.Optional[str]=None, model: Typ.Optional[str]=None, 
