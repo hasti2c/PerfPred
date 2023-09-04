@@ -153,7 +153,7 @@ class Trial:
     
   def fits(self, slice: S) -> np.ndarray[U.FloatT]:
     ind = self.slices.slices.index(slice)
-    return self.df.loc[ind, self.model.pars].to_numpy()
+    return self.df.loc[ind, self.model.pars].to_numpy(dtype=float)
 
   def get_predictions(self, slice: S) -> np.ndarray[U.FloatT]:
     c = self.fits(slice)
