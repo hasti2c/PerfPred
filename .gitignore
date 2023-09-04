@@ -2,6 +2,7 @@
 *.png
 .vscode/
 lang2vec/
+Stats Results/
 credentials.json
 token.json
 

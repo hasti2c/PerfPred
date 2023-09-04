@@ -4,6 +4,8 @@ from itertools import product
 
 import pandas as pd
 
+import experiment.analyze as A
+import experiment.assess as As
 import experiment.setup as S
 from modeling.trial import Trial as T
 from slicing.variable import Variable as V
@@ -56,5 +58,13 @@ def run_on_experiments(f: Typ.Callable[[pd.DataFrame], Typ.Any], group_by_vars: 
             print(f"{f.__name__} on {names} done.")
         sys.stdout.flush()
         sys.stderr.flush()
+
+def run_analysis(run_plots=False, trials: pd.DataFrame=S.TRIALS, suppress: bool=False):
+    run_on_experiments(A.compare_costs, trials=trials, suppress=suppress)
+    run_on_experiments(A.compare_cost_stats, trials=trials, suppress=suppress)
+    run_on_experiments(As.assess_trials, trials=trials, suppress=suppress)
+    if run_plots:
+        run_on_experiments(A.plot_compact, trials=trials, suppress=suppress)
+    run_on_experiments(A.create_cost_table, group_by_splits=False, trials=trials, suppress=suppress)
 
 run_on_trials(T.read_or_fit)

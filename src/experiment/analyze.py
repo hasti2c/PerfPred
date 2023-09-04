@@ -56,7 +56,6 @@ def get_mean_costs(trials: pd.DataFrame, col: str) -> pd.DataFrame:
     return pd.concat([trials, pd.Series(stats, name="mean kfold rmse")], axis=1)
 
 def create_cost_table(trials: pd.DataFrame) -> None:
-    """ TODO docs """
     vars = trials.iloc[0].loc["trial"].xvars
     all_splits, all_models = list(trials["splits"].unique()), list(trials["model"].unique())
     df = get_mean_costs(trials, "kfold rmse").drop(columns=["vars", "trial"])
