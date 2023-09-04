@@ -101,7 +101,7 @@ def get_trials(vars: Typ.Optional[str]=None, splits: Typ.Optional[str]=None, mod
         df = df.loc[df["splits"] == splits]
     if model is not None:
         df = df.loc[df["model"] == model]
-    return df.reset_index()
+    return df.reset_index(drop=True)
 
 def find_trial(vars: str, splits: str, model: str) -> T:
     df = get_trials(vars, splits, model)
