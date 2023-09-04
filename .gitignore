@@ -1,5 +1,4 @@
 .DS_Store
-*.png
 .vscode/
 lang2vec/
 Stats Results/
