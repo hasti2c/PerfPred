@@ -17,8 +17,6 @@ def pearson(true_y, pred_y):
     return sp.normaltest(true_y - pred_y).pvalue
 
 def shapiro(true_y, pred_y):
-    # if len(true_y) < 20:
-    #     return pd.NA
     return sp.shapiro(true_y - pred_y).pvalue
     
 def log_likelihood(true_y, pred_y):
@@ -38,8 +36,6 @@ def levene(true_y, pred_y, n_splits=2):
     if len(true_y) < 5:
         return pd.NA
     split = np.array_split(np.sort(true_y - pred_y), n_splits)
-    # if len(true_y) == 4:
-    #     print("HI", true_y, pred_y, split)
     return sp.levene(*split).pvalue
 
 def bartlett(true_y, pred_y, n_splits=2):

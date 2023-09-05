@@ -92,18 +92,22 @@ def init_trials() -> None:
         if model not in MODEL_CONDITIONS or MODEL_CONDITIONS[model](vars):
             init_trial(vars, splits, model)
 
-def get_trials(vars: Typ.Optional[str]=None, splits: Typ.Optional[str]=None, model: Typ.Optional[str]=None, 
-               df: pd.DataFrame=TRIALS) -> pd.DataFrame:
+def get_trials(vars: Typ.Optional[Typ.Union[str, list[V]]]=None, splits: Typ.Optional[Typ.Union[str, list[V]]]=None, 
+               model: Typ.Optional[str]=None, df: pd.DataFrame=TRIALS) -> pd.DataFrame:
     """ Returns subset of TRIALS with vars, splits, and model within the specified values. """
     if vars is not None:
+        if isinstance(vars, list):
+            vars = V.list_to_str(vars)
         df = df.loc[df["vars"] == vars]
     if splits is not None:
+        if isinstance(splits, list):
+            splits = V.list_to_str(splits)
         df = df.loc[df["splits"] == splits]
     if model is not None:
         df = df.loc[df["model"] == model]
     return df.reset_index(drop=True)
 
-def find_trial(vars: str, splits: str, model: str) -> T:
+def find_trial(vars: Typ.Union[str, list[V]], splits: Typ.Union[str, list[V]], model: str) -> T:
     df = get_trials(vars, splits, model)
     if len(df) > 1:
         raise ValueError("Arguments don't specify a unique trial.")

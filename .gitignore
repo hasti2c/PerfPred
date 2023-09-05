@@ -4,6 +4,7 @@ lang2vec/
 Stats Results/
 credentials.json
 token.json
+data/results/two\ stage/**/*.png
 
 # LaTeX
 *.log
