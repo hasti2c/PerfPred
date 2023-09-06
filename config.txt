@@ -1,5 +1,6 @@
 [Experiment]
 type = one stage
+results directory = results
 max nvars = 1
 max nsplits = 4
 
