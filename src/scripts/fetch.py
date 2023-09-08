@@ -1,4 +1,7 @@
 import os
+import sys
+# sys.path.append('..')
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pandas as pd
 import util as U
@@ -6,9 +9,11 @@ import util as U
 df_cols = [
   "train set 1",
   "train set 1 size",
+  "train set 1 normalized size",
   "train set 1 jsd",
   "train set 2",
   "train set 2 size",
+  "train set 2 normalized size",
   "train set 2 jsd",
   "test set",
   "language from",
@@ -23,8 +28,10 @@ df_cols = [
 ]
 df_dtypes = {
     "train set 1 size": "Int64",
+    "train set 1 normalized size": "Float64",
     "train set 1 jsd": "Float64",
     "train set 2 size": "Int64",
+    "train set 2 normalized size": "Float64",
     "train set 2 jsd": "Float64",
     "geographic": "Float64",
     "genetic": "Float64",
@@ -178,9 +185,11 @@ def format_df(data_df: pd.DataFrame, jsd_df: pd.DataFrame, l2v_df: pd.DataFrame)
       new_row = {
         "train set 1": train1 if pd.isna(train1) or train1 != 'pmo/gov' else 'gov',
         "train set 1 size": int(size1[:-1]),
+        "train set 1 normalized size": int(size1[:-1]) / 100,
         "train set 1 jsd": jsd1,
         "train set 2": train2 if pd.isna(train2) or train2 != 'pmo/gov' else 'gov',
         "train set 2 size": int(size2[:-1]),
+        "train set 2 normalized size": int(size2[:-1]) / 50,
         "train set 2 jsd": jsd2,
         "test set": test if pd.isna(test) or test != 'pmo/gov' else 'gov',
         "language from": "en",
@@ -204,8 +213,10 @@ if __name__ == "__main__":
     df.to_csv(os.path.join("data", "records.csv"), index=False)
     
     one_stage_df = df[pd.isna(df["train set 1"])].copy()
-    one_stage_df.drop(columns=["train set 1", "train set 1 size", "train set 1 jsd"], inplace=True)
+    one_stage_df.drop(columns=["train set 1", "train set 1 size", "train set 1 normalized size", "train set 1 jsd"], 
+                      inplace=True)
     one_stage_df.rename(columns={"train set 2": "train set", "train set 2 size": "train set size", 
+                                 "train set 2 normalized size": "train set normalized size", 
                                  "train set 2 jsd": "train set jsd"}, inplace=True)
     one_stage_df.to_csv(os.path.join("data", "one stage", "records.csv"), index=False)
     

@@ -57,8 +57,9 @@ class Trial:
     self.split_by, self.xvars, self.model, self.path, self.name = split_by, xvars, model, path, name
     if not set(split_by).isdisjoint(V.get_main_vars(xvars)):
       raise ValueError
-    vary = V.complement(split_by)
-    self.slices = SG.get_instance(vary)
+    self.slices = SG.get_instance(V.complement(split_by))
+    if min([len(slice) for slice in self.slices.slices]) < U.MIN_POINTS:
+      raise ValueError
     self.df = self.slices.ids.copy()
     if self.path is not None and not os.path.exists(self.path):
       os.makedirs(self.path)

@@ -3,11 +3,11 @@ type = one stage
 results directory = results
 max nvars = 1
 max nsplits = 4
+min points = 10
 
 [API]
 gsheet = False
 costs sheet = one stage costs
 cost stats sheet = one stage cost stats
 cost table sheet = one stage cost table
-baselines sheet = one stage baselines
 assessment sheet = one stage assessment

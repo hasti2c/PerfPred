@@ -9,9 +9,11 @@ import modeling.functions as F
 import util as U
 from modeling.model import Model as M
 from modeling.trial import Trial as T
+from slicing.slice import SliceGroup as SG
 from slicing.variable import Variable as V
 
-SIZE_VARS = [V.TRAIN_SIZE] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_SIZE, V.TRAIN2_SIZE]
+SIZE_VARS = [V.TRAIN_SIZE, V.TRAIN_NORM_SIZE] if U.EXPERIMENT_TYPE == "one stage" \
+            else [V.TRAIN1_SIZE, V.TRAIN1_NORM_SIZE, V.TRAIN2_SIZE, V.TRAIN2_NORM_SIZE]
 DOMAIN_VARS = [V.TRAIN_JSD] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_JSD, V.TRAIN2_JSD]
 LANG_VARS = [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST]
 ALL_VARS = SIZE_VARS + DOMAIN_VARS + LANG_VARS
@@ -30,7 +32,7 @@ MODELS = {
     "am":      {'f': F.arithmetic_mean_linear, 'n': 1},
     "gm":      {'f': F.geometric_mean_linear, 'n': 1},
     "hm":      {'f': F.harmonic_mean_linear, 'n': 1},
-    "scaling": {'f': F.scaling_law, 'n': 2, 'bounds': [(-np.inf, np.inf), (0, np.inf), (-85, np.inf)]},
+    "scaling": {'f': F.scaling_law, 'n': 2, 'bounds': [(-np.inf, 120), (0, np.inf), (-85, np.inf)]},
     "anthony": {'f': F.anthonys_law, 'n': 4},
     "diff":    {'f': F.linear_with_difference, 'n': 3}
 }
@@ -40,9 +42,10 @@ MODEL_CONDITIONS = {
     "am":      lambda vars: len(vars) > 1,
     "gm":      lambda vars: len(vars) > 1,
     "hm":      lambda vars: len(vars) > 1,
-    "scaling": lambda vars: vars == [V.TRAIN_SIZE] if U.EXPERIMENT_TYPE == "one stage" 
-                                                 else vars in [[V.TRAIN1_SIZE], [V.TRAIN2_SIZE]],
-    "anthony": lambda vars: U.EXPERIMENT_TYPE == "two stage" and vars == [V.TRAIN1_SIZE, V.TRAIN2_SIZE],
+    "scaling": lambda vars: vars in [[V.TRAIN_SIZE], [V.TRAIN_NORM_SIZE]] if U.EXPERIMENT_TYPE == "one stage" 
+                            else vars in [[V.TRAIN1_SIZE], [V.TRAIN1_NORM_SIZE], [V.TRAIN2_SIZE], [V.TRAIN2_NORM_SIZE]],
+    "anthony": lambda vars: U.EXPERIMENT_TYPE == "two stage" and vars in [[V.TRAIN1_SIZE, V.TRAIN2_SIZE], 
+                                                                          [V.TRAIN1_NORM_SIZE, V.TRAIN2_NORM_SIZE]],
     "diff":    lambda vars: len(vars) == 2
 }
 
@@ -59,7 +62,8 @@ def init_setup() -> None:
 
 init_setup()
 
-BASELINE_VARS_LIST = [SIZE_VARS + DOMAIN_VARS, LANG_VARS, SIZE_VARS + DOMAIN_VARS + LANG_VARS]
+BASELINE_VARS_LIST = [[V.TRAIN_SIZE, V.TRAIN_JSD], [V.TRAIN_NORM_SIZE, V.TRAIN_JSD], LANG_VARS, 
+                      [V.TRAIN_SIZE, V.TRAIN_JSD] + LANG_VARS, [V.TRAIN_NORM_SIZE, V.TRAIN_JSD] + LANG_VARS]
 FULL_VARS_LIST = VARS_LIST + BASELINE_VARS_LIST
 
 TRIALS = pd.DataFrame(columns=["vars", "splits", "model", "trial"])

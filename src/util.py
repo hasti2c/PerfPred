@@ -21,6 +21,7 @@ CONFIG_FILE = "config.txt"
 
 EXPERIMENT_TYPE = "all"       # Possible values: "all", "one stage", "two stage".
 MAX_NVARS, MAX_NSPLITS = 1, 0 # Maximum number of vars and splits to consider.
+MIN_POINTS = 0                # Minimum number of points there needs to be in all slices to keep the splits.
 DATA_PATH = "data"            # Path of data directory.
 RESULTS_DIR = "results"       # Subdirectory for results.
 WRITE_TO_SHEET = False        # Whether or not to save data to google sheets. If True, requires credentials.json.
@@ -31,12 +32,13 @@ def read_config() -> None:
     """ Reads config variables from config file. """
     config = ConfigParser()
     config.read(CONFIG_FILE)
-    global WRITE_TO_SHEET, SHEET_NAMES, EXPERIMENT_TYPE, DATA_PATH, RESULTS_DIR, MAX_NVARS, MAX_NSPLITS
+    global WRITE_TO_SHEET, SHEET_NAMES, EXPERIMENT_TYPE, DATA_PATH, RESULTS_DIR, MAX_NVARS, MAX_NSPLITS, MIN_POINTS
     WRITE_TO_SHEET = config['API']['gsheet'] in ["True", "true", "1"]
     SHEET_NAMES["costs"], SHEET_NAMES["cost stats"] = config['API']['costs sheet'], config['API']['cost stats sheet']
     SHEET_NAMES["cost table"], SHEET_NAMES["assessment"] = config['API']['cost table sheet'], config['API']['assessment sheet']
     EXPERIMENT_TYPE, RESULTS_DIR = config['Experiment']['type'], config['Experiment']['results directory']
     MAX_NVARS, MAX_NSPLITS = int(config['Experiment']['max nvars']), int(config['Experiment']['max nsplits'])
+    MIN_POINTS = int(config['Experiment']['min points'])
     DATA_PATH = os.path.join(DATA_PATH, EXPERIMENT_TYPE)
 
 read_config()
@@ -90,6 +92,10 @@ def clear_sheet(sh: gs.Spreadsheet) -> None:
   except gs.exceptions.APIError:
     print("Sleeping for 60 seconds...", file=sys.stderr)
     time.sleep(60)
+    clear_sheet(sh)
+
+def clear_all_sheets() -> None:
+  for sh in SHEETS.values():
     clear_sheet(sh)
 
 def write_to_sheet(df: pd.DataFrame, sh: gs.Spreadsheet, name: str=None, index: bool=True, decimals: int=4) -> None:
