@@ -192,6 +192,41 @@ class Trial:
       slice = self.slices.slices[i]
       self.plot_slice(slice, self.df.loc[i, self.model.pars].to_numpy(dtype=float), horiz)
 
+  def plot_boxplot(self, res_max: int=None, func: str=None) -> None:
+    """ Makes the box-and-whiskers plot for all the slices, where a single box corresponds to a slice
+        res_max is the max y-value for the box and whisker plots 
+        Pre-Condition: len(self.x_vars) == 1
+    """
+    delim = "+"
+    partition = delim.join(map(repr,self.split_by))
+    vars = delim.join(map(repr,self.xvars))
+    print(partition)
+
+    if partition == "":
+      partition = "none"
+    
+
+    boxplot_array = []
+    x_labels = []
+    for s in self.slices.slices:
+        x_labels.append(s.title)
+        preds = self.get_predictions(s)
+        reals = s.df.loc[:,"sp-BLEU"].to_numpy()
+        res = (preds - reals) ** 2
+        boxplot_array.append(res)
+    plt.boxplot(boxplot_array)
+    x=[i for i in range(1, len(x_labels) + 1)]
+    plt.xticks(x, x_labels)
+    plt.xlabel(partition)
+    if res_max:
+      plt.ylim(0,res_max)
+    plt.ylabel("residuals")
+    print(f"data/one stage/results/{vars}/{partition}/{func}/boxplot3.png")
+    if os.path.exists(f"data/one stage/results/{vars}/{partition}/{func}/boxplot3.png"):
+        os.remove(f"data/one stage/results/{vars}/{partition}/{func}/boxplot3.png")
+    plt.savefig(f"data/one stage/results/{vars}/{partition}/{func}/boxplot3.png")
+    plt.clf()
+
   def plot_together(self, premade_ax: T.Optional[mpl.axes.Axes]=None, title: bool=True, legend: bool=True) -> None:
     """ For each possible horiz value, plots all slices in the same plot. Saves each plot as a png file.
     Pre-Condition: Fits have been initalized (by calling fit, read_fits, or read_or_fit).

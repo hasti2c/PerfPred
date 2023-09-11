@@ -119,4 +119,18 @@ def find_trial(vars: Typ.Union[str, list[V]], splits: Typ.Union[str, list[V]], m
         raise ValueError("No trial matches the arguments.")
     return df.iloc[0].loc["trial"]
 
+def find_res_max(vars: Typ.Union[str, list[V]], splits: Typ.Union[str, list[V]], models: Typ.Optional[str]=None) -> int:
+    """ Returns the highest residual for the vars"""
+    res_max = -1
+    for m in models:
+        print((vars, splits, m))
+        trial = find_trial(vars, splits, m)
+        for s in trial.slices.slices:
+            preds = trial.get_predictions(s)
+            reals = s.df.loc[:,"sp-BLEU"].to_numpy()
+            res = (preds - reals) ** 2
+            res_max = max(np.max(res), res_max)
+    
+    return res_max
+
 init_trials()
