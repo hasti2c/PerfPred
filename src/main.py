@@ -11,3 +11,4 @@ import util as U
 # for vars in plot_vars:
 #   trials = S.get_trials(vars)
 #   R.run_on_experiments(R.A.plot_compact, trials=trials)
+print(S.TRIALS)

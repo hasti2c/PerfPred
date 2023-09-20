@@ -12,14 +12,7 @@ from modeling.trial import Trial as T
 from slicing.slice import SliceGroup as SG
 from slicing.variable import Variable as V
 
-SIZE_VARS = [V.TRAIN_SIZE, V.TRAIN_NORM_SIZE] if U.EXPERIMENT_TYPE == "one stage" \
-            else [V.TRAIN1_SIZE, V.TRAIN1_NORM_SIZE, V.TRAIN2_SIZE, V.TRAIN2_NORM_SIZE]
-DOMAIN_VARS = [V.TRAIN_JSD] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_JSD, V.TRAIN2_JSD]
-LANG_VARS = [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST]
-ALL_VARS = SIZE_VARS + DOMAIN_VARS + LANG_VARS
-
-VARS_LIST, SPLITS_LIST = [], []
-
+# Models specified by the input values of Model.get_instance()
 MODELS = {
     "linear":  {'f': F.linear},
     "poly2":   {'f': F.polynomial, 'k': 2},
@@ -37,6 +30,7 @@ MODELS = {
     "diff":    {'f': F.linear_with_difference, 'n': 3}
 }
 
+# Conditions specifying which trials to run model on. Models not in this dictionary are ran on all trials.
 MODEL_CONDITIONS = {
     "mult":    lambda vars: len(vars) > 1,
     "am":      lambda vars: len(vars) > 1,
@@ -49,22 +43,29 @@ MODEL_CONDITIONS = {
     "diff":    lambda vars: len(vars) == 2
 }
 
-def init_setup() -> None:
-    """ Initialize VARS_LIST and SPLITS_LIST based on MAX_NVARS and MAX_NSPLITS. """
-    global VARS_LIST, SPLITS_LIST
-    for k in range(U.MAX_NSPLITS + 1):
-        SPLITS_LIST += map(list, list(combinations(V.main(), k)))
-    
-    for k in range(1, U.MAX_NVARS + 1):
-        VARS_LIST += map(list, list(combinations(SIZE_VARS, k)))
-        VARS_LIST += map(list, list(combinations(DOMAIN_VARS, k)))
-        VARS_LIST += map(list, list(combinations(LANG_VARS, k)))
+# List of vars of each type (for convenience). 
+SIZE_VARS = [V.TRAIN_SIZE, V.TRAIN_NORM_SIZE] if U.EXPERIMENT_TYPE == "one stage" \
+            else [V.TRAIN1_SIZE, V.TRAIN1_NORM_SIZE, V.TRAIN2_SIZE, V.TRAIN2_NORM_SIZE]
+DOMAIN_VARS = [V.TRAIN_JSD] if U.EXPERIMENT_TYPE == "one stage" else [V.TRAIN1_JSD, V.TRAIN2_JSD]
+LANG_VARS = [V.FEA_DIST, V.INV_DIST, V.PHO_DIST, V.SYN_DIST, V.GEN_DIST, V.GEO_DIST]
+ALL_VARS = SIZE_VARS + DOMAIN_VARS + LANG_VARS # List of all values of Variable enum.
 
-init_setup()
+# VARS_LIST is the list of vars configurations.
+# single factor
+VARS_LIST = [[var] for var in ALL_VARS]
+# multi factor: size+jsd, nsize+jsd, langvars, size+jsd+langvars, nsize+jsd+langvars
+VARS_LIST += [[V.TRAIN_SIZE, V.TRAIN_JSD], [V.TRAIN_NORM_SIZE, V.TRAIN_JSD], LANG_VARS,
+             [V.TRAIN_SIZE, V.TRAIN_JSD] + LANG_VARS, [V.TRAIN_NORM_SIZE, V.TRAIN_JSD] + LANG_VARS]
 
-BASELINE_VARS_LIST = [[V.TRAIN_SIZE, V.TRAIN_JSD], [V.TRAIN_NORM_SIZE, V.TRAIN_JSD], LANG_VARS, 
-                      [V.TRAIN_SIZE, V.TRAIN_JSD] + LANG_VARS, [V.TRAIN_NORM_SIZE, V.TRAIN_JSD] + LANG_VARS]
-FULL_VARS_LIST = VARS_LIST + BASELINE_VARS_LIST
+# SPLITS_LIST is the list of vars configurations.
+SPLITS_LIST = []
+# all combinations in which all slices have at least MIN_POINTS points
+for k in range(len(V.main())):
+    combs = map(list, list(combinations(V.main(), k))) # combinations of length k
+    for splits in combs:
+        slices = SG.get_instance(V.complement(splits))
+        if min([len(slice) for slice in slices.slices]) >= U.MIN_POINTS: # check MIN_POINTS
+            SPLITS_LIST.append(splits)
 
 TRIALS = pd.DataFrame(columns=["vars", "splits", "model", "trial"])
 
@@ -90,9 +91,6 @@ def init_trial(vars: list[V], splits: list[V], model: str) -> None:
 def init_trials() -> None:
     """ Initializes TRIALS based on vars_list, splits_list, models, and conditions. """
     for vars, splits, model in list(product(VARS_LIST, SPLITS_LIST, MODELS)):
-        if model not in MODEL_CONDITIONS or MODEL_CONDITIONS[model](vars):
-            init_trial(vars, splits, model)
-    for vars, splits, model in list(product(BASELINE_VARS_LIST, SPLITS_LIST, MODELS)):
         if model not in MODEL_CONDITIONS or MODEL_CONDITIONS[model](vars):
             init_trial(vars, splits, model)
 

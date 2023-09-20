@@ -1,8 +1,6 @@
 [Experiment]
 type = one stage
 results directory = results
-max nvars = 1
-max nsplits = 4
 min points = 10
 
 [API]

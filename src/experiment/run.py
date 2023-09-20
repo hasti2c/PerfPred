@@ -38,7 +38,7 @@ def run_on_experiments(f: Typ.Callable[[pd.DataFrame], Typ.Any], group_by_vars: 
     === Arguments ===
     suppress: If True, exceptions thrown by f will be caught and an error message will be printed instead of terminating.
     """ 
-    vars_list = map(V.list_to_str, S.FULL_VARS_LIST) if group_by_vars else [None]
+    vars_list = map(V.list_to_str, S.VARS_LIST) if group_by_vars else [None]
     splits_list = map(V.list_to_str, S.SPLITS_LIST) if group_by_splits else [None]
     models = S.MODELS if group_by_model else [None]
     for vars, splits, model in product(vars_list, splits_list, models):
