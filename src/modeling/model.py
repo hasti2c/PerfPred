@@ -110,10 +110,9 @@ class Model:
       all_init += init
       all_bounds += bounds
       start += n
-    all_init, all_bounds = np.array(all_init), np.array(all_bounds)
 
     func = F.combine_functions(fs, ns, ks, cvals)
-    return func, all_pars, all_init, all_bounds
+    return Model(func, all_init, all_bounds, all_pars)
 
   def loss(self, c: np.ndarray[U.FloatT], x: np.ndarray[U.FloatT], y: np.ndarray[U.FloatT]) -> float:
     """ Calculates loss function given parameters c, input x and target y. """
