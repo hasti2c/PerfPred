@@ -5,6 +5,7 @@ import numpy as np
 from numpy.linalg import norm
 from sklearn.metrics import mean_squared_error
 
+import modeling.functions as F
 import util as U
 from util import FloatT
 
@@ -55,9 +56,29 @@ class Model:
       parameter.
     """
     self.f, self.init, self.bounds, self.pars, self.alpha, self.ord = f, init, bounds, pars, alpha, ord
-
+  
   @staticmethod
-  def get_instance(f, n, k=1, init=None, bounds=None, alpha=DEFAULT_ALPHA, ord=DEFAULT_ORD):
+  def get_parameter_names(indices, k=1, const=True):
+    if k == 1:
+      return [f"c{i}" for i in indices]
+    elif const:
+      return [f"c{indices[0]}"] + [f"c{i},{j}" for i, j in product(indices[1:], range(1, k + 1))]
+    else:
+      return [f"c{i},{j}" for i, j in product(indices, range(1, k + 1))]
+    
+  @staticmethod
+  def get_model_specs(npars, bounds=None, const=True):
+    init = [DEFAULT_INIT] * npars
+    if bounds is None:
+      bounds = [DEFAULT_BOUNDS] * npars
+    elif const:
+      bounds = [DEFAULT_BOUNDS] + [bounds] * (npars - 1)
+    else:
+      bounds = [bounds] * npars
+    return init, bounds
+  
+  @staticmethod
+  def get_instance(f, n, k=1, bounds=None):
     """ Creates an instance of model.
 
     == Arguments ==
@@ -66,17 +87,33 @@ class Model:
     init: Initial value. If None, will use DEFAULT_INIT.
     bounds: Bounds. If None, will use DEFAULT_BOUNDS.
     """
-    if k == 1:
-      pars = [f"c{i}" for i in range(n + 1)]
-    else:
-      pars = ["c0"] + [f"c{i},{j}" for i, j in product(range(1, n + 1), range(1, k + 1))]
-    if init is None:
-      init = np.full(len(pars), DEFAULT_INIT)
-    if bounds is None:
-      bounds = [DEFAULT_BOUNDS] * len(pars)
-    elif isinstance(bounds, tuple):
-      bounds = [DEFAULT_BOUNDS] + [bounds] * (len(pars) - 1)
-    return Model(f, init, bounds=bounds, pars=pars, alpha=alpha, ord=ord)
+    pars = Model.get_parameter_names(range(n + 1), k=k)
+    init, bounds = Model.get_model_specs(len(pars), bounds=bounds)
+    return Model(f, init, bounds=bounds, pars=pars)
+  
+  @staticmethod
+  def get_combined_instance(fs, ns, ks=None, bs=None, cvals=None):
+    if ks is None:
+      ks = [1] * len(ns)
+    if bs is None:
+      bs = [None] * len(ns)
+    if cvals is None:
+      cvals = [None] * len(ns)
+    
+    start = 0
+    all_pars, all_init, all_bounds = [], [], []
+    for n, k, b, cval in zip(ns, ks, bs, cvals):
+      pars = Model.get_parameter_names(range(start, start + n), k=k, const=cval is None)
+      init, bounds = Model.get_model_specs(len(pars), bounds=b, const=cval is None)
+      
+      all_pars += pars
+      all_init += init
+      all_bounds += bounds
+      start += n
+    all_init, all_bounds = np.array(all_init), np.array(all_bounds)
+
+    func = F.combine_functions(fs, ns, ks, cvals)
+    return func, all_pars, all_init, all_bounds
 
   def loss(self, c: np.ndarray[U.FloatT], x: np.ndarray[U.FloatT], y: np.ndarray[U.FloatT]) -> float:
     """ Calculates loss function given parameters c, input x and target y. """
