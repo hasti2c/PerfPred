@@ -78,40 +78,43 @@ class Model:
     return init, bounds
   
   @staticmethod
-  def get_instance(f, n, k=1, bounds=None):
+  def get_instance(f, p, k=1, bounds=None):
     """ Creates an instance of model.
 
     == Arguments ==
-    n: Number of variables of the model.
+    p: Number of variables of the model.
     k: Number of parameters per variable (k=1 for non-polynomial).
     init: Initial value. If None, will use DEFAULT_INIT.
     bounds: Bounds. If None, will use DEFAULT_BOUNDS.
     """
-    pars = Model.get_parameter_names(range(n + 1), k=k)
+    pars = Model.get_parameter_names(range(p + 1), k=k)
     init, bounds = Model.get_model_specs(len(pars), bounds=bounds)
     return Model(f, init, bounds=bounds, pars=pars)
   
   @staticmethod
-  def get_combined_instance(fs, ns, ks=None, bs=None, cvals=None):
+  def get_combined_instance(fs, ns, ps=None, ks=None, bs=None, cvals=None):
+    if ps is None:
+      ps = ns.copy()
+      ps[0] += 1 # By default, the constant term is associated with the first model.
     if ks is None:
-      ks = [1] * len(ns)
+      ks = [1] * len(fs)
     if bs is None:
-      bs = [None] * len(ns)
+      bs = [None] * len(fs)
     if cvals is None:
-      cvals = [None] * len(ns)
+      cvals = [None] * len(fs)
     
     start = 0
     all_pars, all_init, all_bounds = [], [], []
-    for n, k, b, cval in zip(ns, ks, bs, cvals):
-      pars = Model.get_parameter_names(range(start, start + n), k=k, const=cval is None)
+    for p, k, b, cval in zip(ps, ks, bs, cvals):
+      pars = Model.get_parameter_names(range(start, start + p), k=k, const=cval is None)
       init, bounds = Model.get_model_specs(len(pars), bounds=b, const=cval is None)
       
       all_pars += pars
       all_init += init
       all_bounds += bounds
-      start += n
+      start += p
 
-    func = F.combine_functions(fs, ns, ks, cvals)
+    func = F.combine_functions(fs, ns, ps, ks, cvals)
     return Model(func, all_init, all_bounds, all_pars)
 
   def loss(self, c: np.ndarray[U.FloatT], x: np.ndarray[U.FloatT], y: np.ndarray[U.FloatT]) -> float:

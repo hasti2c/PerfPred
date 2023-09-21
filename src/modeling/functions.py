@@ -121,20 +121,18 @@ def linear_with_difference(c, x):
 def fix_constant_term(f, cval):
   return lambda c, x: f(np.array([cval] + list(c)), x)
 
-def combine_functions(fs, ns, ks, cvals):
+def combine_functions(fs, ns, ps, ks, cvals):
   def combined(c, x):
     ret, cstart, xstart = 0, 0, 0
-    for f, n, k, cval in zip(fs, ns, ks, cvals):
+    for f, n, p, k, cval in zip(fs, ns, ps, ks, cvals):
       if cval is not None:
         f = fix_constant_term(f, cval)
-      cn = 1 + (n - 1) * k if cval is None else n * k
-      xn = n - 1 if cval is None else n
-
-      cpart = c[cstart:cstart + cn]
-      xpart = x[:, xstart:xstart + xn]
+      nvars = 1 + (p - 1) * k if cval is None else p * k
+      cpart = c[cstart:cstart + nvars]
+      xpart = x[:, xstart:xstart + n]
       ret += f(cpart, xpart)
 
-      cstart += cn
-      xstart += xn
+      cstart += nvars
+      xstart += n
     return ret
   return combined
