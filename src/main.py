@@ -7,11 +7,12 @@ import util as U
 import warnings
 warnings.filterwarnings("error")
 
-U.clear_all_sheets()
-R.run_analysis(suppress=True)
+# trial = S.find_trial([S.V.TRAIN_JSD], [S.V.LANG], "exp")
+# trial.plot_together()
 
-# plot_vars = ["size", "nsize", "jsd"]
-# for vars in plot_vars:
-#   trials = S.get_trials(vars)
-#   R.run_on_experiments(R.A.plot_compact, trials=trials)
+plot_vars = ["size", "nsize", "jsd"]
+for vars in plot_vars:
+  trials = S.get_trials(vars)
+  R.run_on_trials(R.T.plot_together, trials=trials)
+  # R.run_on_experiments(R.A.plot_compact, trials=trials)
 # print("hi")

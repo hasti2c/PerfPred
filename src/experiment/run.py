@@ -11,13 +11,13 @@ from modeling.trial import Trial as T
 from slicing.variable import Variable as V
 
 
-def run_on_trials(f: Typ.Callable[[T], Typ.Any], df: pd.DataFrame=S.TRIALS, suppress: bool=False) -> None:
+def run_on_trials(f: Typ.Callable[[T], Typ.Any], trials: pd.DataFrame=S.TRIALS, suppress: bool=False) -> None:
     """ Runs f on trials in the subset of TRIALS corresponding to vars_list, splits_list, and models.
     
     === Arguments ===
     suppress: If True, exceptions thrown by f will be caught and an error message will be printed instead of terminating.
     """
-    for trial in df["trial"]:
+    for trial in trials["trial"]:
         if suppress:
             try:
                 f(trial)
