@@ -1,11 +1,14 @@
 import math
 import os
+import typing as T
 from itertools import product
 
 import matplotlib.pyplot as plt
 import pandas as pd
 
 import experiment.setup as S
+import util as U
+from slicing.slice import SliceGroup as SG
 from slicing.variable import Variable as V
 
 MODEL_NAMES = {
@@ -74,9 +77,36 @@ def plot_compact(trials: pd.DataFrame, path: str=None) -> None:
   fig.savefig(path, bbox_inches = "tight")
   plt.close(fig)
 
-def plot_individual(trials: pd.DataFrame, path: str=None) -> None:
+def plot_individual(trials: pd.DataFrame) -> None: # TODO very temporary
   splits, vars = trials.iloc[0].loc["trial"].split_by, trials.iloc[0].loc["trial"].xvars
   models = trials["model"].unique()
   for model in models:
     trial = trials[trials["model"] == model]
     plot_compact(pd.DataFrame(trial), os.path.join(S.get_path(vars, splits, model), V.list_to_str(vars) + ".png"))
+
+def plot_scatter(slices: SG, xvars: list[V], horiz: V) -> None: # TODO very temporary
+  splits = V.complement(slices.vary)
+  for j in range(len(xvars)):
+      fig, ax = plt.subplots()
+      fig.tight_layout()
+      ax.set_ylim((-10, 60))
+      
+      horiz = xvars[j]
+      slices.plot(ax, horiz, xvars, legend_labels=lambda x: VALUE_NAMES[x])
+      ax.set_xlabel(VARIABLE_NAMES[horiz])
+      ax.set_ylabel('sp-BLEU')
+
+      handles, labels = ax.get_legend_handles_labels()
+      lgnd = fig.legend(handles, labels, loc='center right', 
+                        title=V.list_to_str(splits, lambda v: VARIABLE_NAMES[v]))
+      fig.canvas.draw()
+      lgnd_dims = lgnd.get_window_extent().height, lgnd.get_window_extent().width
+      fig_dims = fig.get_window_extent().height, fig.get_window_extent().width
+      lgnd.remove()
+      if len(slices) > 1:
+        fig.legend(handles, labels, loc='center right', bbox_to_anchor=(1 + lgnd_dims[1] / fig_dims[1], 0.5),
+                  title=V.list_to_str(splits, lambda v: VARIABLE_NAMES[v]))
+      fig.tight_layout()
+      path = os.path.join(U.DATA_PATH, "records", V.list_to_str(splits), horiz.short + ".png")
+      fig.savefig(path, bbox_inches = "tight")
+      plt.close(fig)

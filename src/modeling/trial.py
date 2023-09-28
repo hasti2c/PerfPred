@@ -160,13 +160,13 @@ class Trial:
     return self.model.f(c, x)
 
   def plot_slice(self, slice: S, fit: np.ndarray[U.FloatT], horiz: V, 
-                 legend_labels: T.Callable[[V], str]=lambda v: v.title) -> None:
+                 legend_labels: T.Callable[[str], str]=lambda v: v) -> None:
     """ Plots specified slice with the given fit. Variable horiz is used as the x-axis variable.
     Saves the plot as a png file.
     """
     l_vars = V.get_main_vars([var for var in self.xvars if var != horiz])
     fig, ax = plt.subplots()
-    slice.plot(ax, self.model, fit, horiz, self.xvars)
+    slice.plot(ax, horiz, self.xvars, self.model, fit, legend_labels=legend_labels)
     ax.set_xlabel(horiz.title)
     ax.set_ylabel('sp-BLEU')
     if l_vars:
@@ -228,7 +228,7 @@ class Trial:
     plt.clf()
 
   def plot_together(self, premade_ax: T.Optional[mpl.axes.Axes]=None, title: bool=True, legend: bool=True, 
-                    legend_labels: T.Callable[[V], str]=lambda v: v.title, 
+                    legend_labels: T.Callable[[str], str]=lambda v: v.title, 
                     xlabel: T.Callable[[V], str]=lambda v: v.title) -> None:
     """ For each possible horiz value, plots all slices in the same plot. Saves each plot as a png file.
     Pre-Condition: Fits have been initalized (by calling fit, read_fits, or read_or_fit).
@@ -245,7 +245,8 @@ class Trial:
       else:
         fig, ax = plt.subplots()
       horiz = self.xvars[j]
-      self.slices.plot(ax, self.model, self.df.loc[:, self.model.pars], horiz, self.xvars, legend_labels=legend_labels)
+      self.slices.plot(ax, horiz, self.xvars, model=self.model, fits=self.df.loc[:, self.model.pars], 
+                       legend_labels=legend_labels)
       if legend:
         ax.legend(title=V.list_to_str(V.complement(self.slices.vary)))
       ax.set_xlabel(xlabel(horiz))

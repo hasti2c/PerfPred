@@ -69,9 +69,9 @@ class Slice:
     """ Returns values of xvars for the points in this slice."""
     return self.df.loc[:, [var.title for var in xvars]].astype(float).to_numpy()
 
-  def plot(self, ax: mpl.Axes, model: M, fit: np.ndarray[U.FloatT], horiz: V, xvars: list[V], 
-           xrange: T.Optional[tuple[float]]=None, crange: tuple[float]=(0., 1.), label_by_slice=False,
-           legend_labels: T.Callable[[V], str]=lambda v: v.title):
+  def plot(self, ax: mpl.Axes, horiz: V, xvars: list[V],  model: T.Optional[M]=None, 
+           fit: T.Optional[np.ndarray[U.FloatT]]=None, xrange: T.Optional[tuple[float]]=None, 
+           crange: tuple[float]=(0., 1.), label_by_slice=False, legend_labels: T.Callable[[str], str]=lambda v: v):
     """ Plots specified fitted model for this slice.
 
     == Arguments ==
@@ -102,11 +102,14 @@ class Slice:
 
     ax.scatter(x, self.y, c=c_all)
     for i in range(len(l)):
-      xs = np.linspace(xrange[0], xrange[1], m, endpoint=True)
-      horiz_i = xvars.index(horiz)
-      xs_in = np.column_stack((np.full((m, horiz_i), z[i][:horiz_i]), xs,
-                               np.full((m, len(xvars) - horiz_i - 1), z[i][horiz_i:])))
-      ys = model.f(fit, xs_in)
+      if model is not None and fit is not None:
+        xs = np.linspace(xrange[0], xrange[1], m, endpoint=True)
+        horiz_i = xvars.index(horiz)
+        xs_in = np.column_stack((np.full((m, horiz_i), z[i][:horiz_i]), xs,
+                                np.full((m, len(xvars) - horiz_i - 1), z[i][horiz_i:])))
+        ys = model.f(fit, xs_in)
+      else:
+        xs, ys = [], []
       label = ",".join(l[i])
       if not label_by_slice:
         ax.plot(xs, ys, c=colors[i], label=label)
@@ -153,8 +156,8 @@ class SliceGroup:
       SliceGroup.GROUPS[flags] = SliceGroup(vary)
     return SliceGroup.GROUPS[flags]
   
-  def plot(self, ax: mpl.Axes, model: M, fits: pd.DataFrame, horiz: V, xvars: list[V], 
-           legend_labels: T.Callable[[V], str]=lambda v: v.title):
+  def plot(self, ax: mpl.Axes, horiz: V, xvars: list[V], model: T.Optional[M]=None, fits: T.Optional[pd.DataFrame]=None, 
+           legend_labels: T.Callable[[str], str]=lambda v: v):
     """ Plots specified fitted model for all slices in this slice group.
     
     == Arguments ==
@@ -169,8 +172,9 @@ class SliceGroup:
       n, N = min(min(x), n), max(max(x), N)
 
     for i, slice in enumerate(self.slices):
-      slice.plot(ax, model, fits.loc[i].to_numpy(dtype=float), horiz, xvars, (n, N), (i / len(self), (i + 1) / len(self)), \
-                 label_by_slice=True, legend_labels=legend_labels)
+      slice.plot(ax, horiz, xvars, model=model, fit=fits.loc[i].to_numpy(dtype=float) if fits is not None else None, 
+                 xrange=(n, N), crange=(i / len(self), (i + 1) / len(self)), label_by_slice=True, 
+                 legend_labels=legend_labels)
     
   def __len__(self):
     return len(self.slices)
