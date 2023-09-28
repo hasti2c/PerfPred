@@ -159,7 +159,8 @@ class Trial:
     x = slice.x(self.xvars)
     return self.model.f(c, x)
 
-  def plot_slice(self, slice: S, fit: np.ndarray[U.FloatT], horiz: V) -> None:
+  def plot_slice(self, slice: S, fit: np.ndarray[U.FloatT], horiz: V, 
+                 legend_labels: T.Callable[[V], str]=lambda v: v.title) -> None:
     """ Plots specified slice with the given fit. Variable horiz is used as the x-axis variable.
     Saves the plot as a png file.
     """
@@ -169,7 +170,7 @@ class Trial:
     ax.set_xlabel(horiz.title)
     ax.set_ylabel('sp-BLEU')
     if l_vars:
-      ax.legend(title=",".join([var.title for var in l_vars]))
+      ax.legend(title=",".join([legend_labels(var) for var in l_vars]))
     ax.set_title(slice.description)
     if l_vars:
       path = os.path.join(self.path, "plots", horiz.short)
@@ -180,7 +181,7 @@ class Trial:
     fig.savefig(os.path.join(path, slice.title + ".png"))
     plt.close(fig)
 
-  def plot(self) -> None:
+  def plot(self, legend_labels=lambda v: v.title) -> None:
     """ Plots each slice with each possible horiz value. Saves each plot as a png file.
     Pre-Condition: Fits have been initalized (by calling fit, read_fits, or read_or_fit).
     """
@@ -188,7 +189,8 @@ class Trial:
     for j, i in prd:
       horiz = self.xvars[j]
       slice = self.slices.slices[i]
-      self.plot_slice(slice, self.df.loc[i, self.model.pars].to_numpy(dtype=float), horiz)
+      self.plot_slice(slice, self.df.loc[i, self.model.pars].to_numpy(dtype=float), horiz, 
+                      legend_labels=legend_labels)
 
   def plot_boxplot(self, res_max: int=None, func: str=None) -> None:
     """ Makes the box-and-whiskers plot for all the slices, where a single box corresponds to a slice
@@ -225,7 +227,9 @@ class Trial:
     plt.savefig(f"data/one stage/results/{vars}/{partition}/{func}/boxplot3.png")
     plt.clf()
 
-  def plot_together(self, premade_ax: T.Optional[mpl.axes.Axes]=None, title: bool=True, legend: bool=True) -> None:
+  def plot_together(self, premade_ax: T.Optional[mpl.axes.Axes]=None, title: bool=True, legend: bool=True, 
+                    legend_labels: T.Callable[[V], str]=lambda v: v.title, 
+                    xlabel: T.Callable[[V], str]=lambda v: v.title) -> None:
     """ For each possible horiz value, plots all slices in the same plot. Saves each plot as a png file.
     Pre-Condition: Fits have been initalized (by calling fit, read_fits, or read_or_fit).
 
@@ -241,10 +245,10 @@ class Trial:
       else:
         fig, ax = plt.subplots()
       horiz = self.xvars[j]
-      self.slices.plot(ax, self.model, self.df.loc[:, self.model.pars], horiz, self.xvars)
+      self.slices.plot(ax, self.model, self.df.loc[:, self.model.pars], horiz, self.xvars, legend_labels=legend_labels)
       if legend:
         ax.legend(title=V.list_to_str(V.complement(self.slices.vary)))
-      ax.set_xlabel(horiz.title)
+      ax.set_xlabel(xlabel(horiz))
       ax.set_ylabel('sp-BLEU')
       if title:
         ax.set_title(self)

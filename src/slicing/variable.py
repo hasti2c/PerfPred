@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import typing as Typ
 from enum import Enum
 
 import pandas as pd
@@ -86,13 +87,15 @@ class Variable (Enum):
     return sorted(list(set.union(*mains, set())))
   
   @staticmethod
-  def list_to_str(vars):
+  def list_to_str(vars, naming: Typ.Optional[Typ.Callable[[Variable], str]]=None):
       """ Returns list representing vars. """
+      if naming is None:
+        naming = Variable.__repr__
       if vars is None:
         return ""
       if len(vars) == 0:
         return "none"
-      return "+".join(map(Variable.__repr__, vars))
+      return "+".join(map(naming, vars))
   
   @staticmethod
   def get_flags(vars) -> tuple[Variable]:

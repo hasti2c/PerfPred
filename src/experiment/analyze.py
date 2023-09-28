@@ -1,14 +1,12 @@
-import math
 import os
-from itertools import product
 
-import matplotlib.pyplot as plt
 import pandas as pd
 
 import experiment.choose as C
 import experiment.setup as S
 import util as U
 from slicing.variable import Variable as V
+
 
 def get_all_costs(trials: pd.DataFrame, col: str) -> pd.DataFrame:
     """ Returns a dataframe containing the value of column col of the trials per slice.
@@ -66,38 +64,3 @@ def create_cost_table(trials: pd.DataFrame) -> None:
     df.to_csv(path)
     if U.WRITE_TO_SHEET:
         U.write_to_sheet(df, U.SHEETS["cost table"], V.list_to_str(vars))
-    
-def plot_compact(trials: pd.DataFrame, path: str=None) -> None:
-  """ TODO docs """
-  splits, vars = trials.iloc[0].loc["trial"].split_by, trials.iloc[0].loc["trial"].xvars
-  rows = math.ceil(len(trials) / 3)
-  cols = min(3, len(trials))
-  fig, axes = plt.subplots(rows, cols)
-  fig.tight_layout()
-  fig.set_size_inches((4 * cols, 3 * rows))
-  for i, j in product(range(rows), range(cols)):
-    k = 3 * i + j
-    ax = axes[i][j] if rows > 1 else axes[j]
-    if k < len(trials):
-      trial = trials.iloc[k].loc["trial"]
-      trial.plot_together(ax, title=False, legend=False)
-      ax.set_title(trials.iloc[k].loc["model"])
-      ax.set_ylim((-10, 60))
-    else:
-      fig.delaxes(ax)
-
-  ax = axes[0][0] if rows > 1 else axes[0]
-  handles, labels = ax.get_legend_handles_labels()
-  lgnd = fig.legend(handles, labels, loc='center right', 
-                    title=V.list_to_str(V.complement(trials.iloc[0].loc["trial"].slices.vary)))
-  fig.canvas.draw()
-  lgnd_dims = lgnd.get_window_extent().height, lgnd.get_window_extent().width
-  fig_dims = fig.get_window_extent().height, fig.get_window_extent().width
-  lgnd.remove()
-  fig.legend(handles, labels, loc='center right', bbox_to_anchor=(1 + lgnd_dims[1] / fig_dims[1], 0.5),
-             title=V.list_to_str(V.complement(trials.iloc[0].loc["trial"].slices.vary)))
-  fig.tight_layout()
-  if path is None:
-      path = os.path.join(S.get_path(vars, splits), "plots.png")
-  fig.savefig(path, bbox_inches = "tight")
-  plt.close(fig)

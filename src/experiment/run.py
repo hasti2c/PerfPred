@@ -6,6 +6,7 @@ import pandas as pd
 
 import experiment.analyze as A
 import experiment.assess as As
+import experiment.plot as P
 import experiment.setup as S
 from modeling.trial import Trial as T
 from slicing.variable import Variable as V
@@ -65,6 +66,6 @@ def run_analysis(run_plots=False, trials: pd.DataFrame=S.TRIALS, suppress: bool=
     run_on_experiments(A.create_cost_table, group_by_splits=False, trials=trials, suppress=suppress)
     run_on_experiments(As.assess_trials, trials=trials, suppress=suppress)
     if run_plots:
-        run_on_experiments(A.plot_compact, trials=trials, suppress=suppress)
+        run_on_experiments(P.plot_compact, trials=trials, suppress=suppress)
 
 run_on_trials(T.read_or_fit)

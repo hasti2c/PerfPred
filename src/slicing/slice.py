@@ -42,7 +42,7 @@ class Slice:
     self.title, self.description = self.get_title()
     self.y = self.df.loc[:, "sp-BLEU"].to_numpy()
 
-  def get_title(self) -> tuple[str]:
+  def get_title(self, labeling=str) -> tuple[str]:
     """ Returns title and description for slice.
     
     == Return Values ==
@@ -57,9 +57,9 @@ class Slice:
     vals = []
     for var in fix:
       if "size" in var.title:
-        vals.append(str(self.id[var.title]) + "k")
+        vals.append(labeling(self.id[var.title]) + "k")
       else:
-        vals.append(str(self.id[var.title]))
+        vals.append(labeling(self.id[var.title]))
 
     title = '-'.join(vals)
     description = ','.join([names[i] + "=" + vals[i] for i in range(len(vals))])
@@ -70,7 +70,8 @@ class Slice:
     return self.df.loc[:, [var.title for var in xvars]].astype(float).to_numpy()
 
   def plot(self, ax: mpl.Axes, model: M, fit: np.ndarray[U.FloatT], horiz: V, xvars: list[V], 
-           xrange: T.Optional[tuple[float]]=None, crange: tuple[float]=(0., 1.), label_by_slice=False):
+           xrange: T.Optional[tuple[float]]=None, crange: tuple[float]=(0., 1.), label_by_slice=False,
+           legend_labels: T.Callable[[V], str]=lambda v: v.title):
     """ Plots specified fitted model for this slice.
 
     == Arguments ==
@@ -110,7 +111,7 @@ class Slice:
       if not label_by_slice:
         ax.plot(xs, ys, c=colors[i], label=label)
       else:
-        ax.plot(xs, ys, c=colors[i], label=" ".join([self.__repr__(), label]))
+        ax.plot(xs, ys, c=colors[i], label=" ".join([self.get_title(legend_labels)[0], label]))
 
   def __len__(self):
     return len(self.df)
@@ -152,7 +153,8 @@ class SliceGroup:
       SliceGroup.GROUPS[flags] = SliceGroup(vary)
     return SliceGroup.GROUPS[flags]
   
-  def plot(self, ax: mpl.Axes, model: M, fits: pd.DataFrame, horiz: V, xvars: list[V]):
+  def plot(self, ax: mpl.Axes, model: M, fits: pd.DataFrame, horiz: V, xvars: list[V], 
+           legend_labels: T.Callable[[V], str]=lambda v: v.title):
     """ Plots specified fitted model for all slices in this slice group.
     
     == Arguments ==
@@ -168,7 +170,7 @@ class SliceGroup:
 
     for i, slice in enumerate(self.slices):
       slice.plot(ax, model, fits.loc[i].to_numpy(dtype=float), horiz, xvars, (n, N), (i / len(self), (i + 1) / len(self)), \
-                 label_by_slice=True)
+                 label_by_slice=True, legend_labels=legend_labels)
     
   def __len__(self):
     return len(self.slices)

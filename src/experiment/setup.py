@@ -43,14 +43,9 @@ CORE_SINGLE_MODELS = {
     "poly3":   {'f': F.polynomial, 'k': 3},
     "exp":     {'f': F.exponential, 'bounds': (-np.inf, 6)},
     "log":     {'f': F.logarithmic},
-    "power":   {'f': F.power, 'bounds': (-85, 80)},
-    "hmult":   {'f': F.hybrid_multiplicative, 'bounds': (-80, 90)}
+    "power":   {'f': F.power, 'bounds': (-85, 80)}
 }
 ADDITIONAL_SINGLE_MODELS = {
-    "mult":    {'f': F.multiplicative, 'bounds': (-100, 75)},
-    "am":      {'f': F.arithmetic_mean_linear, 'p': 1},
-    "gm":      {'f': F.geometric_mean_linear, 'p': 1},
-    "hm":      {'f': F.harmonic_mean_linear, 'p': 1},
     "scaling": {'f': F.scaling_law, 'p': 2, 'bounds': [(-np.inf, 120), (0, np.inf), (-85, np.inf)]},
     "anthony": {'f': F.anthonys_law, 'p': 4},
     "diff":    {'f': F.linear_with_difference, 'p': 3}
@@ -58,10 +53,6 @@ ADDITIONAL_SINGLE_MODELS = {
 SINGLE_MODELS = CORE_SINGLE_MODELS | ADDITIONAL_SINGLE_MODELS
 # Conditions specifying which trials to run each "additional model" on.
 MODEL_CONDITIONS = {
-    "mult":    lambda vars: len(vars) > 1,
-    "am":      lambda vars: len(vars) > 1,
-    "gm":      lambda vars: len(vars) > 1,
-    "hm":      lambda vars: len(vars) > 1,
     "scaling": lambda vars: vars in [[V.TRAIN_SIZE], [V.TRAIN_NORM_SIZE]] if U.EXPERIMENT_TYPE == "one stage" 
                             else vars in [[V.TRAIN1_SIZE], [V.TRAIN1_NORM_SIZE], [V.TRAIN2_SIZE], [V.TRAIN2_NORM_SIZE]],
     "anthony": lambda vars: U.EXPERIMENT_TYPE == "two stage" and vars in [[V.TRAIN1_SIZE, V.TRAIN2_SIZE], 
