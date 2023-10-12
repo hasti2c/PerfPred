@@ -22,11 +22,11 @@ MODEL_NAMES = {
 }
 
 VARIABLE_NAMES = {
-  V.TRAIN: "Train Set",
-  V.TRAIN_SIZE: "Train Set Size (thousands of tokens)",
-  V.TRAIN_NORM_SIZE: "Normalized Train Set Size",
+  V.TRAIN: "Fine-Tuning Set",
+  V.TRAIN_SIZE: "Fine-Tuning Set Size (thousands of tokens)",
+  V.TRAIN_NORM_SIZE: "Normalized Fine-Tuning Set Size",
   V.TEST: "Test Set",
-  V.TRAIN_JSD: "JSD of Train and Test Set",
+  V.TRAIN_JSD: "JSD of Fine-Tuning and Test Set",
   V.LANG: "Target Language"
 }
 
