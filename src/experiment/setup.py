@@ -37,7 +37,7 @@ for k in range(len(V.main())):
             SPLITS_LIST.append(splits)
 
 # Models specified by the input values of Model.get_instance()
-CORE_SINGLE_MODELS = {
+CORE_MODELS = {
     "linear":  {'f': F.linear},
     "poly2":   {'f': F.polynomial, 'k': 2},
     "poly3":   {'f': F.polynomial, 'k': 3},
@@ -45,12 +45,12 @@ CORE_SINGLE_MODELS = {
     "log":     {'f': F.logarithmic},
     "power":   {'f': F.power, 'bounds': (-85, 80)}
 }
-ADDITIONAL_SINGLE_MODELS = {
+ADDITIONAL_MODELS = {
     "scaling": {'f': F.scaling_law, 'p': 2, 'bounds': [(-np.inf, 120), (0, np.inf), (-85, np.inf)]},
     "anthony": {'f': F.anthonys_law, 'p': 4},
     "diff":    {'f': F.linear_with_difference, 'p': 3}
 }
-SINGLE_MODELS = CORE_SINGLE_MODELS | ADDITIONAL_SINGLE_MODELS
+MODELS = CORE_MODELS | ADDITIONAL_MODELS
 # Conditions specifying which trials to run each "additional model" on.
 MODEL_CONDITIONS = {
     "scaling": lambda vars: vars in [[V.TRAIN_SIZE], [V.TRAIN_NORM_SIZE]] if U.EXPERIMENT_TYPE == "one stage" 
@@ -59,30 +59,6 @@ MODEL_CONDITIONS = {
                                                                           [V.TRAIN1_NORM_SIZE, V.TRAIN2_NORM_SIZE]],
     "diff":    lambda vars: len(vars) == 2
 }
-
-# Create all combinations of pairs of core functions (to be ran on size+jsd and nsize+jsd).
-DOUBLE_VARS = [[V.TRAIN_SIZE, V.TRAIN_JSD], [V.TRAIN_NORM_SIZE, V.TRAIN_JSD]]
-DOUBLE_MODELS = {}
-for model1, model2 in product(CORE_SINGLE_MODELS.keys(), CORE_SINGLE_MODELS.keys()):
-    if model1 != model2:
-        args = (CORE_SINGLE_MODELS[model1], CORE_SINGLE_MODELS[model2])
-        DOUBLE_MODELS[f"{model1}+{model2}"] = {'fs': [a['f'] for a in args], 'ns': [1, 1], 
-                                              'ks': [a['k'] if 'k' in a else 1 for a in args],
-                                              'bs': [a['bounds'] if 'bounds' in a else None for a in args],
-                                              'cvals': [None, 1 if model2 in ['exp', 'power'] else 0]}
-# Create all combinations of triples of core functions (to be ran on size+jsd+langvars and nsize+jsd+langvars).
-MANY_VARS = [vars + LANG_VARS for vars in DOUBLE_VARS]
-MANY_MODELS = {}
-for model1, model2, model3 in product(CORE_SINGLE_MODELS.keys(), CORE_SINGLE_MODELS.keys(), CORE_SINGLE_MODELS.keys()):
-    if not (model1 == model2 == model3):
-        args = (CORE_SINGLE_MODELS[model1], CORE_SINGLE_MODELS[model2], CORE_SINGLE_MODELS[model3])
-        MANY_MODELS[f"{model1}+{model2}+{model3}"] = {'fs': [a['f'] for a in args], 'ns': [1, 1, 6], 
-                                                        'ks': [a['k'] if 'k' in a else 1 for a in args],
-                                                        'bs': [a['bounds'] if 'bounds' in a else None for a in args],
-                                                        'cvals': [None, 1 if model2 in ['exp', 'power'] else 0,
-                                                                  1 if model2 in ['exp', 'power'] else 0]}
-MULTI_MODELS = DOUBLE_MODELS | MANY_MODELS
-MODELS = SINGLE_MODELS | MULTI_MODELS
 
 TRIALS = pd.DataFrame(columns=["vars", "splits", "model", "trial"])
 
@@ -95,12 +71,9 @@ def init_trial(vars: list[V], splits: list[V], model: str) -> None:
     """ Given vars, splits and models, creates corresponding trial and adds it to TRIALS. """
     split_names, var_names = V.list_to_str(splits), V.list_to_str(vars)
     args = MODELS[model].copy()
-    if model in SINGLE_MODELS:
-        if "p" not in args:
-            args["p"] = len(vars)
-        model_obj = M.get_instance(**args)
-    else:
-        model_obj = M.get_combined_instance(**args)
+    if "p" not in args:
+        args["p"] = len(vars)
+    model_obj = M.get_instance(**args)
     
     try:
         trial = T(vars, splits, model_obj, get_path(vars, splits, model), model)
@@ -110,13 +83,7 @@ def init_trial(vars: list[V], splits: list[V], model: str) -> None:
 
 def init_trials() -> None:
     """ Initializes TRIALS based on vars_list, splits_list, models, and conditions. """
-    for vars, splits, model in list(product(VARS_LIST, SPLITS_LIST, SINGLE_MODELS)):
-        if model not in MODEL_CONDITIONS or MODEL_CONDITIONS[model](vars):
-            init_trial(vars, splits, model)
-    for vars, splits, model in list(product(DOUBLE_VARS, SPLITS_LIST, DOUBLE_MODELS)):
-        if model not in MODEL_CONDITIONS or MODEL_CONDITIONS[model](vars):
-            init_trial(vars, splits, model)
-    for vars, splits, model in list(product(MANY_VARS, SPLITS_LIST, MANY_MODELS)):
+    for vars, splits, model in list(product(VARS_LIST, SPLITS_LIST, MODELS)):
         if model not in MODEL_CONDITIONS or MODEL_CONDITIONS[model](vars):
             init_trial(vars, splits, model)
 

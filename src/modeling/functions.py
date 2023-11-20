@@ -116,23 +116,3 @@ def linear_with_difference(c, x):
   y: Array with dim m.
   """
   return c[0] + np.dot(x, c[1:3]) + c[3] * np.abs(np.diff(x, axis=1)).flatten()
-
-### Modifying functions ###
-def fix_constant_term(f, cval):
-  return lambda c, x: f(np.array([cval] + list(c)), x)
-
-def combine_functions(fs, ns, ps, ks, cvals):
-  def combined(c, x):
-    ret, cstart, xstart = 0, 0, 0
-    for f, n, p, k, cval in zip(fs, ns, ps, ks, cvals):
-      if cval is not None:
-        f = fix_constant_term(f, cval)
-      nvars = 1 + (p - 1) * k if cval is None else p * k
-      cpart = c[cstart:cstart + nvars]
-      xpart = x[:, xstart:xstart + n]
-      ret += f(cpart, xpart)
-
-      cstart += nvars
-      xstart += n
-    return ret
-  return combined

@@ -2,35 +2,22 @@ import pandas as pd
 
 import experiment.run as R
 import experiment.setup as S
+from modeling.trial import Trial as T
+import experiment.assess as A
 import util as U
 
-import warnings
-warnings.filterwarnings("error")
+# read_or_fit is automatically called when importing experiment.run:
+#   If already fitted, fits are read from file.
+#   If new, models are fitted.
+# To force fitting even if already fitted, uncomment the next line.
+# R.run_on_trials(T.fit) 
 
-# trial = S.find_trial([S.V.TRAIN_JSD], [S.V.LANG], "exp")
-# trial.plot_together()
+# assessment
+for vars, splits in zip(S.VARS_LIST, S.SPLITS_LIST):
+  R.run_on_experiments(A.assess_trials)
 
-plot_vars = ["size", "nsize", "jsd"]
+plot_vars = ["size", "nsize", "jsd"] # Only plotting for these vars since they are move relevant.
 for vars in plot_vars:
   trials = S.get_trials(vars)
-  # R.run_on_trials(R.T.plot_together, trials=trials)
-  # R.run_on_experiments(R.P.plot_individual, trials=trials)
-# # print("hi")
-
-# trials = S.get_trials("size", "lang")
-# # R.run_on_trials(R.T.plot_together, trials=trials)
-# R.run_on_experiments(R.P.plot_compact, trials=trials)
-# trials = S.get_trials("jsd", "lang")
-# # R.run_on_trials(R.T.plot_together, trials=trials)
-# R.run_on_experiments(R.P.plot_compact, trials=trials)
-
-# sg = S.SG.get_instance(S.V.complement([S.V.LANG]))
-# R.P.plot_scatter(sg, [S.V.TRAIN_SIZE], S.V.TRAIN_SIZE)
-
-for vars in plot_vars:
-  trials = S.get_trials(vars=vars, model="linear")
-  for trial in trials["trial"]:
-    for horiz in trial.xvars:
-      if horiz.short in plot_vars:
-        print(trial.slices, horiz)
-        R.P.plot_scatter(trial.slices, trial.xvars, horiz)
+  R.run_on_trials(R.T.plot_together, trials=trials) # all models in one image
+  R.run_on_experiments(R.P.plot_individual, trials=trials) # each model separately

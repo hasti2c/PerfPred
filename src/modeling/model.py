@@ -73,8 +73,6 @@ class Model:
       bounds = [DEFAULT_BOUNDS] * npars
     elif const:
       bounds = [DEFAULT_BOUNDS] + [bounds] * (npars - 1)
-    else:
-      bounds = [bounds] * npars
     return init, bounds
   
   @staticmethod
@@ -88,34 +86,8 @@ class Model:
     bounds: Bounds. If None, will use DEFAULT_BOUNDS.
     """
     pars = Model.get_parameter_names(range(p + 1), k=k)
-    init, bounds = Model.get_model_specs(len(pars), bounds=bounds)
+    init, bounds = Model.get_model_specs(len(pars), bounds=bounds, const=isinstance(bounds, tuple))
     return Model(f, init, bounds=bounds, pars=pars)
-  
-  @staticmethod
-  def get_combined_instance(fs, ns, ps=None, ks=None, bs=None, cvals=None):
-    if ps is None:
-      ps = ns.copy()
-      ps[0] += 1 # By default, the constant term is associated with the first model.
-    if ks is None:
-      ks = [1] * len(fs)
-    if bs is None:
-      bs = [None] * len(fs)
-    if cvals is None:
-      cvals = [None] * len(fs)
-    
-    start = 0
-    all_pars, all_init, all_bounds = [], [], []
-    for p, k, b, cval in zip(ps, ks, bs, cvals):
-      pars = Model.get_parameter_names(range(start, start + p), k=k, const=cval is None)
-      init, bounds = Model.get_model_specs(len(pars), bounds=b, const=cval is None)
-      
-      all_pars += pars
-      all_init += init
-      all_bounds += bounds
-      start += p
-
-    func = F.combine_functions(fs, ns, ps, ks, cvals)
-    return Model(func, all_init, all_bounds, all_pars)
 
   def loss(self, c: np.ndarray[U.FloatT], x: np.ndarray[U.FloatT], y: np.ndarray[U.FloatT]) -> float:
     """ Calculates loss function given parameters c, input x and target y. """

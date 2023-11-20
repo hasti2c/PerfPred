@@ -228,7 +228,7 @@ class Trial:
     plt.clf()
 
   def plot_together(self, premade_ax: T.Optional[mpl.axes.Axes]=None, title: bool=True, legend: bool=True, 
-                    legend_labels: T.Callable[[str], str]=lambda v: v.title, 
+                    legend_labels: T.Callable[[str], str]=lambda v: v, 
                     xlabel: T.Callable[[V], str]=lambda v: v.title) -> None:
     """ For each possible horiz value, plots all slices in the same plot. Saves each plot as a png file.
     Pre-Condition: Fits have been initalized (by calling fit, read_fits, or read_or_fit).
